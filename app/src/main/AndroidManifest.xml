@@ -18,6 +18,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Doc" />
+        <activity android:name=".Program" />
+        <activity android:name=".MonAgenda" />
+        <activity android:name=".Feed" />
+        <activity android:name=".Survey"></activity>
     </application>
 
 </manifest>
