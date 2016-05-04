@@ -9,4 +9,52 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.devel.ccqf.ccqfmisson.Survey">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Question ?"
+        android:id="@+id/txtQuestionSurvey"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
+
+    <LinearLayout
+        android:id="@+id/idMultiple"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/txtQuestionSurvey"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="60dp"
+        android:visibility="visible">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/listAnswer"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnNextSurvey"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/idMultiple"
+        android:text="---->"
+        android:textSize="13pt"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="----"
+        android:textSize="13pt"
+        android:id="@+id/btnBackSurvey"
+        android:layout_alignTop="@+id/btnNextSurvey"
+        android:layout_alignParentStart="true" />
+
+
 </RelativeLayout>

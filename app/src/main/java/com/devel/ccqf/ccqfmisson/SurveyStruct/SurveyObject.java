@@ -19,6 +19,11 @@ public class SurveyObject {
         super();
         questionTexte = question;
     }
+    public SurveyObject(int id, String question){
+        super();
+        surveyId = id;
+        questionTexte = question;
+    }
 
     public int getSurveyId() {
         return surveyId;
