@@ -12,7 +12,7 @@
         android:visibility="gone"/>
     <CheckedTextView
 
-        android:id="@+id/txtQuestionSurvey"
+        android:id="@+id/txtAnswerSurvey"
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

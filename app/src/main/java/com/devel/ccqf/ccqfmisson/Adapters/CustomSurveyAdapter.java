@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 import com.devel.ccqf.ccqfmisson.R;
@@ -49,7 +50,7 @@ public class CustomSurveyAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.survey_row_layout, null);
             holder = new ViewHolder();
             holder.txtId = (TextView)convertView.findViewById(R.id.txtIDSurvey);
-            holder.txtNom = (TextView)convertView.findViewById(R.id.txtQuestionSurvey);
+            holder.txtNom = (TextView)convertView.findViewById(R.id.txtAnswerSurvey);
             convertView.setTag(holder);
         }else{
             holder = (ViewHolder)convertView.getTag();

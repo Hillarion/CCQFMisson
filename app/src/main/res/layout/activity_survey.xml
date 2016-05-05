@@ -34,7 +34,8 @@
             android:layout_height="match_parent"
             android:id="@+id/listAnswer"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:choiceMode="singleChoice" />
     </LinearLayout>
 
     <Button
