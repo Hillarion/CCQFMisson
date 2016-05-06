@@ -12,7 +12,6 @@ public class SurveyMultiple extends SurveyObject{
     SurveyMultiple(String question, int nChoice, String[] choix){
         super(question);
         setType(surveyType.SURVEY_TYPE_MULTIPLECHOICE);
-        setnReponse(nChoice);
         for(int idx = 0; idx<choix.length; idx++)
             addReponseToChoice(choix[idx]);
     }

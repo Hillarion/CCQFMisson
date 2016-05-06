@@ -55,7 +55,7 @@ public class CustomSurveyAdapter extends BaseAdapter {
         }else{
             holder = (ViewHolder)convertView.getTag();
         }
-        holder.txtId.setText(Integer.toString(arrayListSurvey.get(position).getSurveyId()));
+        holder.txtId.setText(Integer.toString(arrayListSurvey.get(position).getQuestionId()));
         holder.txtNom.setText(arrayListSurvey.get(position).getQuestionTexte());
 
         return convertView;
