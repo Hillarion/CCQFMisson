@@ -1,15 +1,25 @@
 package com.devel.ccqf.ccqfmisson.SurveyStruct;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by thierry on 03/05/16.
+ *
+ * exprimé en JSON, la classe aura la forme ;
+ *    {
+ *      id : QuestionId,
+ *      type : surveyType,
+ *      question : questionTexte,
+ *      choix : choixReponse
+ *    }
  */
 public class SurveyObject {
     public enum surveyType {SURVEY_TYPE_TRUEFALSE, SURVEY_TYPE_MULTIPLECHOICE, SURVEY_TYPE_TEXT }
-    protected int surveyId;
+    protected int QuestionId;
     protected surveyType type;
     protected String questionTexte;
-    protected int nReponse;
-    protected String [] choixReponse;
+    protected ArrayList<String> choixReponse;
 
     public SurveyObject(){
         super();
@@ -18,19 +28,21 @@ public class SurveyObject {
     public SurveyObject(String question){
         super();
         questionTexte = question;
+        choixReponse = new ArrayList<String>();
     }
     public SurveyObject(int id, String question){
         super();
-        surveyId = id;
+        QuestionId = id;
         questionTexte = question;
+        choixReponse = new ArrayList<String>();
     }
 
-    public int getSurveyId() {
-        return surveyId;
+    public int getQuestionId() {
+        return QuestionId;
     }
 
-    public void setSurveyId(int id) {
-        this.surveyId = id;
+    public void setQuestionId(int id) {
+        this.QuestionId = id;
     }
 
     public surveyType getType() {
@@ -50,18 +62,19 @@ public class SurveyObject {
     }
 
     public int getnReponse() {
-        return nReponse;
+        return choixReponse.size();
     }
 
-    public void setnReponse(int nReponse) {
-        this.nReponse = nReponse;
-    }
 
-    public String[] getChoixReponse() {
+    public List<String> getChoixReponse() {
         return choixReponse;
     }
 
-    public void setChoixReponse(String[] choixReponse) {
+    public void setChoixReponse(ArrayList<String> choixReponse) {
         this.choixReponse = choixReponse;
+    }
+
+    public void addReponseToChoice(String rep){
+        choixReponse.add(rep);
     }
 }

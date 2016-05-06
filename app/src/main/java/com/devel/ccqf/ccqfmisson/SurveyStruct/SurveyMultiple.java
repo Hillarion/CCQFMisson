@@ -13,6 +13,7 @@ public class SurveyMultiple extends SurveyObject{
         super(question);
         setType(surveyType.SURVEY_TYPE_MULTIPLECHOICE);
         setnReponse(nChoice);
-        setChoixReponse(choix);
+        for(int idx = 0; idx<choix.length; idx++)
+            addReponseToChoice(choix[idx]);
     }
 }
