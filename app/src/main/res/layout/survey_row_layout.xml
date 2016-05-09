@@ -4,12 +4,13 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     >
-    <TextView
+   <!-- <TextView
         android:id="@+id/txtIDSurvey"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"/>
+        android:visibility="gone"/>-->
+
     <CheckedTextView
 
         android:id="@+id/txtAnswerSurvey"

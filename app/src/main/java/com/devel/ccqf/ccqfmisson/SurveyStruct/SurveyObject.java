@@ -30,11 +30,12 @@ public class SurveyObject {
         questionTexte = question;
         choixReponse = new ArrayList<String>();
     }
-    public SurveyObject(int id, String question){
+    public SurveyObject(int id, String question, ArrayList<String> reponse){
         super();
         QuestionId = id;
         questionTexte = question;
-        choixReponse = new ArrayList<String>();
+        choixReponse = reponse;
+       // choixReponse = new ArrayList<String>();
     }
 
     public int getQuestionId() {
@@ -66,7 +67,7 @@ public class SurveyObject {
     }
 
 
-    public List<String> getChoixReponse() {
+    public ArrayList<String> getChoixReponse() {
         return choixReponse;
     }
 

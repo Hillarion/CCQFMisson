@@ -18,4 +18,12 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!--<style name="MyCustomTheme" parent="android:Holo.SegmentedButton">
+        <item name="android:actionOverflowButtonStyle">@style/Widget.AppCompat.Button</item>
+    </style>
+
+    <style name="MyCustomTheme.OverFlow">
+        <item name="android:src">@drawable/my_overflow_image</item>
+    </style>-->
+
 </resources>

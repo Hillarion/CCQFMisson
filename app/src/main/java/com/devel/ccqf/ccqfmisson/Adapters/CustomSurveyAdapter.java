@@ -13,17 +13,18 @@ import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObject;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by jo on 5/4/16.
  */
 public class CustomSurveyAdapter extends BaseAdapter {
-    private static List<SurveyObject> arrayListSurvey;
+    private static ArrayList<String> arrayListSurvey;
 
     private LayoutInflater mInflater;
 
-    public CustomSurveyAdapter(Context context, List<SurveyObject>results){
+    public CustomSurveyAdapter(Context context, ArrayList<String>results){
         arrayListSurvey = results;
         mInflater = LayoutInflater.from(context);
     }
@@ -49,19 +50,19 @@ public class CustomSurveyAdapter extends BaseAdapter {
         if(convertView == null){
             convertView = mInflater.inflate(R.layout.survey_row_layout, null);
             holder = new ViewHolder();
-            holder.txtId = (TextView)convertView.findViewById(R.id.txtIDSurvey);
+            //holder.txtId = (TextView)convertView.findViewById(R.id.txtIDSurvey);
             holder.txtNom = (TextView)convertView.findViewById(R.id.txtAnswerSurvey);
             convertView.setTag(holder);
         }else{
             holder = (ViewHolder)convertView.getTag();
         }
-        holder.txtId.setText(Integer.toString(arrayListSurvey.get(position).getQuestionId()));
-        holder.txtNom.setText(arrayListSurvey.get(position).getQuestionTexte());
+        //holder.txtId.setText(Integer.toString(arrayListSurvey.get(position).getQuestionId()));
+        holder.txtNom.setText(arrayListSurvey.get(position));
 
         return convertView;
     }
     static class ViewHolder{
-        TextView txtId;
+       // TextView txtId;
         TextView txtNom;
     }
 }

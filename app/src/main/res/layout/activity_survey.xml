@@ -23,7 +23,7 @@
         android:id="@+id/idMultiple"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/txtQuestionSurvey"
         android:layout_alignParentStart="true"
         android:layout_marginTop="60dp"
@@ -31,22 +31,20 @@
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="265dp"
             android:id="@+id/listAnswer"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"
             android:choiceMode="singleChoice" />
     </LinearLayout>
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/btnNextSurvey"
-        android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/idMultiple"
-        android:text="---->"
+        android:background="@drawable/next"
         android:textSize="13pt"
-        />
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/idMultiple" />
 
     <Button
         android:layout_width="wrap_content"
@@ -55,7 +53,8 @@
         android:textSize="13pt"
         android:id="@+id/btnBackSurvey"
         android:layout_alignTop="@+id/btnNextSurvey"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:visibility="gone"/>
 
 
 </RelativeLayout>
