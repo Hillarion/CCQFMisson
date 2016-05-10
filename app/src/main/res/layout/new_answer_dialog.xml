@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+        <EditText
+            android:id="@+id/txtDialogNewAnswer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/nouvelleReponse"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"></LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:weightSum="2"
+        >
+
+        <Button
+            android:id="@+id/btnDialogFin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fin"
+            android:textSize="10pt"
+            android:fontFamily="Montserrat"
+            android:textColor="#fafafa"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:background="@color/colorCCQFOrange"
+            android:layout_weight="1"
+            />
+        <Button
+            android:id="@+id/btnDialogAjouter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ajouter"
+            android:textSize="10pt"
+            android:fontFamily="Montserrat"
+            android:textColor="#fafafa"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:background="@color/colorCCQFOrange"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

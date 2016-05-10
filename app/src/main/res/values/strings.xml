@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">CCQF Misson</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">New Survey</string>
     <string name="title_activity_doc">Doc</string>
-    <string name="action_nouveau">Nouveau</string>
+    <string name="action_nouveau">Results</string>
+    <string name="txtNouvelleQuestion">Nouveau Choix de Réponse</string>
+    <string name="nouvelleReponse">Nouvelle Réponse</string>
 </resources>

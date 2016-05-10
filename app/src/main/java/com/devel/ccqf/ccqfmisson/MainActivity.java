@@ -112,9 +112,10 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id){
-            case R.id.action_settings:
-
-            case R.id.action_result:
+            case R.id.action_settings://Nouveau Survey
+                Intent i = new Intent(MainActivity.this, SurveyCreate.class);
+                startActivity(i);
+            case R.id.action_result://Consulter résulat du survey
 
         }
 
