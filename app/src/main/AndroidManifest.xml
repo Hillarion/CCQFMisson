@@ -27,7 +27,8 @@
         <activity android:name=".MonAgenda" />
         <activity android:name=".Feed" />
         <activity android:name=".Survey" />
-        <activity android:name=".SurveyCreate"></activity>
+        <activity android:name=".SurveyCreate" />
+        <activity android:name=".SurveyResults"></activity>
     </application>
 
 </manifest>

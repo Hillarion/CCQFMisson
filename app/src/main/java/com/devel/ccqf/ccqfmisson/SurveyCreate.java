@@ -33,7 +33,7 @@ public class SurveyCreate extends AppCompatActivity {
         arrayListNewAnswers = new ArrayList<>();
         listViewNewAnswers = (ListView)findViewById(R.id.listViewNewAnswers);
 
-        //Ajout d'un nouveau choix de réponse, c'est aussi que l'on determinera le type de question
+        //Ajout d'un nouveau choix de réponse, c'est aussi la que l'on determinera le type de question
         btnNewAnswer = (Button)findViewById(R.id.btnNewAnswer);
         btnNewAnswer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,7 +151,7 @@ public class SurveyCreate extends AppCompatActivity {
 
     public int getPositionInArray(String string){
         int i = -1;
-        for(i = 0;i < arrayListNewAnswers.size() ; i++){
+        for(i = 0 ; i < arrayListNewAnswers.size() ; i++){
             if(arrayListNewAnswers.get(i).equals(string)){
                 return i;
             }

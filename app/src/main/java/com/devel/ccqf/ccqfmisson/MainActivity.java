@@ -116,6 +116,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent(MainActivity.this, SurveyCreate.class);
                 startActivity(i);
             case R.id.action_result://Consulter résulat du survey
+                Intent i2 = new Intent(MainActivity.this, SurveyResults.class);
+                startActivity(i2);
 
         }
 

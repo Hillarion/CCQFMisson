@@ -1,5 +1,7 @@
 package com.devel.ccqf.ccqfmisson.SurveyStruct;
 
+import com.devel.ccqf.ccqfmisson.Survey;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +38,12 @@ public class SurveyObject {
         questionTexte = question;
         choixReponse = reponse;
        // choixReponse = new ArrayList<String>();
+    }
+    //Constructeur temporaire a fin de faire des test
+    public SurveyObject(String question, int id){
+        super();
+        questionTexte = question;
+        QuestionId = id;
     }
 
     public int getQuestionId() {
