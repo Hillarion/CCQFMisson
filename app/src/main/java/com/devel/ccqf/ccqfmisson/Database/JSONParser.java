@@ -61,4 +61,30 @@ public class JSONParser {
         else
             return -1;
     }
+
+    public int getInt(String str) {
+        if (reader != null) {
+            try {
+                return reader.getInt(str);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return -1;
+            }
+        }
+        else
+            return -1;
+    }
+
+    public String getString(String str) {
+        if (reader != null) {
+            try {
+                return reader.getString(str);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        else
+            return null;
+    }
 }

@@ -9,9 +9,13 @@ public class SurveyYesNo extends SurveyObject{
         super();
     }
 
-    public SurveyYesNo(String question){
+    public SurveyYesNo(int id, String question){
         super(question);
+        setQuestionId(id);
         setType(surveyType.SURVEY_TYPE_TRUEFALSE);
     }
 
+    public SurveyYesNo(String question){
+        this(-1, question);
+    }
 }

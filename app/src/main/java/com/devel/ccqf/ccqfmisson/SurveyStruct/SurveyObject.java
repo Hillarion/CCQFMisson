@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class SurveyObject {
     public enum surveyType {SURVEY_TYPE_TRUEFALSE, SURVEY_TYPE_MULTIPLECHOICE, SURVEY_TYPE_TEXT }
-    protected int QuestionId;
+    protected int questionId;
     protected surveyType type;
     protected String questionTexte;
     protected ArrayList<String> choixReponse;
@@ -32,18 +32,18 @@ public class SurveyObject {
     }
     public SurveyObject(int id, String question, ArrayList<String> reponse){
         super();
-        QuestionId = id;
+        questionId = id;
         questionTexte = question;
         choixReponse = reponse;
        // choixReponse = new ArrayList<String>();
     }
 
     public int getQuestionId() {
-        return QuestionId;
+        return questionId;
     }
 
     public void setQuestionId(int id) {
-        this.QuestionId = id;
+        this.questionId = id;
     }
 
     public surveyType getType() {

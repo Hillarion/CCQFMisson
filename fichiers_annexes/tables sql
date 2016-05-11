@@ -14,7 +14,7 @@ create table MessagePacket(
 	source int NOT NULL,
 	destinataires text,
 	message text,
-	timestamp TIMESTAMP NOT NULL,
+	time DATETIME NOT NULL,
 	attachement text,
 	PRIMARY KEY(id_msg)
 );

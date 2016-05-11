@@ -1,6 +1,7 @@
 package com.devel.ccqf.ccqfmisson.SurveyStruct;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,10 +18,27 @@ import java.util.List;
  *  }
  */
 
-public class ServeyGroup {
+public class SurveyGroup {
+    private Date dateLimite;
+    private int id;
+
+    public Date getDateLimite() {
+        return dateLimite;
+    }
+
+    public int getId() {
+        return id;
+    }
+
     private List<SurveyObject> surveyList;
 
-    public ServeyGroup(){
+    public SurveyGroup(){
+        surveyList = new ArrayList<>();
+    }
+
+    public SurveyGroup(int id, Date date){
+        dateLimite = date;
+        this.id = id;
         surveyList = new ArrayList<>();
     }
 

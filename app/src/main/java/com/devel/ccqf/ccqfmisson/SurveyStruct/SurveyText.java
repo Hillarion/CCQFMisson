@@ -9,8 +9,14 @@ public class SurveyText extends SurveyObject{
         super();
     }
 
-    public SurveyText(String question){
+    public SurveyText(int id, String question){
         super(question);
+        setQuestionId(id);;
         setType(surveyType.SURVEY_TYPE_TEXT);
+    }
+
+
+    public SurveyText(String question){
+        this(-1, question);
     }
 }
