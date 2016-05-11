@@ -2,6 +2,7 @@ package com.devel.ccqf.ccqfmisson.Database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -35,6 +36,23 @@ public class LocaleDB {
 
     }
 
+    public void setUser(int userId, String userName){
+        if(db != null){
+            Cursor cursor = null;
+            cursor = db.rawQuery("SELECT * FROM Utilisateur WHERE user_id = ?" , new String[]{"" + userId});
+            cursor.moveToFirst();
+            if(cursor == null){
+                ContentValues values = new ContentValues();
+                values.put("user_id", "" + userId);
+                values.put("userName", userName);
+                values.put("lastMsg", "-1");
+                values.put("lastSurvey","-1");
+                values.put("privilege","-1");
+                db.insert("Utilisateur", null, values);
+            }
+        }
+    }
+
     public void writeInMessage(MessagePacket msg){
         ContentValues values = new ContentValues();
         values.put("id_msg", msg.getId_msg());
@@ -57,4 +75,70 @@ public class LocaleDB {
         return msgList;
     }
 
+    public int getPrivilege(int UserId){
+        int privilege = -1;
+        if(db != null){
+            Cursor cursor;
+            cursor = db.rawQuery("SELECT privilege FROM Utilisateur WHERE user_id = ?" , new String[]{"" + UserId});
+            cursor.moveToFirst();
+            if(cursor != null){
+                privilege = cursor.getInt(0);
+            }
+        }
+        return privilege;
+    }
+
+
+    public void setPrivilege(int UserId, interfaceDB.privilegeType privilege){
+        int priv = 0;
+        if(privilege == interfaceDB.privilegeType.ADMIN)
+            priv=1;
+        if(db != null){
+            ContentValues values = new ContentValues();
+            values.put("privilege", "" + priv);
+            db.update("Utilisateur", values, "user_id = " + UserId, null);
+        }
+    }
+
+    public int getLastSurveyIndex(int UserId){
+        int sIdx=-1;
+        if(db != null) {
+            Cursor cursor;
+            cursor = db.rawQuery("SELECT lastSurvey FROM Utilisateur WHERE user_id = ?", new String[]{"" + UserId});
+            cursor.moveToFirst();
+            if (cursor != null) {
+                sIdx = cursor.getInt(0);
+            }
+        }
+        return sIdx;
+    }
+
+    public void setLastSurveyIndex(int UserId, int sIdx){
+        if(db != null){
+            ContentValues values = new ContentValues();
+            values.put("lastSurvey", "" + sIdx);
+            db.update("Utilisateur", values, "user_id = " + UserId, null);
+        }
+    }
+
+    public int getLastMsgIndex(int UserId){
+        int mIdx=-1;
+        if(db != null) {
+            Cursor cursor;
+            cursor = db.rawQuery("SELECT lastMsg FROM Utilisateur WHERE user_id = ?", new String[]{"" + UserId});
+            cursor.moveToFirst();
+            if (cursor != null) {
+                mIdx = cursor.getInt(0);
+            }
+        }
+        return mIdx;
+    }
+
+    public void setLastMsgIndex(int UserId, int mIdx){
+        if(db != null){
+            ContentValues values = new ContentValues();
+            values.put("lastMsg", "" + mIdx);
+            db.update("Utilisateur", values, "user_id = " + UserId, null);
+        }
+    }
 }

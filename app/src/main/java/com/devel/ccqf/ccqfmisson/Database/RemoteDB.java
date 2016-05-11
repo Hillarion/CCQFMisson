@@ -41,13 +41,16 @@ public class RemoteDB {
     public volatile boolean parsingComplete = true;
 
     public RemoteDB(Context cntx){
-
     }
 
     void setLocalBackUp(LocaleDB dbaLite){
         lDb = dbaLite;
     }
 
+
+    /*
+    * Méthodes privées pour la gestion des transaction réseaux
+    */
     private void sendRequest(List<NameValuePair> pairs){
         paramRequete = pairs;
         ligneResult = null;
@@ -100,11 +103,17 @@ public class RemoteDB {
         thread.start();
     }
 
-    public int validateUser(String username, String password){
-        int userID = -1;
+     /*
+     *  Méthode pour valider un usager. Si le userName et mot de passe sont valide,
+     *      Recoit un nom d'usager, et le mot de passe
+     *      Retourne un identifiant pouvant être utilisé pour les conversations et les sondages.
+     */
+
+    public int validateUser(String userName, String password){
+        int userId = -1;
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
         pairs.add(new BasicNameValuePair("action", "validateLogin"));
-        pairs.add(new BasicNameValuePair("userName", username));
+        pairs.add(new BasicNameValuePair("userName", userName));
         pairs.add(new BasicNameValuePair("userPass", password));
         sendRequest(pairs);
         while(parsingComplete == false);
@@ -116,16 +125,26 @@ public class RemoteDB {
                 if (status.equalsIgnoreCase("Success")) {
                     try {
                         JSONObject loginObject = parser.getJSONObject("login");
-                        userID = loginObject.getInt("id");
+                        userId = loginObject.getInt("id");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
             }
         }
-        return userID;
+        if(userId > 0){
+            if(lDb != null){
+                lDb.setUser(userId, userName);
+            }
+        }
+        return userId;
     }
 
+    /*
+    *  Méthode pour retrouver le privilège associé à l'usager,
+    *       Reçoit l'identifiant de l'usager
+    *       Retourne le niveau de privilege ( NO_PRIVILEGE ou ADMIN) de l'usager
+    */
     public interfaceDB.privilegeType getPrivilege(int UserId){
         interfaceDB.privilegeType privilege = interfaceDB.privilegeType.NO_PRIVILEGE;
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
@@ -150,6 +169,12 @@ public class RemoteDB {
         return privilege;
     }
 
+    /*
+    * Méthode qui envoi un message au system de réseau social.
+    *       Reçoit un MessagePacket
+    *       Ne retourne rien
+    * Pour tout message envoyé une copie est insctite dans la BD locale, si celle-ci existe.
+    */
     public void sendMessage(MessagePacket msg){
         int msgId = -1;
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
@@ -178,12 +203,18 @@ public class RemoteDB {
         }
     }
 
-    public List<MessagePacket> readMessages(int userId, int lastMessage){
+    /*
+    * Méthode qui lis tout les messages destiné à l'usager, qui sont plus vieux que lastMessageID
+    *       Reçoit l'identifiant de l'usager ainsi que l'identifiant du dernier message reçu.
+    *       Retourne une Liste de MessagePacket ou null s'il n'y a pas de nouveau message
+    */
+
+    public List<MessagePacket> readMessages(int userId, int lastMessageID){
         ArrayList<MessagePacket> msgList = null;
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
         pairs.add(new BasicNameValuePair("action", "readMessages"));
         pairs.add(new BasicNameValuePair("userID", "" + userId));
-        pairs.add(new BasicNameValuePair("msgID", "" + lastMessage));
+        pairs.add(new BasicNameValuePair("msgID", "" + lastMessageID));
         sendRequest(pairs);
         while(parsingComplete == false);
 
@@ -220,7 +251,12 @@ public class RemoteDB {
         return  msgList;
     }
 
-    public void sendSurvey(){
+    /*
+    *  Méthode qui envoi un sondage au réseau commun.
+    *       Reçoit un SurveyGroup
+    *       Ne retourne rien
+    */
+    public void sendSurvey(SurveyGroup  sGrp){
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
         pairs.add(new BasicNameValuePair("action", "sendSurvey"));
         sendRequest(pairs);
@@ -236,6 +272,11 @@ public class RemoteDB {
         }
     }
 
+    /*
+    * Méthode qui lis un sondage
+    *       Reçoit l'identifiant su sondage à lire
+    *       Retourne un SurveyGroup contenant la liste des questions
+    */
     public SurveyGroup readSurvey(int surveyID){
         SurveyGroup surveyGrp = null;
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
@@ -303,6 +344,11 @@ public class RemoteDB {
         return surveyGrp;
     }
 
+    /*
+    * Méthode qui lis la listes des sondages non lu.
+    *       Reçoit l'identifiant du dernier sondage déjà lu.
+    *       Retourne un tableau contenant la liste des identifiant non-lu
+    */
     public int [] readSurveyList(int lastSurveyID){
         int[] surveylist = null;
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
@@ -333,6 +379,11 @@ public class RemoteDB {
         return surveylist;
     }
 
+    /*
+    * Méthode qui envois la réponse à une question de sondage sur les serveur
+    *       Reçoit l'identifiant de l'usager ainsi qu'un SurveyAnswer contenant la réponse
+    *       Ne retourne rien
+    */
     public void answerSurveyQuestion(int UserID, SurveyAnswer sQuestion){
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
         pairs.add(new BasicNameValuePair("action", "answerSurveyQuestion"));
@@ -341,10 +392,7 @@ public class RemoteDB {
         pairs.add(new BasicNameValuePair("reponseInt", ""+sQuestion.getReponseInt()));
         pairs.add(new BasicNameValuePair("reponseText", sQuestion.getReponseTexte()));
         sendRequestNoResponse(pairs);
-
+        while(parsingComplete == false);
     }
-
-
-
 
 }

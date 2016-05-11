@@ -33,12 +33,21 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 "timestamp TEXT, " +
                 "attachement text)";
         db.execSQL(sql);
+        sql = "CREATE TABLE IF NOT EXISTS Utilisateur (" +
+              "user_id INTEGER PRIMARY," +
+              "userName TEXT," +
+              "privilege INTEGER," +
+              "lastMsg INTEGER," +
+              "lastSurvey INTEGER)";
+        db.execSQL(sql);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS MessageOut");
         db.execSQL("DROP TABLE IF EXISTS MessageIn");
+        db.execSQL("DROP TABLE IF EXISTS Utilisateur");
+        db.execSQL("DROP TABLE IF EXISTS Pointeurs");
         onCreate(db);
     }
 
