@@ -43,7 +43,7 @@ public class SurveyObject {
     public SurveyObject(String question, int id){
         super();
         questionTexte = question;
-        QuestionId = id;
+        questionId = id;
     }
 
     public int getQuestionId() {
