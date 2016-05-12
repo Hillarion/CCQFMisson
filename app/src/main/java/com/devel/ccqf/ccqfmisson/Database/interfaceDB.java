@@ -80,13 +80,22 @@ public class interfaceDB {
         return (ligneResult != null);
     }
 
-
+     /*
+     *  Méthode pour valider un usager. Si le userName et mot de passe sont valide,
+     *      Recoit un nom d'usager, et le mot de passe
+     *      Retourne un identifiant pouvant être utilisé pour les conversations et les sondages.
+     */
     public int validateUser(String userName, String password) {
         if(rDb != null)
             currentUser = rDb.validateUser(userName, password);
         return currentUser;
     }
 
+    /*
+    *  Méthode pour retrouver le privilège associé à l'usager,
+    *       Reçoit l'identifiant de l'usager
+    *       Retourne le niveau de privilege ( NO_PRIVILEGE ou ADMIN) de l'usager
+    */
     public privilegeType getPrivilege(int UserId) {
         privilegeType privilege = null;
 
@@ -107,12 +116,21 @@ public class interfaceDB {
         return privilege;
     }
 
-
+    /*
+    * Méthode qui envois la réponse à une question de sondage sur les serveur
+    *       Reçoit l'identifiant de l'usager ainsi qu'un SurveyAnswer contenant la réponse
+    *       Ne retourne rien
+    */
     public void answerSurveyQuestion(int UserID, SurveyAnswer sQuestion) {
         if (rDb != null)
             rDb.answerSurveyQuestion(UserID, sQuestion);
     }
 
+    /*
+    * Méthode qui lis la listes des sondages non lu.
+    *       Utilise l'identifiant du dernier sondage déjà lu tels que gardé dans la base de données locale
+    *       Retourne un tableau contenant la liste des identifiant non-lu
+    */
     public int[] readSurveyList() {
         int[] tbl = null;
         int lastSurveyID = lDb.getLastSurveyIndex(currentUser);
@@ -122,6 +140,11 @@ public class interfaceDB {
         return tbl;
     }
 
+    /*
+    * Méthode qui lis un sondage
+    *       Reçoit l'identifiant su sondage à lire
+    *       Retourne un SurveyGroup contenant la liste des questions
+    */
     public SurveyGroup readSurvey(int surveyID) {
         SurveyGroup sGrp = null;
         if (rDb != null) {
@@ -135,7 +158,11 @@ public class interfaceDB {
         if (rDb != null)
             rDb.sendSurvey(sGrp);
     }
-
+    /*
+    * Méthode qui lis tout les messages destiné à l'usager, qui sont plus vieux que lastMessageID
+    *       Reçoit l'identifiant de l'usager ainsi que l'identifiant du dernier message reçu.
+    *       Retourne une Liste de MessagePacket ou null s'il n'y a pas de nouveau message
+    */
     public List<MessagePacket> readMessages(int userId) {
         List<MessagePacket> msgList = null;
         int lastMessageID = lDb.getLastMsgIndex(currentUser);
@@ -146,6 +173,11 @@ public class interfaceDB {
         return msgList;
     }
 
+    /*
+    * Méthode qui envoi un message au system de réseau social.
+    *       Reçoit un MessagePacket
+    *       Ne retourne rien
+    */
     public void sendMessage(MessagePacket msg){
         if(rDb != null)
             rDb.sendMessage( msg);

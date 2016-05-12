@@ -7,6 +7,7 @@ import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyGroup;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyAnswer;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyMultiple;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObject;
+import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObjectResults;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyText;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyYesNo;
 
@@ -208,7 +209,6 @@ public class RemoteDB {
     *       Reçoit l'identifiant de l'usager ainsi que l'identifiant du dernier message reçu.
     *       Retourne une Liste de MessagePacket ou null s'il n'y a pas de nouveau message
     */
-
     public List<MessagePacket> readMessages(int userId, int lastMessageID){
         ArrayList<MessagePacket> msgList = null;
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
@@ -393,6 +393,32 @@ public class RemoteDB {
         pairs.add(new BasicNameValuePair("reponseText", sQuestion.getReponseTexte()));
         sendRequestNoResponse(pairs);
         while(parsingComplete == false);
+    }
+
+    /*
+    * Méthode poutr lire les résultats de sondage pour une question donnée.
+    *       Reçoit l'identifiant de la question.
+    *       Retourne un object surveyAnswerObject
+    */
+    public SurveyObjectResults readSurveyResult(int questionID){
+        SurveyObjectResults srvAnswrObj = null;
+        ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
+        pairs.add(new BasicNameValuePair("action", "readSurveyResult"));
+        pairs.add(new BasicNameValuePair("questionID", "questionID"));
+        sendRequestNoResponse(pairs);
+        while(parsingComplete == false);
+
+        if(ligneResult != null) {
+            parser = new JSONParser(ligneResult);
+            String status = parser.getStatus();
+            if (!status.isEmpty()) {
+                if (status.equalsIgnoreCase("Success")) {
+                    JSONObject jsonObject = parser.getJSONObject("");
+                }
+            }
+        }
+
+        return srvAnswrObj;
     }
 
 }

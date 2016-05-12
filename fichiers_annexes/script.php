@@ -218,7 +218,7 @@ function answerSurveyQuestion(){
 
 function readSurveyList(){
     $lastSurveyId=$_POST["surveyID"];
-    if(
+
     $req = "SELECT id_survey FROM SurveyForm WHERE id_survey > $lastSurveyID";
     $result=doQuery($req);
     $row=mysqli_num_rows($result);
@@ -233,6 +233,46 @@ function readSurveyList(){
     }
     else
         returnFail("no result");
+}
+
+function readSurveyResult(){
+    $questionID=$_POST["questionID"];
+
+    if(($questionID != "") && !is_numeric($questionID))
+        returnFail("bad ID");
+    else {
+        $req = "SELECT * FROM SurveyQuestion WHERE id_question = $questionID";
+        $result = doQuery($req); 
+        $row=mysqli_num_rows($result);
+	$ligne=mysqli_fetch_object($result)
+        if($ligne != ""){
+        $response_list = $ligne->response_list;
+        $response_tbl = explode(',', $response_list);
+        $type = $ligne->type;
+        mysql_free_result($result);
+        for($idx=0; $idx< size($response_tbl); $idx++)
+            $response[idx] = 0;
+        $req = "SELECT * FROM SurveyResponse WHERE id_question = $questionID";
+        $result = doQuery($req); 
+        $row=mysqli_num_rows($result);
+        if($type < 2){
+            if($row > 0){
+                echo "{\"Status\" : \"Success\", ";
+                while($ligne=mysqli_fetch_object($result))
+                    $response[$ligne->response_int]++;
+                echo "\"reponses\" : [";
+                for($idx=0; $idx< size($response_tbl); $idx++){
+                    echo "{\"$response_tbl[$idx]\" : \"$reponse[$idx]\"}";
+                    if($idx < size($response_tbl)-1)
+                        echo",";
+                }
+                echo "]}";
+            }
+            else{}
+        }
+        else
+            returnFail("no result");
+    }
 }
 
 //Le controleur
@@ -258,6 +298,9 @@ $action=$_POST['action'];
     break;
     case "readSurveyList" :
        readSurveyList();
+    break;
+    case "readSurveyResult" :
+        readSurveyResult();
     break;
     case "answerSurveyQuestion":
         answerSurveyQuestion();
