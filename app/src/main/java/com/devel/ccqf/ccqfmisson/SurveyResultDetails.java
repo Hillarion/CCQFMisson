@@ -7,7 +7,11 @@ import android.widget.TextView;
 
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObjectResults;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 public class SurveyResultDetails extends AppCompatActivity {
     private TextView txtQuestion;
@@ -20,13 +24,32 @@ public class SurveyResultDetails extends AppCompatActivity {
         txtDetails = (TextView)findViewById(R.id.txtAnswerDetails);
         txtQuestion = (TextView)findViewById(R.id.txtQuestionResultDetails);
 
+        txtQuestion.setText(dummyObject().getQuestion());
+        ArrayList<Pair> p = dummyObject().getAnswersAndHit();
+        txtDetails.setText(jsndfkjhsdf());
     }
+
     private SurveyObjectResults dummyObject(){
-        Pair pair = new Pair<>(1, 3);
+        Pair p1 = new Pair<>("A", 3);
+        Pair p2 = new Pair<>("B", 4);
+        Pair p3 = new Pair<>("C", 2);
+
         ArrayList<Pair> p = new ArrayList<>();
-        p.add(pair);
+        p.add(p1);
+        p.add(p2);
+        p.add(p3);
 
         SurveyObjectResults sor = new SurveyObjectResults("Hola",p);
         return sor;
     }
+    private String jsndfkjhsdf(){ //Il était 3h
+        StringBuilder s = new StringBuilder();
+        for(int i = 0; i < dummyObject().getAnswersAndHit().size(); i++){
+            s.append(("\n"+dummyObject().getAnswersAndHit().get(i).first+
+                    " "+dummyObject().getAnswersAndHit().get(i).second));
+        }
+        String string = s.toString();
+        return string;
+    }
+
 }

@@ -22,6 +22,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
+        android:textSize="20pt"
         android:id="@+id/txtAnswerDetails"
         android:layout_below="@+id/txtQuestionResultDetails"
         android:layout_centerHorizontal="true"

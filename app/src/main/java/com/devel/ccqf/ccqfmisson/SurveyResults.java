@@ -1,7 +1,10 @@
 package com.devel.ccqf.ccqfmisson;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -24,9 +27,16 @@ public class SurveyResults extends AppCompatActivity {
 
         ArrayList<SurveyObjectResults> l = new ArrayList<>();
         l = dummyList();
-        Toast.makeText(SurveyResults.this, ""+l, Toast.LENGTH_SHORT).show();
         listResults = (ListView)findViewById(R.id.listViewSurveyResults);
         listResults.setAdapter(new CustomSurveyResultsAdapter(SurveyResults.this, dummyList()));
+
+        listResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(SurveyResults.this, SurveyResultDetails.class);
+                startActivity(i);
+            }
+        });
 
     }
     public ArrayList<SurveyObjectResults> dummyList(){

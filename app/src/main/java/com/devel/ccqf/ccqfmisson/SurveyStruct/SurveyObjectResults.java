@@ -1,8 +1,6 @@
 package com.devel.ccqf.ccqfmisson.SurveyStruct;
 
-import android.util.Pair;
-
-import java.lang.reflect.Array;
+import android.support.v4.util.Pair;
 import java.util.ArrayList;
 
 /**
@@ -52,5 +50,14 @@ public class SurveyObjectResults {
 
     public void setAnswersAndHit(ArrayList<Pair> answersAndHit) {
         this.answersAndHit = answersAndHit;
+    }
+
+    @Override
+    public String toString() {
+        return "SurveyObjectResults{" +
+                "question='" + question + '\'' +
+                ", totalHit=" + totalHit +
+                ", answersAndHit=" + answersAndHit +
+                '}';
     }
 }
