@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.devel.ccqf.ccqfmisson.Adapters.CustomSurveyResultsAdapter;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObject;
+import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObjectResults;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -21,17 +22,17 @@ public class SurveyResults extends AppCompatActivity {
         setContentView(R.layout.activity_survey_results);
 
 
-        ArrayList<SurveyObject> l = new ArrayList<>();
+        ArrayList<SurveyObjectResults> l = new ArrayList<>();
         l = dummyList();
         Toast.makeText(SurveyResults.this, ""+l, Toast.LENGTH_SHORT).show();
         listResults = (ListView)findViewById(R.id.listViewSurveyResults);
         listResults.setAdapter(new CustomSurveyResultsAdapter(SurveyResults.this, dummyList()));
 
     }
-    public ArrayList<SurveyObject> dummyList(){
-        ArrayList<SurveyObject> list = new ArrayList<>();
+    public ArrayList<SurveyObjectResults> dummyList(){
+        ArrayList<SurveyObjectResults> list = new ArrayList<>();
         for(int i = 0;i < 5;i++){
-            list.add(new SurveyObject("jhgjhg",i));
+            list.add(new SurveyObjectResults("jhgjhg",i));
         }
         return  list;
     }

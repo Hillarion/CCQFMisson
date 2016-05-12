@@ -28,7 +28,8 @@
         <activity android:name=".Feed" />
         <activity android:name=".Survey" />
         <activity android:name=".SurveyCreate" />
-        <activity android:name=".SurveyResults"></activity>
+        <activity android:name=".SurveyResults" />
+        <activity android:name=".SurveyResultDetails"></activity>
     </application>
 
 </manifest>

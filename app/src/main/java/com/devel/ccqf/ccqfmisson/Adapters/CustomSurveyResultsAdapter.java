@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.devel.ccqf.ccqfmisson.R;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObject;
+import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObjectResults;
 
 import org.w3c.dom.Text;
 
@@ -20,11 +21,11 @@ import java.util.List;
  * Created by jo on 5/4/16.
  */
 public class CustomSurveyResultsAdapter extends BaseAdapter {
-    private static ArrayList<SurveyObject> arrayListSurvey;
+    private static ArrayList<SurveyObjectResults> arrayListSurvey;
 
     private LayoutInflater mInflater;
 
-    public CustomSurveyResultsAdapter(Context context, ArrayList<SurveyObject>results){
+    public CustomSurveyResultsAdapter(Context context, ArrayList<SurveyObjectResults>results){
         arrayListSurvey = results;
         mInflater = LayoutInflater.from(context);
     }
@@ -56,8 +57,8 @@ public class CustomSurveyResultsAdapter extends BaseAdapter {
         }else{
             holder = (ViewHolder)convertView.getTag();
         }
-        holder.txtQuestion.setText(arrayListSurvey.get(position).getQuestionTexte());
-        holder.txtStatus.setText(String.valueOf(arrayListSurvey.get(position).getQuestionId()));
+        holder.txtQuestion.setText(arrayListSurvey.get(position).getQuestion());
+        holder.txtStatus.setText(String.valueOf(arrayListSurvey.get(position).getTotalHit()));
 
         return convertView;
     }
