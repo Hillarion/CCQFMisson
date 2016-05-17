@@ -106,9 +106,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
+        //Options réservés au compte admin
         int id = item.getItemId();
 
         switch (id){
@@ -118,6 +117,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_result://Consulter résulat du survey
                 Intent i2 = new Intent(MainActivity.this, SurveyResults.class);
                 startActivity(i2);
+            case R.id.action_newB2b://Nouveau B2B (formulaire quie crée un object Event)
+                Intent b2b = new Intent(MainActivity.this, NewB2B.class);
+                startActivity(b2b);
 
         }
 

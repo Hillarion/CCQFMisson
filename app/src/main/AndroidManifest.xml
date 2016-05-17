@@ -29,7 +29,8 @@
         <activity android:name=".Survey" />
         <activity android:name=".SurveyCreate" />
         <activity android:name=".SurveyResults" />
-        <activity android:name=".SurveyResultDetails"></activity>
+        <activity android:name=".SurveyResultDetails" />
+        <activity android:name=".NewB2B"></activity>
     </application>
 
 </manifest>

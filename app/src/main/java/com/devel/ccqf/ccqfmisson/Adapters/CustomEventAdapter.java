@@ -56,8 +56,8 @@ public class CustomEventAdapter extends BaseAdapter {
 
         Event currentEvent = events.get(position);
 
-        title.setText(currentEvent.getTitle());
-        time.setText(currentEvent.getTime());
+        title.setText(currentEvent.getNom());
+        time.setText(currentEvent.getDTStart());
 
         eventLayout.setTag(position);
         return eventLayout;

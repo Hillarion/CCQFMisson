@@ -5,12 +5,17 @@
     >
     <item
         android:id="@+id/action_settings"
-        android:orderInCategory="100"
+        android:orderInCategory="2"
         android:title="@string/action_settings"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_result"
         android:orderInCategory="1"
         android:title="@string/action_nouveau"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_newB2b"
+        android:orderInCategory="2"
+        android:title="New B2B"
         app:showAsAction="never"/>
 </menu>
