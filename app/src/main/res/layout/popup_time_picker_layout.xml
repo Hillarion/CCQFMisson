@@ -8,4 +8,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/timePicker"
         android:layout_gravity="center_horizontal" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OK"
+        android:id="@+id/btnOkTimePIcker"
+        android:layout_gravity="right" />
 </LinearLayout>

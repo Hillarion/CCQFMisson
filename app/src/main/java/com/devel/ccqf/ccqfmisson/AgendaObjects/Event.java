@@ -12,11 +12,9 @@ public class Event {
     protected String nom;
     protected String poste;
     protected String telephone;
+    protected String email;
     protected String nomBatiment;
     protected boolean autreBatiment;
-
-
-
 
     public Event( String title, String time) {
         this.nom = title;
@@ -24,13 +22,14 @@ public class Event {
     }
 
     public Event(String destinataire, String DTStart, String DTEnd, String nom, String poste,
-                 String telephone, String nomBatiment, boolean autreBatiment) {
+                 String telephone,String email,  String nomBatiment, boolean autreBatiment) {
         this.destinataire = destinataire;
         this.DTStart = DTStart;
         this.DTEnd = DTEnd;
         this.nom = nom;
         this.poste = poste;
         this.telephone = telephone;
+        this.email = email;
         this.nomBatiment = nomBatiment;
         this.autreBatiment = autreBatiment;
     }
@@ -44,6 +43,7 @@ public class Event {
                 ", nom='" + nom + '\'' +
                 ", poste='" + poste + '\'' +
                 ", telephone='" + telephone + '\'' +
+                ", email='" + email +'\''+
                 ", nomBatiment='" + nomBatiment + '\'' +
                 ", autreBatiment=" + autreBatiment +
                 '}';
@@ -95,6 +95,14 @@ public class Event {
 
     public void setTelephone(String telephone) {
         this.telephone = telephone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getNomBatiment() {
