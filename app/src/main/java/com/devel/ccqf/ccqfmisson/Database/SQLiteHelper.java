@@ -18,15 +18,15 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String sql;
         sql = "CREATE TABLE IF NOT EXISTS MessageOut (" +
-                "id_msg INTEGER PRIMARY, " +
+                "id_msg INTEGER PRIMARY KEY, " +
                 "source INTEGER," +
                 "destinataires TEXT, " +
                 "message TEXT, " +
                 "timestamp TEXT, " +
-                "attachement text)";
+                "attachement TEXT)";
         db.execSQL(sql);
         sql = "CREATE TABLE IF NOT EXISTS MessageIn (" +
-                "id_msg INTEGER PRIMARY, " +
+                "id_msg INTEGER PRIMARY KEY, " +
                 "source INTEGER," +
                 "destinataires TEXT, " +
                 "message TEXT, " +
@@ -34,7 +34,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 "attachement text)";
         db.execSQL(sql);
         sql = "CREATE TABLE IF NOT EXISTS Utilisateur (" +
-              "user_id INTEGER PRIMARY," +
+              "user_id INTEGER PRIMARY KEY," +
               "userName TEXT," +
               "privilege INTEGER," +
               "lastMsg INTEGER," +
@@ -47,7 +47,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS MessageOut");
         db.execSQL("DROP TABLE IF EXISTS MessageIn");
         db.execSQL("DROP TABLE IF EXISTS Utilisateur");
-        db.execSQL("DROP TABLE IF EXISTS Pointeurs");
         onCreate(db);
     }
 

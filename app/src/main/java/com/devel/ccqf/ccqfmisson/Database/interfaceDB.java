@@ -4,8 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 
 import com.devel.ccqf.ccqfmisson.ReseauSocial.MessagePacket;
-import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyAnswer;
-import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyGroup;
+import com.devel.ccqf.ccqfmisson.SurveyStruct.*;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -16,6 +15,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,12 +38,12 @@ public class interfaceDB {
         currentUser = -1;
         parentContext = cntx;
         if (isOnline()) {
-            if (testConnexionToServer())
+            if (testConnexionToServer() == true)
                 workLocaly = false;
         }
-        LocaleDB lDb = new LocaleDB(cntx);
-        if (!workLocaly) {
-            RemoteDB rDb = new RemoteDB(cntx);
+        lDb = new LocaleDB(cntx);
+        if (workLocaly == false) {
+            rDb = new RemoteDB(cntx);
             rDb.setLocalBackUp(lDb);
         }
     }
@@ -63,7 +63,7 @@ public class interfaceDB {
             public void run() {
                 try {
                     HttpClient httpclient = new DefaultHttpClient();
-                    HttpPost httppost = new HttpPost("http://thierrystpierre.ddns.net:81/CCQFMission/script.php");
+                    HttpPost httppost = new HttpPost("http://thierrystpierre.ddns.net:81/CCQFMission/index.php");
                     HttpResponse response = httpclient.execute(httppost);
                     HttpEntity entity2 = response.getEntity();
                     ligneResult = EntityUtils.toString(entity2);
@@ -165,10 +165,10 @@ public class interfaceDB {
     */
     public List<MessagePacket> readMessages(int userId) {
         List<MessagePacket> msgList = null;
-        int lastMessageID = lDb.getLastMsgIndex(currentUser);
-        if (rDb != null) {
-            msgList = rDb.readMessages(userId, lastMessageID);
-            lDb.setLastMsgIndex(currentUser, msgList.get(msgList.size() - 1).getId_msg());
+        if(userId > 0) {
+            int lastMessageID = lDb.getLastMsgIndex(userId);
+            if (rDb != null)
+                msgList = rDb.readMessages(userId, lastMessageID);
         }
         return msgList;
     }
@@ -183,6 +183,13 @@ public class interfaceDB {
             rDb.sendMessage( msg);
     }
 
+
+    public ArrayList<SurveyObjectResults> readSurveyResults(int surveyId){
+        ArrayList<SurveyObjectResults> rsltList = null;
+        if(rDb != null)
+            rsltList = rDb.readSurveyResults( surveyId);
+        return rsltList;
+    }
 
 
 

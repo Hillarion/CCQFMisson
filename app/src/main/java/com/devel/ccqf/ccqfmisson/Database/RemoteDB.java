@@ -26,6 +26,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -40,8 +42,11 @@ public class RemoteDB {
     private JSONParser parser;
     private String ligneResult = null;
     public volatile boolean parsingComplete = true;
+    SimpleDateFormat dateFormat;
+
 
     public RemoteDB(Context cntx){
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     }
 
     void setLocalBackUp(LocaleDB dbaLite){
@@ -184,7 +189,9 @@ public class RemoteDB {
         pairs.add(new BasicNameValuePair("msgSource", "" + msg.getSource()));
         pairs.add(new BasicNameValuePair("destinataires", msg.getDestinataires()));
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        pairs.add(new BasicNameValuePair("timeStamp", sdf.format(msg.getTimestamp())));
+		Date tStmp = msg.getTimestamp();
+		String time = sdf.format(tStmp);
+        pairs.add(new BasicNameValuePair("timeStamp", time));
         pairs.add(new BasicNameValuePair("attachement", msg.getAttachement()));
         sendRequest(pairs);
         while(parsingComplete == false);
@@ -229,16 +236,27 @@ public class RemoteDB {
                         for (int idx = 0; idx < jArray.length(); idx++) {
                             try {
                                 JSONObject jsonObject = jArray.getJSONObject(idx);
+                                String time = jsonObject.getString("timeStamp");
+                                Date convertedDate = new Date();
+                                try {
+                                    convertedDate = dateFormat.parse(time);
+                                }catch (ParseException pe) {
+                                    pe.printStackTrace();
+                                }
                                 MessagePacket msg = new MessagePacket(
                                         jsonObject.getInt("msgId"),
                                         jsonObject.getInt("source"),
                                         jsonObject.getString("destinataires"),
                                         jsonObject.getString("message"),
-                                        new Date(jsonObject.getString("timeStamp")),
+                                        convertedDate,
                                         jsonObject.getString("attachement"));
                                 msgList.add(msg);
                                 if(lDb != null){
-                                    lDb.writeInMessage(msg);
+                                    if(msg.getId_msg() > lastMessageID) {
+                                        lastMessageID = msg.getId_msg();
+                                        lDb.writeInMessage(msg);
+                                        lDb.setLastMsgIndex(userId, lastMessageID);
+                                    }
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -285,21 +303,29 @@ public class RemoteDB {
         sendRequest(pairs);
         while(parsingComplete == false);
 
-
         if(ligneResult != null) {
             parser = new JSONParser(ligneResult);
+            System.out.print("CCQF Mission RemoteDB readSurvey ligneResult = " + ligneResult + "\n\n");
+            System.out.print("CCQF Mission RemoteDB readSurvey parser = " + parser + "\n\n");
+            System.out.print("CCQF Mission RemoteDB readSurvey status = " + parser.getStatus() + "\n\n");
+            System.out.flush();
             String status = parser.getStatus();
             if (!status.isEmpty()) {
                 if (status.equalsIgnoreCase("Success")) {
                     JSONObject jsonObject = parser.getJSONObject("survey");
+                    Date convertedDate = new Date();
+                    int srvId = -1;
                     try {
-                        surveyGrp = new SurveyGroup(
-                                jsonObject.getInt("id"),
-                                new Date(jsonObject.getString("dueTime"))
-                                );
+                        srvId = jsonObject.getInt("id");
+                        String time = jsonObject.getString("dueTime");
+                        convertedDate = dateFormat.parse(time);
                     }catch (JSONException e) {
                         e.printStackTrace();
+                    }catch (ParseException pe) {
+                        pe.printStackTrace();
                     }
+                    if(srvId >0)
+                        surveyGrp = new SurveyGroup( srvId, convertedDate );
                     if(surveyGrp != null){
                         try{
                             SurveyObject qObj = null;
@@ -400,11 +426,11 @@ public class RemoteDB {
     *       Reçoit l'identifiant de la question.
     *       Retourne un object surveyAnswerObject
     */
-    public SurveyObjectResults readSurveyResult(int questionID){
-        SurveyObjectResults srvAnswrObj = null;
+    public ArrayList<SurveyObjectResults> readSurveyResults(int surveyId){
+        ArrayList<SurveyObjectResults> srvAnswrObj = null;
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
         pairs.add(new BasicNameValuePair("action", "readSurveyResult"));
-        pairs.add(new BasicNameValuePair("questionID", "questionID"));
+        pairs.add(new BasicNameValuePair("surveyID", "surveyId"));
         sendRequestNoResponse(pairs);
         while(parsingComplete == false);
 

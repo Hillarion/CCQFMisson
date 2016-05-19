@@ -2,6 +2,12 @@
 //header ("Access-Control-Allow-Origin : localhost");
 require_once("connexion.php");
 
+function validateDate($date, $format = 'Y-m-d H:i:s')
+{
+    $d = DateTime::createFromFormat($format, $date);
+    return $d && $d->format($format) == $date;
+}
+
 function getPrivilege(){
     $userID = $_POST["userID"];
     if(($userID != "") && is_numeric($userID)){
@@ -10,7 +16,7 @@ function getPrivilege(){
         
         $row = mysqli_num_row($result);
         echo "{\"status\" : ";
-        if($row > 0){
+        if($row > 0) {
             echo "\"Success\","; 
             if($ligne=mysqli_fetch_object($result)){
                 echo "\"privilege\" : \"";
@@ -37,26 +43,25 @@ function validateLogin(){
         if(success){
             echo "{\"Status\" : \"Success\", \"login\" :";
             $localReq = "SELECT user_id FROM Utilisateur WHERE userName = '$userName'";
-            $result = doQuery(localReq);
+            $result = doQuery($localReq);
             $row = mysqli_num_row($result);
-            if($row>0){
-                $ligne = mysqli_fetch_object($result));
+            if($row>0) {
+                $ligne = mysqli_fetch_object($result);
                 $userID = $ligne->user_id;
                 mysql_free_result($result);
             }
             else{
                 $localReq = "INSERT INTO Utilisateur VALUEs (0, '$userName', '')";
                 $result = doQuery($localReq);
-                $userID = mysqli_insert_id($conn)
+                $userID = mysqli_insert_id($conn);
             }
             echo "{ \"id\" : \"$userID\" }}";
         }
         else
-            returnFail("bad user or pass")
+            returnFail("bad user or pass");
     }
     else
-        returnFail("empty user or pass")
-
+        returnFail("empty user or pass");
 }
 
 function getUserList(){
@@ -67,7 +72,7 @@ function getUserList(){
         echo "{\"Status\" : \"Success\", ";
         echo "\"users\" : [";
         while($ligne=mysqli_fetch_object($result)){
-            echo "{\"id\" : \"$ligne->user_id\", \"name\" : \"$ligne->userName\"}"
+            echo "{\"id\" : \"$ligne->user_id\", \"name\" : \"$ligne->userName\"}";
             if(--$row>0) echo ",";
         }
         echo "]}";
@@ -85,19 +90,24 @@ function sendMessage(){
     $attachement=$_POST["attachement"];
     
     if(($message != "") && ($msgSource != "") && ($timeStamp != "")){
-        if(!preg_match("[0-9, ]", $destinataires) || !is_numeric($msgSource))
-            returnFail("bad field values");
-        else if(!validstamp(timeStamp))
-            returnFail("bad time stamp");
+        if(!is_numeric($msgSource))
+            returnFail("bad source values src = '$msgSource'");
+        else if(  ($tag = preg_match('/^\d+(?:,\d+)*$/', $destinataires, $matches)) != 1){
+            returnFail("bad field values dest = $destinataires ($matches[1])");
+            }
+        else if(!validateDate($timeStamp))
+            returnFail("bad time stamp $timeStamp");
         else{
             $destList = explode(',', trim($destinataires, " \n\r"));
             $req = "INSERT INTO MessagePacket values(0, $msgSource, ".
-                   "'$destinataires', '$message', $timeStamp, '$attachement'";
-            $result = doQuery(req);
-            $msgId = mysqli_insert_id($conn)
-            foreach($destList as $dest){
-                $req2="INSERT INTO MessageQueue VALUES ($msgId, $dest, false)";
-                $result2=doQuery(req2);
+                   "'$destinataires', '$message', '$timeStamp', '$attachement')";
+            $result = doQuery($req);
+            $msgId = mysqli_insert_id($conn);
+            if($msgId > 0){
+                foreach($destList as $dest){
+                    $req2="INSERT INTO MessageQueue VALUES ($msgId, $dest, false)";
+                    $result2=doQuery($req2);
+                }
             }
             echo "{\"Status\" : \"Success\", ";
             echo "\"Id\" : \"$msgId\"}";
@@ -116,21 +126,22 @@ function readMessages(){
     else if($lastMsgId == "")
         $lastMsgId = -1;
         
-    if(is_numeric($userID){
+    if(is_numeric($userId)){
         $req = "SELECT * FROM MessagePacket INNER JOIN MessageQueue ON ".
                "MessageQueue.id_msg = MessagePacket.id_msg WHERE ".
-               "MessageQueue.destinataire=$userID and MessagePacket.msgID > $lastMsgId";
+               "MessageQueue.destinataire=$userId and MessagePacket.id_msg > $lastMsgId";
+//        error_log("readMessages req = $req", 0);
         $result = doQuery($req);
-        $row = mysqli_num_rows(result);
+        $row = mysqli_num_rows($result);
         if($row>0){
             echo "{\"Status\" : \"Success\", ";
             echo "\"msgQueue\" : [";
             while ($ligne= mysqli_fetch_object($result)){
                 echo "{\"msgId\" : \"$ligne->id_msg\", \"source\" : \"$ligne->source\",".
                      "\"destinataires\" : \"$ligne->destinataires\", ".
-                     "\"timeStamp\" : \"$ligne->time\", ".
-                     "\"message\" : \"$ligne->message\", \"attachement\" : "
-                     "\"$ligne->attachement\"}"
+                     "\"timeStamp\" : \"$ligne->timestamp\", ".
+                     "\"message\" : \"$ligne->message\", \"attachement\" : ".
+                     "\"$ligne->attachement\"}";
                 if(--$row > 0) echo ",";                
             }
             echo"]}";
@@ -152,7 +163,7 @@ function readSurvey(){
     
     if(is_numeric($idSurvey)){
         $req="SELECT * FROM SurveyForm WHERE id_survey=$idSurvey";
-        $result = $doQuery($req);
+        $result = doQuery($req);
         $row =  mysqli_num_rows($result);
         if($row>0){
             if($ligne = mysqli_fetch_object($result)){
@@ -168,34 +179,34 @@ function readSurvey(){
                     $req = "SELECT * FROM SurveyQuestion WHERE id_question = $questionId";
                     $result = doQuery($req);
                     if(mysqli_num_rows($result) > 0){
-                        $ligne=mysqli_fetch_object($result))
-                        echo "\"id\" : \"$ligne->id_question\", \"question\" : ".
+                        $ligne = mysqli_fetch_object($result);
+                        echo "{\"id\" : \"$ligne->id_question\", \"question\" : ".
                             "\"$ligne->question\", \"type\" : \"$ligne->type\", ".
                             "\"choix\" : \"$ligne->response_list\"}";
-                        if($qCount > 0) echo ",";
+                        if($qCount > 1) echo ",";
                     }
                     --$qCount;
                 }
                 echo "]}}";
             }
             else
-                returnFail("no result")
+                returnFail("no result");
         }
         else
-            returnFail("no result")
+            returnFail("no result");
     }
     else
-        returnFail("bad ID")
+        returnFail("bad ID");
 }
 
 function answerSurveyQuestion(){
     $idQuestion=$_POST["questionID"];
-    $idSsource=$_POST["sourceID"];
+    $idSource=$_POST["sourceID"];
     $reponseInt=$_POST["reponseInt"];
     $reponseText=$_POST["reponseText"];
-    if(!is_numeric($idQuestion) || !is_numeric($qType) || !is_numeric($idSsource))
+    if(!is_numeric($idQuestion) || !is_numeric($reponseInt) || !is_numeric($idSource))
         returnFail("bad ID or bad Type");
-    else(
+    else{
         $req2="";
         if($reponseInt == "")
             $reponseInt = -1;
@@ -208,23 +219,23 @@ function answerSurveyQuestion(){
                     "AND source=idSource";
         else
             $req2 = "INSERT INTO SurveyResponse VALUES ($idQuestion, $idSource,".
-                    " $reponseInt, '$reponseText'";
+                    " $reponseInt, '$reponseText')";
         if($req2!="")
-            doQuery($req);
+            createStatus(doQuery($req2));
         else
-            returnFail("");0
+            returnFail("");
     }
 }
 
 function readSurveyList(){
     $lastSurveyId=$_POST["surveyID"];
 
-    $req = "SELECT id_survey FROM SurveyForm WHERE id_survey > $lastSurveyID";
+    $req = "SELECT id_survey FROM SurveyForm WHERE id_survey > $lastSurveyId";
     $result=doQuery($req);
     $row=mysqli_num_rows($result);
     if($row > 0){
         echo "{\"Status\" : \"Success\", ";
-        echo "\"surveyList\" : , [";
+        echo "\"surveyList\" : [";
         while($ligne=mysqli_fetch_object($result)){
             echo "\"$ligne->id_survey\"";
             if(--$row>0) echo ",";
@@ -235,40 +246,60 @@ function readSurveyList(){
         returnFail("no result");
 }
 
-function readSurveyResult(){
-    $questionID=$_POST["questionID"];
+function readSurveyResults(){
+    $surveyID=$_POST["surveyID"];
 
-    if(($questionID != "") && !is_numeric($questionID))
+    if(($surveyID != "") && !is_numeric($surveyID))
         returnFail("bad ID");
     else {
-        $req = "SELECT * FROM SurveyQuestion WHERE id_question = $questionID";
+        $req = "SELECT question_list FROM SurveyForm WHERE id_survey = $surveyID";
+//        echo "readSurveyResults req1 = $req<br/>";
         $result = doQuery($req); 
         $row=mysqli_num_rows($result);
-	$ligne=mysqli_fetch_object($result)
+        $ligne=mysqli_fetch_object($result);
         if($ligne != ""){
-        $response_list = $ligne->response_list;
-        $response_tbl = explode(',', $response_list);
-        $type = $ligne->type;
-        mysql_free_result($result);
-        for($idx=0; $idx< size($response_tbl); $idx++)
-            $response[idx] = 0;
-        $req = "SELECT * FROM SurveyResponse WHERE id_question = $questionID";
-        $result = doQuery($req); 
-        $row=mysqli_num_rows($result);
-        if($type < 2){
-            if($row > 0){
-                echo "{\"Status\" : \"Success\", ";
-                while($ligne=mysqli_fetch_object($result))
-                    $response[$ligne->response_int]++;
-                echo "\"reponses\" : [";
-                for($idx=0; $idx< size($response_tbl); $idx++){
-                    echo "{\"$response_tbl[$idx]\" : \"$reponse[$idx]\"}";
-                    if($idx < size($response_tbl)-1)
-                        echo",";
+            $question_list = $ligne->question_list;
+            $question_tbl = explode(',', $question_list);
+             mysql_free_result($result);
+            for($qIdx=0; $qIdx< sizeof($question_tbl); $qIdx++){
+                $req = "SELECT question, response_list FROM SurveyQuestion WHERE ".
+                "id_question = $question_tbl[$qIdx]";
+                $result = doQuery($req);
+                $ligne=mysqli_fetch_object($result);
+                if($ligne != ""){
+                    $questionText = $ligne->question;
+                    $responseText = $ligne->response_list;
+                    $responseTable = explode(',', $responseText);
                 }
-                echo "]}";
+            
+                if($ligne != ""){
+                    $response_list = $ligne->response_list;
+                    $response_tbl = explode(',', $response_list);
+                    $type = $ligne->type;
+                    mysql_free_result($result);
+                    for($idx=0; $idx< sizeof($response_tbl); $idx++)
+                        $response[$idx] = 0;
+                    $req = "SELECT * FROM SurveyResponse WHERE id_question = $question_tbl[$qIdx]";
+//        echo "----readSurveyResults req3 = $req<br/>";
+                    $result = doQuery($req); 
+                    $row=mysqli_num_rows($result);
+                    if($type < 2){
+                        if($row > 0){
+                            echo "{\"Status\" : \"Success\", \"id_question\" : \"$question_tbl[$qIdx]\", ";
+                            echo "\"question\" : \"$questionText\",";
+                            while($ligne=mysqli_fetch_object($result))
+                                $response[$ligne->response_int]++;
+                            echo "\"reponses\" : [";
+                            for($idx=0; $idx< sizeof($response_tbl); $idx++){
+                                echo "{\"$response_tbl[$idx]\" : \"$response[$idx]\"}";
+                                if($idx < sizeof($response_tbl)-1)
+                                    echo",";
+                            }
+                            echo "]}";
+                        }
+                    }
+                }
             }
-            else{}
         }
         else
             returnFail("no result");
@@ -277,7 +308,7 @@ function readSurveyResult(){
 
 //Le controleur
 $action=$_POST['action'];
-    switch ($action){
+switch ($action){
     case "getPrivilege" :
        getPrivilege();
     break;
@@ -299,8 +330,8 @@ $action=$_POST['action'];
     case "readSurveyList" :
        readSurveyList();
     break;
-    case "readSurveyResult" :
-        readSurveyResult();
+    case "readSurveyResults" :
+        readSurveyResults();
     break;
     case "answerSurveyQuestion":
         answerSurveyQuestion();

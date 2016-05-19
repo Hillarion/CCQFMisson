@@ -47,7 +47,7 @@ create table SurveyResponse(
 create table SurveyForm(
 	id_survey int NOT NULL AUTO_INCREMENT,
 	question_list text,
-	dateLimite  Date,
+	dateLimite  DATETIME,
 	PRIMARY KEY(id_survey)
 );
 

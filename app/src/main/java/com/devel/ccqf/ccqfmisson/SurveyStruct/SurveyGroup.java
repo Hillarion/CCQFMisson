@@ -21,6 +21,7 @@ import java.util.List;
 public class SurveyGroup {
     private Date dateLimite;
     private int id;
+    private List<SurveyObject> surveyList;
 
     public Date getDateLimite() {
         return dateLimite;
@@ -29,8 +30,6 @@ public class SurveyGroup {
     public int getId() {
         return id;
     }
-
-    private List<SurveyObject> surveyList;
 
     public SurveyGroup(){
         surveyList = new ArrayList<>();
