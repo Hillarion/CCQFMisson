@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.devel.ccqf.ccqfmisson.Adapters.CustomEventAdapter;
+import com.devel.ccqf.ccqfmisson.Adapters.CustomProgramAdapter;
 import com.devel.ccqf.ccqfmisson.AgendaObjects.Event;
 
 import java.text.DateFormat;
@@ -30,7 +31,7 @@ public class ProgramDays extends AppCompatActivity {
         listViewEvents.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               Intent i = new Intent(ProgramDays.this, Program.class);
+                Intent i = new Intent(ProgramDays.this, Program.class);
                 startActivity(i);
 
 
@@ -54,5 +55,4 @@ public class ProgramDays extends AppCompatActivity {
     }
 
 }
-
 

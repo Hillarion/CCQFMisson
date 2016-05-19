@@ -16,9 +16,15 @@ public class Event {
     protected String nomBatiment;
     protected boolean autreBatiment;
 
-    public Event( String title, String time) {
+    public Event( String title, String timeStart, String timeEnd) {
         this.nom = title;
-        this.DTStart = time;
+        this.DTStart = timeStart;
+        this.DTEnd = timeEnd;
+    }
+
+    public Event( String title, String timeStart) {
+        this.nom = title;
+        this.DTStart = timeStart;
     }
 
     public Event(String destinataire, String DTStart, String DTEnd, String nom, String poste,

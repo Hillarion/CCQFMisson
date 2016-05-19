@@ -3,6 +3,8 @@ package com.devel.ccqf.ccqfmisson;
 import android.app.Dialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -176,5 +178,24 @@ public class NewB2B extends AppCompatActivity {
         txtEmail = (EditText)findViewById(R.id.editTextB2bEmail);
         spinner = (Spinner)findViewById(R.id.spinnerBatiementExterieur);
         btnDone = (Button)findViewById(R.id.btnB2bOk);
+    }
+
+    public final static boolean isValidEmail(CharSequence target) {
+        if (TextUtils.isEmpty(target)) {
+            return false;
+        } else {
+            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+        }
+    }
+    public final static boolean isValidPhone(CharSequence target){
+        if(TextUtils.isEmpty(target)){
+            return false;
+        }else {
+            return Patterns.PHONE.matcher(target).matches();
+        }
+    }
+
+    public void verification(){
+
     }
 }

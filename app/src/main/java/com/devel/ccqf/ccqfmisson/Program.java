@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.devel.ccqf.ccqfmisson.Adapters.CustomEventAdapter;
+import com.devel.ccqf.ccqfmisson.Adapters.CustomProgramAdapter;
 import com.devel.ccqf.ccqfmisson.AgendaObjects.Event;
 
 import java.text.DateFormat;
@@ -32,14 +33,14 @@ public class Program extends AppCompatActivity {
         listViewEvents.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-              //  Intent i = new Intent(Program.this )
+                //  Intent i = new Intent(Program.this )
 
 
             }
         });
     }
     public void setListViewEvents() {
-        CustomEventAdapter adapter = new CustomEventAdapter(this, dummyListDays());
+        CustomProgramAdapter adapter = new CustomProgramAdapter(this, dummyListDays());
         listViewEvents.setAdapter(adapter);
     }
     public ArrayList<Event> dummyListDays(){
@@ -49,7 +50,7 @@ public class Program extends AppCompatActivity {
         String date = df.format(d);
 
         for(int i = 0 ; i < 20 ; i++ ){
-            n.add(new Event(date, "TITLE"));
+            n.add(new Event("Title", i+"h00", (i+1)+"h00"));
         }
         return n;
     }
