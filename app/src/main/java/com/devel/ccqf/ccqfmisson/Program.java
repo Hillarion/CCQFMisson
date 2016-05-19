@@ -1,5 +1,6 @@
 package com.devel.ccqf.ccqfmisson;
 
+import android.content.Intent;
 import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,47 +22,34 @@ public class Program extends AppCompatActivity {
     private ListView listViewEvents;
     private ArrayList<Event> events;
 
-    public static final String [] EVENT_PROJECTION = new String[]{
-            CalendarContract.Calendars._ID,
-            CalendarContract.Calendars.ACCOUNT_NAME,
-            CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,
-            CalendarContract.Calendars.OWNER_ACCOUNT
-    };
-
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mon_agenda);
 
-
         listViewEvents = (ListView) findViewById(R.id.listViewEvents);
+        setListViewEvents();
         listViewEvents.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                writeToLocalDB();
+              //  Intent i = new Intent(Program.this )
+
+
             }
         });
-
-        setListViewEvents();
-
     }
-
-    private void writeToLocalDB() {
-        Toast.makeText(Program.this, "In", Toast.LENGTH_SHORT).show();
-
-    }
-
     public void setListViewEvents() {
-        CustomEventAdapter adapter = new CustomEventAdapter(this, dummyList());
+        CustomEventAdapter adapter = new CustomEventAdapter(this, dummyListDays());
         listViewEvents.setAdapter(adapter);
     }
-    public ArrayList<Event> dummyList(){
+    public ArrayList<Event> dummyListDays(){
         ArrayList<Event> n = new ArrayList<>();
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy ");
         Date d = Calendar.getInstance().getTime();
         String date = df.format(d);
 
-        for(int i = 0 ; i < 10 ; i++ ){
-            n.add(new Event("MY PROGRAM CHOICE", date));
+        for(int i = 0 ; i < 20 ; i++ ){
+            n.add(new Event(date, "TITLE"));
         }
         return n;
     }

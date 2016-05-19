@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         btnProg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, Program.class);
+                Intent i = new Intent(MainActivity.this, ProgramDays.class);
                 startActivity(i);
             }
         });

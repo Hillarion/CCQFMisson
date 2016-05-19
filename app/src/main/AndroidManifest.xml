@@ -30,7 +30,8 @@
         <activity android:name=".SurveyCreate" />
         <activity android:name=".SurveyResults" />
         <activity android:name=".SurveyResultDetails" />
-        <activity android:name=".NewB2B"></activity>
+        <activity android:name=".NewB2B" />
+        <activity android:name=".ProgramDays"></activity>
     </application>
 
 </manifest>
