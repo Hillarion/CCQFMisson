@@ -186,8 +186,11 @@ public class interfaceDB {
 
     public ArrayList<SurveyObjectResults> readSurveyResults(int surveyId){
         ArrayList<SurveyObjectResults> rsltList = null;
-        if(rDb != null)
-            rsltList = rDb.readSurveyResults( surveyId);
+        System.out.print("CCQF Mission interfaceDB surveyId = " + surveyId + ", rDb = " + rDb + "\n\n");
+        System.out.flush();
+        if(rDb != null) {
+            rsltList = rDb.readSurveyResults(surveyId);
+        }
         return rsltList;
     }
 

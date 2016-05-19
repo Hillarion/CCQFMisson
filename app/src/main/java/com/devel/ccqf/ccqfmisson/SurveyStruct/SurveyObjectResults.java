@@ -1,15 +1,22 @@
 package com.devel.ccqf.ccqfmisson.SurveyStruct;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v4.util.Pair;
 import java.util.ArrayList;
 
 /**
  * Created by jo on 5/12/16.
  */
-public class SurveyObjectResults {
+public class SurveyObjectResults /*implements Parcelable*/ {
     private String question;
     private int totalHit;
     private ArrayList<Pair> answersAndHit;
+
+
+    public SurveyObjectResults() {
+        this("", 0, null);
+    }
 
     public SurveyObjectResults(String question, int totalHit, ArrayList<Pair> answersAndHit) {
         this.question = question;
@@ -60,4 +67,33 @@ public class SurveyObjectResults {
                 ", answersAndHit=" + answersAndHit +
                 '}';
     }
+/*
+    public static final Parcelable.Creator<SurveyObjectResults> CREATOR =
+            new Creator<SurveyObjectResults>() {
+                @Override
+                public SurveyObjectResults createFromParcel(Parcel source) {
+                    SurveyObjectResults sor = new SurveyObjectResults();
+                    sor.question = source.readString();
+                    sor.totalHit = source.readInt();
+                    sor.answersAndHit = source.readArrayList();
+                    return sor;
+                }
+
+                @Override
+                public SurveyObjectResults[] newArray(int size) {
+                    return new SurveyObjectResults[0];
+                }
+            };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(question);
+        dest.writeInt(totalHit);
+        dest.writeList(answersAndHit);
+    }*/
 }

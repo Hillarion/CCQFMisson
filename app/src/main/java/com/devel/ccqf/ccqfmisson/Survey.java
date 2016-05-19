@@ -32,7 +32,7 @@ public class Survey extends AppCompatActivity {
     private List<String> selectedAnswers;
     private List<String> checkedItems;
     private SparseIntArray selectedPosition;
-
+    private static List<SurveyObject> listSurveyGroup = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +49,9 @@ public class Survey extends AppCompatActivity {
         txtQuestion = (TextView)findViewById(R.id.txtQuestionSurvey);
 
         //Affichage de la premiere question et ses choix de réponses
-        final List<SurveyObject> listSurveyGroup;
         interfaceDB iDb = new interfaceDB(this);
         if(iDb != null) {
             SurveyGroup srvGrp = iDb.readSurvey(3);
-
             listSurveyGroup = srvGrp.getQuestions();
         }
         else

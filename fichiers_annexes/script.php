@@ -254,13 +254,14 @@ function readSurveyResults(){
     else {
         $req = "SELECT question_list FROM SurveyForm WHERE id_survey = $surveyID";
 //        echo "readSurveyResults req1 = $req<br/>";
-        $result = doQuery($req); 
+        $result = doQuery($req);
         $row=mysqli_num_rows($result);
         $ligne=mysqli_fetch_object($result);
         if($ligne != ""){
             $question_list = $ligne->question_list;
             $question_tbl = explode(',', $question_list);
-             mysql_free_result($result);
+            mysql_free_result($result);
+            echo "{\"Status\" : \"Success\", \"questions\" : [";
             for($qIdx=0; $qIdx< sizeof($question_tbl); $qIdx++){
                 $req = "SELECT question, response_list FROM SurveyQuestion WHERE ".
                 "id_question = $question_tbl[$qIdx]";
@@ -270,36 +271,43 @@ function readSurveyResults(){
                     $questionText = $ligne->question;
                     $responseText = $ligne->response_list;
                     $responseTable = explode(',', $responseText);
-                }
-            
-                if($ligne != ""){
                     $response_list = $ligne->response_list;
                     $response_tbl = explode(',', $response_list);
                     $type = $ligne->type;
-                    mysql_free_result($result);
                     for($idx=0; $idx< sizeof($response_tbl); $idx++)
                         $response[$idx] = 0;
-                    $req = "SELECT * FROM SurveyResponse WHERE id_question = $question_tbl[$qIdx]";
-//        echo "----readSurveyResults req3 = $req<br/>";
-                    $result = doQuery($req); 
-                    $row=mysqli_num_rows($result);
+                    $req2 = "SELECT * FROM SurveyResponse WHERE id_question = $question_tbl[$qIdx]";
+                    $result2 = doQuery($req2);
+                    $row2=mysqli_num_rows($result2);
+                    echo "{\"id_question\" : \"$question_tbl[$qIdx]\", ";
+                    echo "\"question\" : \"$questionText\", ";
                     if($type < 2){
-                        if($row > 0){
-                            echo "{\"Status\" : \"Success\", \"id_question\" : \"$question_tbl[$qIdx]\", ";
-                            echo "\"question\" : \"$questionText\",";
-                            while($ligne=mysqli_fetch_object($result))
+                        if($row2 > 0){
+                            while($ligne=mysqli_fetch_object($result2))
                                 $response[$ligne->response_int]++;
                             echo "\"reponses\" : [";
                             for($idx=0; $idx< sizeof($response_tbl); $idx++){
-                                echo "{\"$response_tbl[$idx]\" : \"$response[$idx]\"}";
+                                echo "{\"label\" : \"$response_tbl[$idx]\", \"hit\" : \"$response[$idx]\"}";
                                 if($idx < sizeof($response_tbl)-1)
-                                    echo",";
+                                    echo", ";
+                            }
+                            echo "]}";
+                        }
+                        else{
+                            echo "\"reponses\" : [";
+                            for($idx=0; $idx< sizeof($response_tbl); $idx++){
+                                echo "{\"label\" : \"$response_tbl[$idx]\", \"hit\" : \"0\"}";
+                                if($idx < sizeof($response_tbl)-1)
+                                    echo", ";
                             }
                             echo "]}";
                         }
                     }
+                    if($qIdx < sizeof($question_tbl)-1)
+                        echo", ";
                 }
             }
+            echo "]}";
         }
         else
             returnFail("no result");

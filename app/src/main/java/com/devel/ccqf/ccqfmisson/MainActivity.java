@@ -114,13 +114,15 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_settings://Nouveau Survey
                 Intent i = new Intent(MainActivity.this, SurveyCreate.class);
                 startActivity(i);
+                break;
             case R.id.action_result://Consulter résulat du survey
                 Intent i2 = new Intent(MainActivity.this, SurveyResults.class);
                 startActivity(i2);
+                break;
             case R.id.action_newB2b://Nouveau B2B (formulaire quie crée un object Event)
                 Intent b2b = new Intent(MainActivity.this, NewB2B.class);
                 startActivity(b2b);
-
+                break;
         }
 
         return super.onOptionsItemSelected(item);

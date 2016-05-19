@@ -1,6 +1,7 @@
 package com.devel.ccqf.ccqfmisson.Database;
 
 import android.content.Context;
+import android.support.v4.util.Pair;
 
 import com.devel.ccqf.ccqfmisson.ReseauSocial.MessagePacket;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyGroup;
@@ -429,17 +430,51 @@ public class RemoteDB {
     public ArrayList<SurveyObjectResults> readSurveyResults(int surveyId){
         ArrayList<SurveyObjectResults> srvAnswrObj = null;
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
-        pairs.add(new BasicNameValuePair("action", "readSurveyResult"));
-        pairs.add(new BasicNameValuePair("surveyID", "surveyId"));
-        sendRequestNoResponse(pairs);
+        System.out.print("CCQF Mission readSurveyResults surveyID = " + surveyId + "\n\n");
+        System.out.flush();
+        pairs.add(new BasicNameValuePair("action", "readSurveyResults"));
+        pairs.add(new BasicNameValuePair("surveyID", "" + surveyId));
+        System.out.print("CCQF Mission readSurveyResults pairs = " + pairs + "\n\n");
+        System.out.flush();
+        sendRequest(pairs);
         while(parsingComplete == false);
 
         if(ligneResult != null) {
             parser = new JSONParser(ligneResult);
+            System.out.print("CCQF Mission readSurveyResults ligneResult = " + ligneResult + "\n\n");
+            System.out.flush();
             String status = parser.getStatus();
             if (!status.isEmpty()) {
                 if (status.equalsIgnoreCase("Success")) {
-                    JSONObject jsonObject = parser.getJSONObject("");
+                    JSONArray jArray = parser.getList("questions");
+                    if(jArray != null){
+                        srvAnswrObj = new ArrayList<>();
+                        for (int idx = 0; idx < jArray.length(); idx++){
+                            try {
+                                JSONObject srvy = jArray.getJSONObject(idx);
+                                System.out.print("CCQF Mission readSurveyResults srvy = " + srvy + "\n\n");
+                                System.out.flush();
+                                ArrayList<Pair> answersAndHit = new ArrayList<>();
+                                JSONArray respArray = srvy.getJSONArray("reponses");
+                                System.out.print("CCQF Mission readSurveyResults respArray = " + respArray + "\n\n");
+                                System.out.flush();
+                                int hit=0, ttlHit=0;
+                                for(int jdx=0; jdx<respArray.length(); jdx++){
+                                    JSONObject joPesp = respArray.getJSONObject(jdx);
+                                    hit = joPesp.getInt("hit");
+                                    ttlHit += hit;
+                                    Pair pair = new Pair(joPesp.getString("label"), hit);
+                                    answersAndHit.add(pair);
+                                }
+                                SurveyObjectResults sor = new SurveyObjectResults(
+                                        srvy.getString("question"), ttlHit, answersAndHit );
+                                srvAnswrObj.add(sor);
+
+                            }catch(JSONException  je){
+
+                            }
+                        }
+                    }
                 }
             }
         }

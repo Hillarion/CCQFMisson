@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#FFFFFF</color>
     <color name="colorAccent">#c13f21</color>
     <color name="colorCCQFOrange">#c13f21</color>
+    <color name="colorCCQFGreen1">#35873f</color>
+    <color name="colorCCQFGreen2">#415d2d</color>
+
 </resources>
