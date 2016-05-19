@@ -14,8 +14,14 @@ public class MessagePacket {
     String attachement;
 
     public MessagePacket(int id, int src, String dest, String msg, Date tStamp, String attach) {
-
+        id_msg = id;
+        source = src;
+        destinataires = dest;
+        message=msg;
+        timestamp = tStamp;
+        attachement=attach;
     }
+
     public MessagePacket(int src, String dest, String msg, String attach){
         this(-1, src, dest, msg, new Date(), attach);
     }
@@ -68,4 +74,7 @@ public class MessagePacket {
         this.attachement = attachement;
     }
 
+    public String toString (){
+        return "[" +source+ "]" + timestamp + " : " + message;
+    }
 }

@@ -9,6 +9,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.devel.ccqf.ccqfmisson.Adapters.CustomSurveyResultsAdapter;
+import com.devel.ccqf.ccqfmisson.Database.interfaceDB;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObject;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObjectResults;
 
@@ -24,9 +25,13 @@ public class SurveyResults extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey_results);
 
-
-        ArrayList<SurveyObjectResults> l = new ArrayList<>();
-        l = dummyList();
+/*        ArrayList<SurveyObjectResults> l = new ArrayList<>();
+        interfaceDB iDb = new interfaceDB(this);
+        if(iDb != null) {
+            l = iDb.readSurveyResults(2);
+        }
+        else
+            l = dummyList();*/
         listResults = (ListView)findViewById(R.id.listViewSurveyResults);
         listResults.setAdapter(new CustomSurveyResultsAdapter(SurveyResults.this, dummyList()));
 

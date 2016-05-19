@@ -14,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.devel.ccqf.ccqfmisson.Adapters.CustomSurveyAdapter;
+import com.devel.ccqf.ccqfmisson.Database.interfaceDB;
+import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyGroup;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObject;
 
 import java.util.ArrayList;
@@ -48,7 +50,15 @@ public class Survey extends AppCompatActivity {
 
         //Affichage de la premiere question et ses choix de réponses
         final List<SurveyObject> listSurveyGroup;
-        listSurveyGroup = dummySurveyGroup();
+        interfaceDB iDb = new interfaceDB(this);
+        if(iDb != null) {
+            SurveyGroup srvGrp = iDb.readSurvey(3);
+
+            listSurveyGroup = srvGrp.getQuestions();
+        }
+        else
+            listSurveyGroup = dummySurveyGroup();
+
         setListAnswerAdapter(listSurveyGroup.get(i).getChoixReponse());
         txtQuestion.setText(listSurveyGroup.get(i).getQuestionTexte());
 

@@ -3,6 +3,7 @@ package com.devel.ccqf.ccqfmisson.Database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -128,7 +129,13 @@ public class LocaleDB {
             cursor = db.rawQuery("SELECT lastMsg FROM Utilisateur WHERE user_id = ?", new String[]{"" + UserId});
             cursor.moveToFirst();
             if (cursor != null) {
-                mIdx = cursor.getInt(0);
+                System.out.print("Chat Test ldb.getLastMsgIndex() cursor (bis)= " + cursor + "\n\n");
+                System.out.flush();
+                try {
+                    mIdx = cursor.getInt(0);
+                }catch(CursorIndexOutOfBoundsException cioobe) {//entry does not exist
+                   mIdx = -1;
+                }
             }
         }
         return mIdx;
