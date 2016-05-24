@@ -11,14 +11,14 @@ import java.util.ArrayList;
 public class SurveyObjectResults /*implements Parcelable*/ {
     private String question;
     private int totalHit;
-    private ArrayList<Pair> answersAndHit;
+    private SurveyPair answersAndHit;
 
 
     public SurveyObjectResults() {
         this("", 0, null);
     }
 
-    public SurveyObjectResults(String question, int totalHit, ArrayList<Pair> answersAndHit) {
+    public SurveyObjectResults(String question, int totalHit, SurveyPair answersAndHit) {
         this.question = question;
         this.totalHit = totalHit;
         this.answersAndHit = answersAndHit;
@@ -29,7 +29,7 @@ public class SurveyObjectResults /*implements Parcelable*/ {
         this.totalHit = totalHit;
     }
 
-    public SurveyObjectResults(String question,  ArrayList<Pair> answersAndHit) {
+    public SurveyObjectResults(String question,  SurveyPair answersAndHit) {
         this.question = question;
         this.answersAndHit = answersAndHit;
     }
@@ -51,11 +51,11 @@ public class SurveyObjectResults /*implements Parcelable*/ {
         this.totalHit = totalHit;
     }
 
-    public ArrayList<Pair> getAnswersAndHit() {
+    public SurveyPair getAnswersAndHit() {
         return answersAndHit;
     }
 
-    public void setAnswersAndHit(ArrayList<Pair> answersAndHit) {
+    public void setAnswersAndHit(SurveyPair answersAndHit) {
         this.answersAndHit = answersAndHit;
     }
 

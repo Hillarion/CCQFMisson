@@ -75,7 +75,7 @@ public class Survey extends AppCompatActivity {
                    // selectedPosition.delete(i);
                    // checkedItems.remove(String.valueOf(position));
                     check.toggle();
-                    Toast.makeText(Survey.this, "Un-check", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(Survey.this, "Un-check", Toast.LENGTH_SHORT).show();
 
                 }
                 else if (selectedAnswers.size() < 1){ //CHECK
@@ -83,8 +83,8 @@ public class Survey extends AppCompatActivity {
                    // selectedPosition.put(i, position);
                    // checkedItems.add(checkedId);
                     check.toggle();
-                    Toast.makeText(Survey.this, "Check "+selectedId,
-                            Toast.LENGTH_SHORT).show();
+                    /*Toast.makeText(Survey.this, "Check "+selectedId,
+                            Toast.LENGTH_SHORT).show();*/
                 }
 
             }

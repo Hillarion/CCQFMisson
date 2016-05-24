@@ -12,6 +12,7 @@ import com.devel.ccqf.ccqfmisson.Adapters.CustomSurveyResultsAdapter;
 import com.devel.ccqf.ccqfmisson.Database.interfaceDB;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObject;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObjectResults;
+import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyPair;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -56,10 +57,10 @@ public class SurveyResults extends AppCompatActivity {
         });
 
     }
-    public ArrayList<SurveyObjectResults> dummyList(){
-        ArrayList<SurveyObjectResults> list = new ArrayList<>();
+    public ArrayList<SurveyPair> dummyList(){
+        ArrayList<SurveyPair> list = new ArrayList<>();
         for(int i = 0;i < 5;i++){
-            list.add(new SurveyObjectResults("jhgjhg",i));
+            list.add(new SurveyPair("jhgjhg",""+i));
         }
         return  list;
     }

@@ -135,7 +135,8 @@ public class NewB2B extends AppCompatActivity {
                     ext = false;
 
                 Event e = new Event
-                        (destinataire, heureDebut, heureFin, nom, poste, telephnone, email, batiment, ext);
+                        (destinataire, heureDebut, heureFin, nom, poste,
+                                telephnone, email, batiment, ext);
                 Toast.makeText(NewB2B.this, ""+e, Toast.LENGTH_SHORT).show();
             }
         });
