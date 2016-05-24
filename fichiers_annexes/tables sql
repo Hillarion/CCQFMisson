@@ -5,52 +5,52 @@ use CCQFMission;
 create table Utilisateur (
     user_id int NOT NULL AUTO_INCREMENT,
     userName text NOT NULL,
-	privilege  enum ('', 'admin'), 
-	PRIMARY KEY(user_id)
-);	
+    privilege  enum ('', 'admin'),
+    PRIMARY KEY(user_id)
+);
 
 create table MessagePacket(
-	id_msg int NOT NULL AUTO_INCREMENT, 
-	source int NOT NULL,
-	destinataires text,
-	message text,
-	time DATETIME NOT NULL,
-	attachement text,
-	PRIMARY KEY(id_msg)
+    id_msg int NOT NULL AUTO_INCREMENT,
+    source int NOT NULL,
+    destinataires text,
+    message text,
+    time DATETIME NOT NULL,
+    attachement text,
+    PRIMARY KEY(id_msg)
 );
 
 create table MessageQueue(
-	id_msg int NOT NULL ,
-	destinataire int NOT NULL,
+    id_msg int NOT NULL ,
+    destinataire int NOT NULL,
     lu boolean NOT NULL,
-	FOREIGN KEY(id_msg) REFERENCES MessagePacket (id_msg),
-	FOREIGN KEY(destinataire) REFERENCES Utilisateur (id_user)
+    FOREIGN KEY(id_msg) REFERENCES MessagePacket (id_msg),
+    FOREIGN KEY(destinataire) REFERENCES Utilisateur (id_user)
 );
 
-
 create table SurveyQuestion(
-	id_question int NOT NULL AUTO_INCREMENT,
-	question text, 
-	type int,
-	response_list text,
-	PRIMARY KEY(id_question)
+    id_question int NOT NULL AUTO_INCREMENT,
+    question text, 
+    type int,
+    response_list text,
+    PRIMARY KEY(id_question)
 );
 
 create table SurveyResponse(
-	id_question int NOT NULL,
-	source int NOT NULL, 
-	response_int int,
-	response_text text,
-	FOREIGN KEY(id_question) REFERENCES SurveyQuestion (id_question)
+    id_question int NOT NULL,
+    source int NOT NULL, 
+    response_int int,
+    response_text text,
+    FOREIGN KEY(id_question) REFERENCES SurveyQuestion (id_question)
 );
 
 create table SurveyForm(
-	id_survey int NOT NULL AUTO_INCREMENT,
-	question_list text,
-	dateLimite  DATETIME,
-	PRIMARY KEY(id_survey)
+    id_survey int NOT NULL AUTO_INCREMENT,
+    question_list text,
+    dateLimite  DATETIME,
+    PRIMARY KEY(id_survey)
 );
 
 insert into Utilisateur values(0, 'Admin', 'admin');
 insert into Utilisateur values(0, 'User', '');
 insert into Utilisateur values(0, 'User2', '');
+

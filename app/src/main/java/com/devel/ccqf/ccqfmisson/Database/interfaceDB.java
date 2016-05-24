@@ -37,11 +37,13 @@ public class interfaceDB {
     public interfaceDB(Context cntx) {
         currentUser = -1;
         parentContext = cntx;
+
         if (isOnline()) {
             if (testConnexionToServer() == true)
                 workLocaly = false;
         }
         lDb = new LocaleDB(cntx);
+
         if (workLocaly == false) {
             rDb = new RemoteDB(cntx);
             rDb.setLocalBackUp(lDb);
@@ -147,6 +149,7 @@ public class interfaceDB {
     */
     public SurveyGroup readSurvey(int surveyID) {
         SurveyGroup sGrp = null;
+
         if (rDb != null) {
             sGrp = rDb.readSurvey(surveyID);
             lDb.setLastSurveyIndex(currentUser, sGrp.getId());
@@ -186,8 +189,7 @@ public class interfaceDB {
 
     public ArrayList<SurveyObjectResults> readSurveyResults(int surveyId){
         ArrayList<SurveyObjectResults> rsltList = null;
-        System.out.print("CCQF Mission interfaceDB surveyId = " + surveyId + ", rDb = " + rDb + "\n\n");
-        System.out.flush();
+
         if(rDb != null) {
             rsltList = rDb.readSurveyResults(surveyId);
         }

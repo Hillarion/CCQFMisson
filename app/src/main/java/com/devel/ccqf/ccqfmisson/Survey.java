@@ -1,6 +1,7 @@
 package com.devel.ccqf.ccqfmisson;
 
 import android.media.Image;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.SparseIntArray;
@@ -28,7 +29,7 @@ public class Survey extends AppCompatActivity {
     private TextView txtQuestion;
     private ImageButton btnNext;
     private ImageButton btnBack;
-    private int i = 0;
+    private int surveyQuestionIndex = 0;
     private List<String> selectedAnswers;
     private List<String> checkedItems;
     private SparseIntArray selectedPosition;
@@ -49,16 +50,7 @@ public class Survey extends AppCompatActivity {
         txtQuestion = (TextView)findViewById(R.id.txtQuestionSurvey);
 
         //Affichage de la premiere question et ses choix de réponses
-        interfaceDB iDb = new interfaceDB(this);
-        if(iDb != null) {
-            SurveyGroup srvGrp = iDb.readSurvey(3);
-            listSurveyGroup = srvGrp.getQuestions();
-        }
-        else
-            listSurveyGroup = dummySurveyGroup();
-
-        setListAnswerAdapter(listSurveyGroup.get(i).getChoixReponse());
-        txtQuestion.setText(listSurveyGroup.get(i).getQuestionTexte());
+        new GetSurveyAsyncTask().execute(3);
 
         listViewAnswers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -72,7 +64,7 @@ public class Survey extends AppCompatActivity {
 
                 if(selectedAnswers.contains(selectedId)){ //UN-CHECK
                     selectedAnswers.remove(selectedId);
-                   // selectedPosition.delete(i);
+                   // selectedPosition.delete(surveyQuestionIndex);
                    // checkedItems.remove(String.valueOf(position));
                     check.toggle();
                    // Toast.makeText(Survey.this, "Un-check", Toast.LENGTH_SHORT).show();
@@ -80,7 +72,7 @@ public class Survey extends AppCompatActivity {
                 }
                 else if (selectedAnswers.size() < 1){ //CHECK
                     selectedAnswers.add(selectedId);
-                   // selectedPosition.put(i, position);
+                   // selectedPosition.put(surveyQuestionIndex, position);
                    // checkedItems.add(checkedId);
                     check.toggle();
                     /*Toast.makeText(Survey.this, "Check "+selectedId,
@@ -99,24 +91,24 @@ public class Survey extends AppCompatActivity {
                 //Send Answer
                 Toast.makeText(Survey.this, "Sent (not)", Toast.LENGTH_SHORT).show();
                 //Reload list
-                if(i < listSurveyGroup.size()-1){
-                    i++;
+                if(surveyQuestionIndex < listSurveyGroup.size()-1){
+                    surveyQuestionIndex++;
                     listViewAnswers.setAdapter(null);
-                    setListAnswerAdapter(listSurveyGroup.get(i).getChoixReponse());
-                    txtQuestion.setText(listSurveyGroup.get(i).getQuestionTexte());
+                    setListAnswerAdapter(listSurveyGroup.get(surveyQuestionIndex).getChoixReponse());
+                    txtQuestion.setText(listSurveyGroup.get(surveyQuestionIndex).getQuestionTexte());
                     selectedAnswers = new ArrayList<String>();
                 }
                 else {
                     txtQuestion.setText("All caught up !");
                     listViewAnswers.setVisibility(View.GONE);
                 }
-               /* if (i < listList.size()-1) {
-                    i++;
+               /* if (surveyQuestionIndex < listList.size()-1) {
+                    surveyQuestionIndex++;
                     listViewAnswers.setAdapter(null);
-                    setListAnswerAdapter(listList.get(i));
+                    setListAnswerAdapter(listList.get(surveyQuestionIndex));
                  }
                 else{
-                   // Toast.makeText(Survey.this, i+" nope", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(Survey.this, surveyQuestionIndex+" nope", Toast.LENGTH_SHORT).show();
                 }*/
             }
         });
@@ -125,15 +117,15 @@ public class Survey extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               if(i > 0){
-                   i--;
+               if(surveyQuestionIndex > 0){
+                   surveyQuestionIndex--;
                    listViewAnswers.setAdapter(null);
-                   setListAnswerAdapter(listList.get(i));
+                   setListAnswerAdapter(listList.get(surveyQuestionIndex));
 
-                       View view = getViewByPosition(selectedPosition.get(i), listViewAnswers);
+                       View view = getViewByPosition(selectedPosition.get(surveyQuestionIndex), listViewAnswers);
                        CheckedTextView check = (CheckedTextView) view.findViewById(R.id.txtAnswerSurvey);
                        check.toggle();
-                       Toast.makeText(Survey.this, "selectedPosition.get(i) = " + selectedPosition.get(i)
+                       Toast.makeText(Survey.this, "selectedPosition.get(surveyQuestionIndex) = " + selectedPosition.get(surveyQuestionIndex)
                                + "\n check.txt =" + check.getText().toString(), Toast.LENGTH_SHORT).show();
                        // NE coche pas les cases quand on revien d'une autre question mais le toast s'affiche quand meme
                        voir notifyDataSetChanged();
@@ -190,6 +182,43 @@ public class Survey extends AppCompatActivity {
                    listViewAnswers);
             CheckedTextView check = (CheckedTextView)v.findViewById(R.id.txtAnswerSurvey);
             check.toggle();
+
+    }
+
+    private class GetSurveyAsyncTask extends AsyncTask<Integer, Void, SurveyGroup> {
+        @Override
+        protected SurveyGroup doInBackground(Integer... adr) {
+            SurveyGroup srvGrp = null;
+            interfaceDB iDb = new interfaceDB(Survey.this);
+            if(iDb != null)
+                srvGrp = iDb.readSurvey(adr[0].intValue());
+            return srvGrp;
+        }
+
+        @Override
+        protected void onPostExecute(SurveyGroup sGrp) {
+            // execution of result of Long time consuming operation
+            if(sGrp != null) {
+                listSurveyGroup = sGrp.getQuestions();
+            }
+            else
+                listSurveyGroup = dummySurveyGroup();
+            surveyQuestionIndex=0;
+            setListAnswerAdapter(listSurveyGroup.get(surveyQuestionIndex).getChoixReponse());
+            txtQuestion.setText(listSurveyGroup.get(surveyQuestionIndex).getQuestionTexte());
+        }
+
+        @Override
+        protected void onPreExecute() {
+            // Things to be done before execution of long running operation. For
+            // example showing ProgessDialog
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... text) {
+            // Things to be done while execution of long running operation is in
+            // progress. For example updating ProgessDialog
+        }
 
     }
 }

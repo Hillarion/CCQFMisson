@@ -32,6 +32,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -42,73 +43,54 @@ public class RemoteDB {
     public static final String strURL = "http://thierrystpierre.ddns.net:81/CCQFMission/script.php";
     private List<NameValuePair> paramRequete;
     private JSONParser parser;
-    private String ligneResult = null;
-    public volatile boolean parsingComplete = true;
-    SimpleDateFormat dateFormat;
-
-
+    private SimpleDateFormat dateFormat;
+    private HttpClient httpclient;
+    private HttpPost httppost;
+    
     public RemoteDB(Context cntx){
         dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        httpclient = new DefaultHttpClient();
+        httppost = new HttpPost(strURL);
     }
 
     void setLocalBackUp(LocaleDB dbaLite){
         lDb = dbaLite;
     }
 
-
     /*
     * Méthodes privées pour la gestion des transaction réseaux
     */
-    private void sendRequest(List<NameValuePair> pairs){
+    private String sendRequest(List<NameValuePair> pairs){
         paramRequete = pairs;
-        ligneResult = null;
-        parsingComplete = false;
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    HttpClient httpclient = new DefaultHttpClient();
-                    HttpPost httppost = new HttpPost(strURL);
-                    httppost.setEntity(new UrlEncodedFormEntity(paramRequete));
-                    HttpResponse response = httpclient.execute(httppost);
-                    HttpEntity entity2 = response.getEntity();
-                    ligneResult = EntityUtils.toString(entity2);
-                    parsingComplete = true;
-                } catch (UnsupportedEncodingException e)
-                {
-                    e.printStackTrace();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
-        thread.start();
+        String ligneResult = null;
+        try {
+            httppost.setEntity(new UrlEncodedFormEntity(paramRequete));
+            HttpResponse response = httpclient.execute(httppost);
+            HttpEntity entity2 = response.getEntity();
+            ligneResult = EntityUtils.toString(entity2);
+        } catch (UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        return ligneResult;
     }
 
-    private void sendRequestNoResponse(List<NameValuePair> pairs){
+    private String sendRequestNoResponse(List<NameValuePair> pairs){
         paramRequete = pairs;
-        ligneResult = null;
-        parsingComplete = false;
+        String ligneResult = null;
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    HttpClient httpclient = new DefaultHttpClient();
-                    HttpPost httppost = new HttpPost(strURL);
-                    httppost.setEntity(new UrlEncodedFormEntity(paramRequete));
-                    HttpResponse response = httpclient.execute(httppost);
-                    parsingComplete = true;
-                } catch (UnsupportedEncodingException e)
-                {
-                    e.printStackTrace();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
-        thread.start();
+        try {
+            httppost.setEntity(new UrlEncodedFormEntity(paramRequete));
+            HttpResponse response = httpclient.execute(httppost);
+        } catch (UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        return ligneResult;
     }
 
      /*
@@ -123,8 +105,7 @@ public class RemoteDB {
         pairs.add(new BasicNameValuePair("action", "validateLogin"));
         pairs.add(new BasicNameValuePair("userName", userName));
         pairs.add(new BasicNameValuePair("userPass", password));
-        sendRequest(pairs);
-        while(parsingComplete == false);
+        String ligneResult = sendRequest(pairs);
 
         if(ligneResult != null) {
             parser = new JSONParser(ligneResult);
@@ -158,8 +139,7 @@ public class RemoteDB {
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
         pairs.add(new BasicNameValuePair("action", "getPrivilege"));
         pairs.add(new BasicNameValuePair("userID", "" + UserId));
-        sendRequest(pairs);
-        while(parsingComplete == false);
+        String ligneResult = sendRequest(pairs);
 
         if(ligneResult != null) {
             parser = new JSONParser(ligneResult);
@@ -195,8 +175,7 @@ public class RemoteDB {
 		String time = sdf.format(tStmp);
         pairs.add(new BasicNameValuePair("timeStamp", time));
         pairs.add(new BasicNameValuePair("attachement", msg.getAttachement()));
-        sendRequest(pairs);
-        while(parsingComplete == false);
+        String ligneResult = sendRequest(pairs);
 
         if(ligneResult != null) {
             parser = new JSONParser(ligneResult);
@@ -224,8 +203,7 @@ public class RemoteDB {
         pairs.add(new BasicNameValuePair("action", "readMessages"));
         pairs.add(new BasicNameValuePair("userID", "" + userId));
         pairs.add(new BasicNameValuePair("msgID", "" + lastMessageID));
-        sendRequest(pairs);
-        while(parsingComplete == false);
+        String ligneResult = sendRequest(pairs);
 
         if(ligneResult != null) {
             parser = new JSONParser(ligneResult);
@@ -278,15 +256,36 @@ public class RemoteDB {
     */
     public void sendSurvey(SurveyGroup  sGrp){
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
-        pairs.add(new BasicNameValuePair("action", "sendSurvey"));
-        sendRequest(pairs);
-        while(parsingComplete == false);
+        pairs.add(new BasicNameValuePair("action", "createSurveyForm"));
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date tStmp = sGrp.getDateLimite();
+        String dueDate = sdf.format(tStmp);
+        pairs.add(new BasicNameValuePair("dateLimite", dueDate));
+        String ligneResult = sendRequest(pairs);
 
         if(ligneResult != null) {
             parser = new JSONParser(ligneResult);
             String status = parser.getStatus();
             if (!status.isEmpty()) {
                 if (status.equalsIgnoreCase("Success")) {
+                    int srvId = parser.getIndex();
+
+                    List<SurveyObject> qList = sGrp.getQuestions();
+                    Iterator<SurveyObject> iter = qList.iterator();
+                    while(iter.hasNext()){
+                        SurveyObject sObj = iter.next();
+                        pairs = new ArrayList<NameValuePair>();
+                        pairs.add(new BasicNameValuePair("action", "sendSurveyQuestion"));
+                        pairs.add(new BasicNameValuePair("id_survey", ""+srvId));
+                        pairs.add(new BasicNameValuePair("question", ""+sObj.getQuestionTexte()));
+                        pairs.add(new BasicNameValuePair("type", ""+sObj.getType()));
+                        ArrayList<String> reps  = sObj.getChoixReponse();
+                        String listeReponses = reps.get(0);
+                        for(int r=1; r<reps.size(); r++)
+                            listeReponses += ","+reps.get(r);
+                        pairs.add(new BasicNameValuePair("listeReponses", listeReponses));
+                        sendRequestNoResponse(pairs);
+                    }
                 }
             }
         }
@@ -299,18 +298,14 @@ public class RemoteDB {
     */
     public SurveyGroup readSurvey(int surveyID){
         SurveyGroup surveyGrp = null;
+
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
         pairs.add(new BasicNameValuePair("action", "readSurvey"));
         pairs.add(new BasicNameValuePair("surveyID", "" + surveyID));
-        sendRequest(pairs);
-        while(parsingComplete == false);
+        String ligneResult = sendRequest(pairs);
 
         if(ligneResult != null) {
             parser = new JSONParser(ligneResult);
-            System.out.print("CCQF Mission RemoteDB readSurvey ligneResult = " + ligneResult + "\n\n");
-            System.out.print("CCQF Mission RemoteDB readSurvey parser = " + parser + "\n\n");
-            System.out.print("CCQF Mission RemoteDB readSurvey status = " + parser.getStatus() + "\n\n");
-            System.out.flush();
             String status = parser.getStatus();
             if (!status.isEmpty()) {
                 if (status.equalsIgnoreCase("Success")) {
@@ -382,8 +377,7 @@ public class RemoteDB {
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
         pairs.add(new BasicNameValuePair("action", "readSurveyList"));
         pairs.add(new BasicNameValuePair("surveyID", "" + lastSurveyID));
-        sendRequest(pairs);
-        while(parsingComplete == false);
+        String ligneResult = sendRequest(pairs);
 
         if(ligneResult != null) {
             parser = new JSONParser(ligneResult);
@@ -420,7 +414,6 @@ public class RemoteDB {
         pairs.add(new BasicNameValuePair("reponseInt", ""+sQuestion.getReponseInt()));
         pairs.add(new BasicNameValuePair("reponseText", sQuestion.getReponseTexte()));
         sendRequestNoResponse(pairs);
-        while(parsingComplete == false);
     }
 
     /*
@@ -431,19 +424,13 @@ public class RemoteDB {
     public ArrayList<SurveyObjectResults> readSurveyResults(int surveyId){
         ArrayList<SurveyObjectResults> srvAnswrObj = null;
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
-        System.out.print("CCQF Mission readSurveyResults surveyID = " + surveyId + "\n\n");
-        System.out.flush();
         pairs.add(new BasicNameValuePair("action", "readSurveyResults"));
         pairs.add(new BasicNameValuePair("surveyID", "" + surveyId));
-        System.out.print("CCQF Mission readSurveyResults pairs = " + pairs + "\n\n");
-        System.out.flush();
-        sendRequest(pairs);
-        while(parsingComplete == false);
+        String ligneResult = sendRequest(pairs);
 
         if(ligneResult != null) {
             parser = new JSONParser(ligneResult);
-            System.out.print("CCQF Mission readSurveyResults ligneResult = " + ligneResult + "\n\n");
-            System.out.flush();
+
             String status = parser.getStatus();
             if (!status.isEmpty()) {
                 if (status.equalsIgnoreCase("Success")) {
@@ -453,12 +440,8 @@ public class RemoteDB {
                         for (int idx = 0; idx < jArray.length(); idx++){
                             try {
                                 JSONObject srvy = jArray.getJSONObject(idx);
-                                System.out.print("CCQF Mission readSurveyResults srvy = " + srvy + "\n\n");
-                                System.out.flush();
                                 ArrayList<SurveyPair> answersAndHit = new ArrayList<>();
                                 JSONArray respArray = srvy.getJSONArray("reponses");
-                                System.out.print("CCQF Mission readSurveyResults respArray = " + respArray + "\n\n");
-                                System.out.flush();
                                 int hit=0, ttlHit=0;
                                 for(int jdx=0; jdx<respArray.length(); jdx++){
                                     JSONObject joPesp = respArray.getJSONObject(jdx);

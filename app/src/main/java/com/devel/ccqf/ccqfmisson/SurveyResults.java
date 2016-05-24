@@ -1,6 +1,7 @@
 package com.devel.ccqf.ccqfmisson;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -30,20 +31,8 @@ public class SurveyResults extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey_results);
 
-        l = new ArrayList<>();
-        interfaceDB iDb = new interfaceDB(this);
-        System.out.print("CCQF Mission SurveyResults iDb = " + iDb + "\n\n");
-        System.out.flush();
-        if(iDb != null) {
-            l = iDb.readSurveyResults(1);
-            System.out.print("CCQF Mission SurveyResults l = " + l + "\n\n");
-            System.out.flush();
-        }
-        else
-             l = dummyList();
-
+        new GetSurveyResultsAsyncTask().execute(1);
         listResults = (ListView)findViewById(R.id.listViewSurveyResults);
-        listResults.setAdapter(new CustomSurveyResultsAdapter(SurveyResults.this, l));
 
         listResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -66,4 +55,37 @@ public class SurveyResults extends AppCompatActivity {
         }
         return  list;
     }
+
+
+    private class GetSurveyResultsAsyncTask extends AsyncTask<Integer, Void, ArrayList<SurveyObjectResults> > {
+        @Override
+        protected ArrayList<SurveyObjectResults>  doInBackground(Integer... adr) {
+            ArrayList<SurveyObjectResults> responsesList = null;
+            interfaceDB iDb = new interfaceDB(SurveyResults.this);
+            if(iDb != null)
+                responsesList = iDb.readSurveyResults(adr[0].intValue());
+            return responsesList;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<SurveyObjectResults>  sList) {
+            // execution of result of Long time consuming operation
+            if(sList != null)
+                listResults.setAdapter(new CustomSurveyResultsAdapter(SurveyResults.this, sList));
+        }
+
+        @Override
+        protected void onPreExecute() {
+            // Things to be done before execution of long running operation. For
+            // example showing ProgessDialog
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... text) {
+            // Things to be done while execution of long running operation is in
+            // progress. For example updating ProgessDialog
+        }
+
+    }
+
 }

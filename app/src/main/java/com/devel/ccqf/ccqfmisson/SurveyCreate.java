@@ -1,6 +1,7 @@
 package com.devel.ccqf.ccqfmisson;
 
 import android.app.Dialog;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 
 
 import com.devel.ccqf.ccqfmisson.Adapters.CustomSurveyAnswerAdapter;
+import com.devel.ccqf.ccqfmisson.Database.interfaceDB;
+import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyGroup;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObject;
 
 import java.util.ArrayList;
@@ -166,6 +169,33 @@ public class SurveyCreate extends AppCompatActivity {
         listViewNewAnswers.setAdapter(null);
         listViewNewAnswers.setAdapter(new CustomSurveyAnswerAdapter
                 (SurveyCreate.this, arrayListNewAnswers));
+    }
+
+    private class SendSurveyAsyncTask extends AsyncTask<SurveyGroup, Void, Void> {
+        @Override
+        protected Void doInBackground(SurveyGroup... srvGrp) {
+            interfaceDB iDb = new interfaceDB(SurveyCreate.this);
+            if(iDb != null)
+                iDb.sendSurvey(srvGrp[0]);
+            return null;
+        }
+
+        protected void onPostExecute(Void... unused) {
+            // execution of result of Long time consuming operation
+        }
+
+        @Override
+        protected void onPreExecute() {
+            // Things to be done before execution of long running operation. For
+            // example showing ProgessDialog
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... text) {
+            // Things to be done while execution of long running operation is in
+            // progress. For example updating ProgessDialog
+        }
+
     }
 }
 

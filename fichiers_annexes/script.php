@@ -153,9 +153,48 @@ function readMessages(){
         returnFail("bad UserID");
 }
 
-function sendSurvey(){
-//    $idSurvey=$_POST["id_survey"];
-    
+/* 
+*  Cette méthode ne fait que créer l'entrée SurveyForm à laqulle se greffera,
+*   subséquemment, les questions.
+*/
+function createSurveyForm(){
+    $dateLimite=$_POST["dateLimite"];
+    if(validateDate($dateLimite)) {
+	$req = "INSERT INTO SurveyForm value(0, '', '$dateLimite')";
+	createStatus(doQuery($req2));
+    }
+    else returnFail("Bad date format");
+}
+
+function sendSurveyQuestion(){
+    $idSurvey=$_POST["id_survey"];
+    $question=$_POST["question"];
+    $type=$_POST["type"];
+    $reponsesList=$_POST["listeReponses"];
+
+    if(($idSurvey == "") || (!is_numeric($idSurvey))
+        returnFail("Bad Survey ID");
+    else if($qestion == "")
+        returnFail("question must not be empty");
+    else if ($reponsesList == "")
+        returnFail("response list must not be empty");
+    else if (($type == "") || !is_numeric($type) || ($type > 2) || ($type < 0))
+        returnFail("Bad QuestionType");
+    else{
+        $req = "INSERT INTO SurveyQuestion values(0, '$question', $type, '$reponsesList')";
+	createStatus(doQuery($req));
+        $msgId = mysqli_insert_id($conn);
+	$req = "SELECT question_list FROM SurveyForm where id_survey = $idSurvey";
+        $result = doQuery($req);
+	$ligne = mysqli_fetch_object(doQuery($req));
+        $qList = $ligne->question_list;
+	if($qList == "")
+            $qList = "$msgId";
+        else
+            $qList += ",$msgId";
+	$req = "UPDATE question_list=$qList FROM SurveyForm where id_survey = $idSurvey";
+        $result = doQuery($req);		
+    }
 }
 
 function readSurvey(){
@@ -329,8 +368,11 @@ switch ($action){
     case "readMessages" :
        readMessages();
     break;
-    case "sendSurvey" :
-       sendSurvey();
+    case "createSurveyForm":
+        createSurveyForm();
+    break;
+    case "sendSurveyQuestion" :
+       sendSurveyQuestion();
     break;
     case "readSurvey" :
        readSurvey();
