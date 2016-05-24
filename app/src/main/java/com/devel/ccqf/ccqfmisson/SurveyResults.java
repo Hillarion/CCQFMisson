@@ -23,6 +23,7 @@ public class SurveyResults extends AppCompatActivity {
 //    public final static String PAR_KEY2 = "com.devel.ccqf.ccqfmisson.PAR_KEY2";
     private ListView listResults;
     private ArrayList<SurveyObjectResults> l;
+    private ArrayList<SurveyPair> listPair;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,8 @@ public class SurveyResults extends AppCompatActivity {
             System.out.flush();
         }
         else
-            l = dummyList();
+             l = dummyList();
+
         listResults = (ListView)findViewById(R.id.listViewSurveyResults);
         listResults.setAdapter(new CustomSurveyResultsAdapter(SurveyResults.this, l));
 
@@ -57,10 +59,10 @@ public class SurveyResults extends AppCompatActivity {
         });
 
     }
-    public ArrayList<SurveyPair> dummyList(){
-        ArrayList<SurveyPair> list = new ArrayList<>();
+    public ArrayList<SurveyObjectResults> dummyList(){
+        ArrayList<SurveyObjectResults> list = new ArrayList<>();
         for(int i = 0;i < 5;i++){
-            list.add(new SurveyPair("jhgjhg",""+i));
+            list.add(new SurveyObjectResults("jhgjhg", i));
         }
         return  list;
     }

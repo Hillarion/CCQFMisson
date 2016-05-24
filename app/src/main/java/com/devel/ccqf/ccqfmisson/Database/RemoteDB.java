@@ -9,6 +9,7 @@ import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyAnswer;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyMultiple;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObject;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObjectResults;
+import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyPair;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyText;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyYesNo;
 
@@ -454,7 +455,7 @@ public class RemoteDB {
                                 JSONObject srvy = jArray.getJSONObject(idx);
                                 System.out.print("CCQF Mission readSurveyResults srvy = " + srvy + "\n\n");
                                 System.out.flush();
-                                ArrayList<Pair> answersAndHit = new ArrayList<>();
+                                ArrayList<SurveyPair> answersAndHit = new ArrayList<>();
                                 JSONArray respArray = srvy.getJSONArray("reponses");
                                 System.out.print("CCQF Mission readSurveyResults respArray = " + respArray + "\n\n");
                                 System.out.flush();
@@ -463,7 +464,8 @@ public class RemoteDB {
                                     JSONObject joPesp = respArray.getJSONObject(jdx);
                                     hit = joPesp.getInt("hit");
                                     ttlHit += hit;
-                                    Pair pair = new Pair(joPesp.getString("label"), hit);
+                                    //Pair pair = new Pair(joPesp.getString("label"), hit);
+                                    SurveyPair pair = new SurveyPair(joPesp.getString("label"), ""+hit);
                                     answersAndHit.add(pair);
                                 }
                                 SurveyObjectResults sor = new SurveyObjectResults(

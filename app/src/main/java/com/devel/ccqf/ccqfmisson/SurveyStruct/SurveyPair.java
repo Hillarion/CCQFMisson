@@ -42,4 +42,28 @@ public class SurveyPair implements Parcelable {
             return new SurveyPair[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "SurveyPair{" +
+                "answer='" + answer + '\'' +
+                ", hits='" + hits + '\'' +
+                '}';
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+    public String getHits() {
+        return hits;
+    }
+
+    public void setHits(String hits) {
+        this.hits = hits;
+    }
 }
