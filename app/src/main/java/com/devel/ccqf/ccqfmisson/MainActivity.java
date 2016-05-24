@@ -1,5 +1,6 @@
 package com.devel.ccqf.ccqfmisson;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -12,7 +13,10 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+
+import com.devel.ccqf.ccqfmisson.LoginObjects.Login;
 
 public class MainActivity extends AppCompatActivity {
     ActionMenuView amvMenu;
@@ -25,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        dialogLogin();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.tToolbar);
         amvMenu = (ActionMenuView) toolbar.findViewById(R.id.amvMenu);
         amvMenu.setOnMenuItemClickListener(new ActionMenuView.OnMenuItemClickListener() {
@@ -127,4 +134,32 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void dialogLogin(){
+
+        final Dialog d = new Dialog(MainActivity.this);
+        d.setContentView(R.layout.dialog_login);
+        d.setTitle("Enregistrez Vous");
+        d.setCancelable(false);
+        final EditText txtPrenom = (EditText)d.findViewById(R.id.txtLoginName);
+        final EditText txtNom = (EditText)d.findViewById(R.id.txtLoginLastName);
+        final EditText txtEmail = (EditText)d.findViewById(R.id.txtLoginLastName);
+        final EditText txtSurnom = (EditText)d.findViewById(R.id.txtLoginScreenName);
+        Button btnOK = (Button)d.findViewById(R.id.btnLoginOk);
+        d.show();
+
+        btnOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String prenom = txtPrenom.getText().toString();
+                String nom = txtNom.getText().toString();
+                String email = txtEmail.getText().toString();
+                String surnom = txtSurnom.getText().toString();
+
+                Login login = new Login(prenom, nom, email, surnom);
+            }
+        });
+    }
+
+
 }
