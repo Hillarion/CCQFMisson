@@ -123,9 +123,9 @@ public class interfaceDB {
     *       Reçoit l'identifiant de l'usager ainsi qu'un SurveyAnswer contenant la réponse
     *       Ne retourne rien
     */
-    public void answerSurveyQuestion(int UserID, SurveyAnswer sQuestion) {
+    public void answerSurveyQuestion(SurveyAnswer sQuestion) {
         if (rDb != null)
-            rDb.answerSurveyQuestion(UserID, sQuestion);
+            rDb.answerSurveyQuestion(currentUser, sQuestion);
     }
 
     /*

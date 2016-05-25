@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.devel.ccqf.ccqfmisson.Adapters.CustomSurveyAdapter;
 import com.devel.ccqf.ccqfmisson.Database.interfaceDB;
+import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyAnswer;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyGroup;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObject;
 
@@ -33,6 +34,7 @@ public class Survey extends AppCompatActivity {
     private List<String> selectedAnswers;
     private List<String> checkedItems;
     private SparseIntArray selectedPosition;
+    private SurveyGroup workingSurvey;
     private static List<SurveyObject> listSurveyGroup = null;
 
     @Override
@@ -89,6 +91,9 @@ public class Survey extends AppCompatActivity {
             public void onClick(View v) {
 
                 //Send Answer
+/*                new SendAnswerAsyncTask().execute(new SurveyAnswer(workingSurvey.getId(),
+                                                listSurveyGroup.get(surveyQuestionIndex).getType(),
+                                                selectedAnswers));*/
                 Toast.makeText(Survey.this, "Sent (not)", Toast.LENGTH_SHORT).show();
                 //Reload list
                 if(surveyQuestionIndex < listSurveyGroup.size()-1){
@@ -199,6 +204,7 @@ public class Survey extends AppCompatActivity {
         protected void onPostExecute(SurveyGroup sGrp) {
             // execution of result of Long time consuming operation
             if(sGrp != null) {
+                workingSurvey = sGrp;
                 listSurveyGroup = sGrp.getQuestions();
             }
             else
@@ -219,6 +225,31 @@ public class Survey extends AppCompatActivity {
             // Things to be done while execution of long running operation is in
             // progress. For example updating ProgessDialog
         }
+    }
 
+    private class SendAnswerAsyncTask extends AsyncTask<SurveyAnswer,Void,Void>{
+        @Override
+        protected Void doInBackground(SurveyAnswer... answ) {
+            interfaceDB iDb = new interfaceDB(Survey.this);
+            if(iDb != null)
+                iDb.answerSurveyQuestion(answ[0]);
+            return null;
+        }
+
+        protected void onPostExecute(Void... unused) {
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            // Things to be done before execution of long running operation. For
+            // example showing ProgessDialog
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... text) {
+            // Things to be done while execution of long running operation is in
+            // progress. For example updating ProgessDialog
+        }
     }
 }
