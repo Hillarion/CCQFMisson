@@ -181,22 +181,4 @@ public class NewB2B extends AppCompatActivity {
         btnDone = (Button)findViewById(R.id.btnB2bOk);
     }
 
-    public final static boolean isValidEmail(CharSequence target) {
-        if (TextUtils.isEmpty(target)) {
-            return false;
-        } else {
-            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
-        }
-    }
-    public final static boolean isValidPhone(CharSequence target){
-        if(TextUtils.isEmpty(target)){
-            return false;
-        }else {
-            return Patterns.PHONE.matcher(target).matches();
-        }
-    }
-
-    public void verification(){
-
-    }
 }

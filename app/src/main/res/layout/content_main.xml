@@ -11,44 +11,48 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.devel.ccqf.ccqfmisson.MainActivity"
-    tools:showIn="@layout/activity_main">
+    tools:showIn="@layout/activity_main"
+    android:background="@drawable/bg_patern">
 
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Doc"
+        android:layout_width="39pt"
+        android:layout_height="37pt"
         android:id="@+id/docActivityBtn"
-        android:layout_marginTop="164dp"
-        android:layout_marginStart="31dp"
+        android:layout_marginTop="116dp"
+        android:layout_marginStart="38dp"
+        android:background="@drawable/doc_300px"
         android:layout_below="@+id/imageButton"
         android:layout_alignParentStart="true" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Feed"
+        android:layout_width="39pt"
+        android:layout_height="37pt"
+        android:text=""
         android:id="@+id/feedActivityBtn"
         android:layout_alignTop="@+id/docActivityBtn"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="40dp" />
+        android:layout_marginEnd="40dp"
+        android:background="@drawable/chat_300px"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Program"
+        android:layout_width="39pt"
+        android:layout_height="37pt"
+        android:text=""
         android:id="@+id/programActivityBtn"
         android:layout_below="@+id/docActivityBtn"
         android:layout_alignStart="@+id/docActivityBtn"
-        android:layout_marginTop="64dp" />
+        android:layout_marginTop="64dp"
+        android:background="@drawable/calendar_300px"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="B2B"
+        android:layout_width="39pt"
+        android:layout_height="37pt"
+        android:text=""
         android:id="@+id/myAgendaActivityBtn"
         android:layout_alignBottom="@+id/programActivityBtn"
-        android:layout_alignEnd="@+id/feedActivityBtn" />
+        android:layout_alignEnd="@+id/feedActivityBtn"
+        android:background="@drawable/calendar_green"/>
 
     <ImageButton
         android:layout_width="wrap_content"

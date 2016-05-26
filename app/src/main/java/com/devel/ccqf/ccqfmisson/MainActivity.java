@@ -15,8 +15,10 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.devel.ccqf.ccqfmisson.LoginObjects.Login;
+import com.devel.ccqf.ccqfmisson.Utilitairies.Verify;
 
 public class MainActivity extends AppCompatActivity {
     ActionMenuView amvMenu;
@@ -139,8 +141,8 @@ public class MainActivity extends AppCompatActivity {
 
         final Dialog d = new Dialog(MainActivity.this);
         d.setContentView(R.layout.dialog_login);
-        d.setTitle("Enregistrez Vous");
-        d.setCancelable(false);
+        d.setTitle("Enregistrez-Vous");
+        //d.setCancelable(false);
         final EditText txtPrenom = (EditText)d.findViewById(R.id.txtLoginName);
         final EditText txtNom = (EditText)d.findViewById(R.id.txtLoginLastName);
         final EditText txtEmail = (EditText)d.findViewById(R.id.txtLoginLastName);
@@ -155,8 +157,40 @@ public class MainActivity extends AppCompatActivity {
                 String nom = txtNom.getText().toString();
                 String email = txtEmail.getText().toString();
                 String surnom = txtSurnom.getText().toString();
+                Verify verify = new Verify();
 
-                Login login = new Login(prenom, nom, email, surnom);
+                if(verify.isValidName(prenom)){
+
+                     if(verify.isValidName(nom)) {
+                         
+                         if(!surnom.isEmpty()){
+
+                             if (verify.isValidEmail(email)){
+                                 d.dismiss(); //a vérifier
+
+                             } else if(!verify.isValidEmail(email)) {
+                                 Toast.makeText(MainActivity.this, "Email Invalide",
+                                         Toast.LENGTH_SHORT).show();
+                             }
+
+                         } else{
+                             Toast.makeText(MainActivity.this, "Surnom vide", Toast.LENGTH_SHORT).
+                                     show();
+                         }
+
+                     } else{
+                         Toast.makeText(MainActivity.this, "Nom Invalide", Toast.LENGTH_SHORT).
+                                 show();
+                     }
+
+                } else{
+                    Toast.makeText(MainActivity.this, "Prenom Invalide", Toast.LENGTH_SHORT).show();
+                }
+                
+                
+                
+             /*   Login login = new Login(prenom, nom, email, surnom);
+                d.dismiss();*/
             }
         });
     }
