@@ -172,7 +172,7 @@ function sendSurveyQuestion(){
     $type=$_POST["type"];
     $reponsesList=$_POST["listeReponses"];
 
-    if(($idSurvey == "") || (!is_numeric($idSurvey))
+    if(($idSurvey == "") || !is_numeric($idSurvey))
         returnFail("Bad Survey ID");
     else if($qestion == "")
         returnFail("question must not be empty");
@@ -208,7 +208,7 @@ function readSurvey(){
             if($ligne = mysqli_fetch_object($result)){
                 $questionList = $ligne->question_list;
                 $limite = $ligne->dateLimite;
-                mysql_free_result($result);
+//                mysql_free_result($result);
                 echo "{\"Status\" : \"Success\", ";
                 echo "\"survey\" : { \"id\" : \"$idSurvey\", ".
                      "\"dueTime\" : \"$limite\", \"questions\" : [";
