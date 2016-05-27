@@ -6,15 +6,16 @@ import java.util.Date;
  * Created by thierry on 10/05/16.
  */
 public class MessagePacket {
-    int id_msg;
-    int source;
+    private int id_msg;
+    private int source;
+    private int convID;
     private String destinataires;
     private String message;
     private Date timestamp;
     private String attachement;
     private boolean isSelf;
 
-    public MessagePacket(int id, int src, String dest, String msg, Date tStamp, String attach) {
+    public MessagePacket(int id, int src, int cID, String dest, String msg, Date tStamp, String attach) {
         id_msg = id;
         source = src;
         destinataires = dest;
@@ -25,7 +26,7 @@ public class MessagePacket {
     }
 
     public MessagePacket(int src, String dest, String msg, String attach){
-        this(-1, src, dest, msg, new Date(), attach);
+        this(-1, src, -1, dest, msg, new Date(), attach);
     }
 
     public int getId_msg() {
@@ -82,6 +83,14 @@ public class MessagePacket {
 
     public void setSelf(boolean isSelf) {
         this.isSelf = isSelf;
+    }
+
+    public int getConvID() {
+        return convID;
+    }
+
+    public void setConvID(int convID) {
+        this.convID = convID;
     }
 
     public String toString (){

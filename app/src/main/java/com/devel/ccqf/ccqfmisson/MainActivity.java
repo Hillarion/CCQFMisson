@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         btnFeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, Feed.class);
+                Intent i = new Intent(MainActivity.this, FeedListActivity.class);
                 startActivity(i);
             }
         });

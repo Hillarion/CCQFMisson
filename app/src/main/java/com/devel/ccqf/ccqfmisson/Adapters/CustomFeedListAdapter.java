@@ -10,10 +10,8 @@ import android.widget.TextView;
 
 import com.devel.ccqf.ccqfmisson.R;
 import com.devel.ccqf.ccqfmisson.ReseauSocial.ConversationHead;
-import com.devel.ccqf.ccqfmisson.ReseauSocial.MessagePacket;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by thierry on 26/05/16.
@@ -50,7 +48,7 @@ public class CustomFeedListAdapter extends BaseAdapter {
 
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-        convertView = mInflater.inflate(R.layout.feed_list_layout, null);
+        convertView = mInflater.inflate(R.layout.feed_list_adapter_layout, null);
         TextView txtLastMsgHdr =  (TextView) convertView.findViewById(R.id.lblMsgFrom);
         TextView txtLastMsgTime =  (TextView) convertView.findViewById(R.id.txtLastMsgTime);
         TextView txtNameList =  (TextView) convertView.findViewById(R.id.txtNameList);

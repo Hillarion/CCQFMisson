@@ -186,7 +186,6 @@ public class interfaceDB {
             rDb.sendMessage( msg);
     }
 
-
     public ArrayList<SurveyObjectResults> readSurveyResults(int surveyId){
         ArrayList<SurveyObjectResults> rsltList = null;
 
@@ -195,7 +194,5 @@ public class interfaceDB {
         }
         return rsltList;
     }
-
-
 
 }

@@ -29,7 +29,7 @@ public class FeedViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_feed_list, container, false);
+        View v = inflater.inflate(R.layout.feed_list_listview_layout, container, false);
 
         btnSend = (Button)v.findViewById(R.id.btnSend);
         inputMsg = (EditText) v.findViewById(R.id.inputMsg);

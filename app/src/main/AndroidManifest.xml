@@ -27,6 +27,7 @@
         <activity android:name=".Doc" />
         <activity android:name=".Program" />
         <activity android:name=".MonAgenda" />
+        <activity android:name=".FeedListActivity" />
         <activity android:name=".Feed" />
         <activity android:name=".Survey" />
         <activity android:name=".SurveyCreate" />
