@@ -3,6 +3,7 @@ package com.devel.ccqf.ccqfmisson.Database;
 import android.content.Context;
 import android.net.ConnectivityManager;
 
+import com.devel.ccqf.ccqfmisson.ReseauSocial.ConversationHead;
 import com.devel.ccqf.ccqfmisson.ReseauSocial.MessagePacket;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.*;
 
@@ -21,7 +22,7 @@ import java.util.List;
 /**
  * Created by thierry on 10/05/16.
  */
-public class interfaceDB {
+public class InterfaceDB {
     public enum privilegeType {NO_PRIVILEGE, ADMIN};
 
     private LocaleDB lDb = null;
@@ -34,7 +35,7 @@ public class interfaceDB {
 
     private int currentUser;
 
-    public interfaceDB(Context cntx) {
+    public InterfaceDB(Context cntx) {
         currentUser = -1;
         parentContext = cntx;
 
@@ -87,9 +88,9 @@ public class interfaceDB {
      *      Recoit un nom d'usager, et le mot de passe
      *      Retourne un identifiant pouvant être utilisé pour les conversations et les sondages.
      */
-    public int validateUser(String userName, String password) {
+    public int registerUser(String nom, String prenom, String userName, String courriel) {
         if(rDb != null)
-            currentUser = rDb.validateUser(userName, password);
+            currentUser = rDb.registerUser(nom, prenom, userName, courriel) ;
         return currentUser;
     }
 
@@ -193,6 +194,20 @@ public class interfaceDB {
             rsltList = rDb.readSurveyResults(surveyId);
         }
         return rsltList;
+    }
+
+    public List<Integer> getMessageThreadList() {
+        List<Integer> list = null;
+        if(lDb != null)
+            list = lDb.getMessageThreadList();
+        return list;
+    }
+
+    public ConversationHead getmessageHead(int conversationID) {
+        ConversationHead cHead = null;
+        if(lDb != null)
+            cHead = lDb.getmessageHead(conversationID);
+        return cHead;
     }
 
 }

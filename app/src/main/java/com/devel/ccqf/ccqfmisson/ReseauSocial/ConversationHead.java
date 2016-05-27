@@ -8,14 +8,14 @@ import java.util.Date;
 public class ConversationHead {
     private String convID;
     private String from;
-    private Date when;
+    private String when;
     private String lastMsg;
 
     public ConversationHead() {
-        this("", "","", new Date(0));
+        this("", "","", "");
     }
 
-    public ConversationHead(String cID, String src, String msg, Date when){
+    public ConversationHead(String cID, String src, String msg, String when){
         convID = cID;
         from = src;
         this.when = when;
@@ -30,7 +30,7 @@ public class ConversationHead {
         return from;
     }
 
-    public Date getWhen() {
+    public String getWhen() {
         return when;
     }
 

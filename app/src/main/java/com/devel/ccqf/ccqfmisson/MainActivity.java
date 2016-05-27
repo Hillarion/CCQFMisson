@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         //d.setCancelable(false);
         final EditText txtPrenom = (EditText)d.findViewById(R.id.txtLoginName);
         final EditText txtNom = (EditText)d.findViewById(R.id.txtLoginLastName);
-        final EditText txtEmail = (EditText)d.findViewById(R.id.txtLoginLastName);
+        final EditText txtEmail = (EditText)d.findViewById(R.id.txtLoginEmail);
         final EditText txtSurnom = (EditText)d.findViewById(R.id.txtLoginScreenName);
         Button btnOK = (Button)d.findViewById(R.id.btnLoginOk);
         d.show();

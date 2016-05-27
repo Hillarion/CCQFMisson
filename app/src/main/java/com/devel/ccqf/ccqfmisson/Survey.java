@@ -1,13 +1,11 @@
 package com.devel.ccqf.ccqfmisson;
 
-import android.media.Image;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.SparseIntArray;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -15,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.devel.ccqf.ccqfmisson.Adapters.CustomSurveyAdapter;
-import com.devel.ccqf.ccqfmisson.Database.interfaceDB;
+import com.devel.ccqf.ccqfmisson.Database.InterfaceDB;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyAnswer;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyGroup;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObject;
@@ -194,7 +192,7 @@ public class Survey extends AppCompatActivity {
         @Override
         protected SurveyGroup doInBackground(Integer... adr) {
             SurveyGroup srvGrp = null;
-            interfaceDB iDb = new interfaceDB(Survey.this);
+            InterfaceDB iDb = new InterfaceDB(Survey.this);
             if(iDb != null)
                 srvGrp = iDb.readSurvey(adr[0].intValue());
             return srvGrp;
@@ -230,7 +228,7 @@ public class Survey extends AppCompatActivity {
     private class SendAnswerAsyncTask extends AsyncTask<SurveyAnswer,Void,Void>{
         @Override
         protected Void doInBackground(SurveyAnswer... answ) {
-            interfaceDB iDb = new interfaceDB(Survey.this);
+            InterfaceDB iDb = new InterfaceDB(Survey.this);
             if(iDb != null)
                 iDb.answerSurveyQuestion(answ[0]);
             return null;

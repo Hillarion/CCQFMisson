@@ -7,17 +7,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.devel.ccqf.ccqfmisson.Adapters.CustomSurveyResultsAdapter;
-import com.devel.ccqf.ccqfmisson.Database.interfaceDB;
-import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObject;
+import com.devel.ccqf.ccqfmisson.Database.InterfaceDB;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObjectResults;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyPair;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 public class SurveyResults extends AppCompatActivity {
 //    public final static String PAR_KEY = "com.devel.ccqf.ccqfmisson.PAR_KEY";
@@ -61,7 +57,7 @@ public class SurveyResults extends AppCompatActivity {
         @Override
         protected ArrayList<SurveyObjectResults>  doInBackground(Integer... adr) {
             ArrayList<SurveyObjectResults> responsesList = null;
-            interfaceDB iDb = new interfaceDB(SurveyResults.this);
+            InterfaceDB iDb = new InterfaceDB(SurveyResults.this);
             if(iDb != null)
                 responsesList = iDb.readSurveyResults(adr[0].intValue());
             return responsesList;

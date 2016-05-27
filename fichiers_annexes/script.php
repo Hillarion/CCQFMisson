@@ -8,13 +8,17 @@ function validateDate($date, $format = 'Y-m-d H:i:s')
     return $d && $d->format($format) == $date;
 }
 
+function validerCourriel($courriel){
+    return filter_var($courriel, FILTER_VALIDATE_EMAIL);
+}
+
 function getPrivilege(){
     $userID = $_POST["userID"];
     if(($userID != "") && is_numeric($userID)){
         $req = "SELECT privilege from Utilisateur where user_id=$userID";
         $result = doQuery($req);
         
-        $row = mysqli_num_row($result);
+        $row = mysqli_num_rows($result);
         echo "{\"status\" : ";
         if($row > 0) {
             echo "\"Success\","; 
@@ -33,7 +37,41 @@ function getPrivilege(){
     }
 }
 
+function registerUser(){
+    $nom = $_POST("nom");
+    $prenom = $_POST("prenom");
+    $userName = $_POST("userName");
+    $courriel = $_POST("courriel");
+    $userId = -1;
 
+    if(($nom == "") || ($prenom == "") ||($userName == "") || (courriel == ""))
+        returnFail("fields must not be empty");
+    else if(!validerCourriel)
+        returnFail("Not a valid email");
+    else {
+        $req = "SELECT user_id FROM Utilisateur WHERE nom='$nom' AND prenom='$prenom'".
+            " AND userName='$username' AND courriel='$courriel'";
+        $result = doQuery($req);
+        $row = mysqli_num_rows($result);
+        if($row > 0){
+            $ligne = mysqli_fetch_object($result);
+            $userId = $ligne->user_id;
+        }
+        else{
+            $req = "INSERT INTO Utilisateur VALUES(0, '$nom','$prenom', '$username', '$courriel', '');
+            $result = doQuery($req);
+            $userId = mysqli_insert_id($conn);
+        }
+        if($userId > 0){
+            echo "{\"Status\" : " ;
+            echo "\"Success\"";
+            echo ", \"Id\" : \"$userId\"}";
+        }
+        else
+            returnFail("")
+    }
+}
+/*
 function validateLogin(){
     $userName=$_POST["userName"];
     $userPass=$_POST["userPass"];
@@ -44,7 +82,7 @@ function validateLogin(){
             echo "{\"Status\" : \"Success\", \"login\" :";
             $localReq = "SELECT user_id FROM Utilisateur WHERE userName = '$userName'";
             $result = doQuery($localReq);
-            $row = mysqli_num_row($result);
+            $row = mysqli_num_rows($result);
             if($row>0) {
                 $ligne = mysqli_fetch_object($result);
                 $userID = $ligne->user_id;
@@ -63,11 +101,11 @@ function validateLogin(){
     else
         returnFail("empty user or pass");
 }
-
+*/
 function getUserList(){
     $req="SELECT user_id, userName from Utilisateur";
     $result = doQuery($req);
-    $row = mysqli_num_row($result);
+    $row = mysqli_num_rows($result);
     if($row>0){
         echo "{\"Status\" : \"Success\", ";
         echo "\"users\" : [";
@@ -88,7 +126,8 @@ function sendMessage(){
     $destinataires=$_POST["destinataires"];
     $timeStamp=$_POST["timeStamp"];
     $attachement=$_POST["attachement"];
-    
+    $convId = $_POST["conversationID"];
+
     if(($message != "") && ($msgSource != "") && ($timeStamp != "")){
         if(!is_numeric($msgSource))
             returnFail("bad source values src = '$msgSource'");
@@ -98,8 +137,26 @@ function sendMessage(){
         else if(!validateDate($timeStamp))
             returnFail("bad time stamp $timeStamp");
         else{
+            if($convId < 0){  // vérifier si une conversation existe avec le même groupe d'usagers
+                $group_id = $destinataires . "," .$msgSource;
+                $gList = explode(',', trim($group_id, " \n\r"));
+                sort($gList);
+                $groupList = implode(",", $gList);
+                $req = "SELECT conversation_id FROM ConversationThread WHERE groupe_ids='$groupList'";
+                $result = doQuery($req);
+                $row = mysqli_num_rows($result);
+                if($row>0){// s'il existe déjà un econversation, utiliser son ID
+                    $ligne = mysqli_fetch_object($result);
+                    $convId = $ligne->conversation_id;
+                }
+                else{ // s'il n'existe pas de conversation avec ce groupe d'usager, en créer une.
+                    $req = "INSERT INTO ConversationThread values (0, '$groupList')";
+                    $result = doQuery($req);
+                    $convId = mysqli_insert_id($conn);
+                }
+            }
             $destList = explode(',', trim($destinataires, " \n\r"));
-            $req = "INSERT INTO MessagePacket values(0, $msgSource, ".
+            $req = "INSERT INTO MessagePacket values(0, $msgSource, $convId,".
                    "'$destinataires', '$message', '$timeStamp', '$attachement')";
             $result = doQuery($req);
             $msgId = mysqli_insert_id($conn);
@@ -110,7 +167,8 @@ function sendMessage(){
                 }
             }
             echo "{\"Status\" : \"Success\", ";
-            echo "\"Id\" : \"$msgId\"}";
+            echo "\"Id\" : \"$msgId\", ";
+            echo "\"conversationID\" : \"$convId\"}";
         }
     }
     else
@@ -139,6 +197,7 @@ function readMessages(){
             while ($ligne= mysqli_fetch_object($result)){
                 echo "{\"msgId\" : \"$ligne->id_msg\", \"source\" : \"$ligne->source\",".
                      "\"destinataires\" : \"$ligne->destinataires\", ".
+                     "\"conversationID\" : \"$ligne->conversation_id\",".
                      "\"timeStamp\" : \"$ligne->timestamp\", ".
                      "\"message\" : \"$ligne->message\", \"attachement\" : ".
                      "\"$ligne->attachement\"}";
@@ -359,8 +418,8 @@ switch ($action){
     case "getPrivilege" :
        getPrivilege();
     break;
-    case "validateLogin" :
-       validateLogin();
+    case "registerUser" :
+       registerUser();
     break;
     case "sendMessage" :
        sendMessage();
