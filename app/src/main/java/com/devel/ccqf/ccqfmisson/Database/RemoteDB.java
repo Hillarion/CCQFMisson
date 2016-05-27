@@ -11,6 +11,7 @@ import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObjectResults;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyPair;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyText;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyYesNo;
+import com.devel.ccqf.ccqfmisson.Users;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -150,6 +151,42 @@ public class RemoteDB {
             }
         }
         return privilege;
+    }
+
+    public ArrayList<Users> getUserList(int currentUser){
+        ArrayList<Users> uList = null;
+        ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
+        pairs.add(new BasicNameValuePair("action", "getUserList"));
+        String ligneResult = sendRequest(pairs);
+
+        if(ligneResult != null) {
+            parser = new JSONParser(ligneResult);
+            String status = parser.getStatus();
+            if (!status.isEmpty()) {
+                if (status.equalsIgnoreCase("Success")) {
+                    JSONArray jArray = parser.getList("users");
+                    if (jArray != null) {
+                        uList = new ArrayList<Users>();
+                        for (int idx = 0; idx < jArray.length(); idx++) {
+                            try {
+                                JSONObject jsonObject = jArray.getJSONObject(idx);
+                                int uId = jsonObject.getInt("user_id");
+                                if(uId != currentUser){
+                                    String nom = jsonObject.getString("nom");
+                                    String prenom = jsonObject.getString("prenom");
+                                    String username = jsonObject.getString("userName");
+                                    Users user=new Users(uId, nom, prenom, username, "", "");
+                                    uList.add(user);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return uList;
     }
 
     /*

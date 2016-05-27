@@ -58,17 +58,17 @@ function registerUser(){
             $userId = $ligne->user_id;
         }
         else{
-            $req = "INSERT INTO Utilisateur VALUES(0, '$nom','$prenom', '$username', '$courriel', '');
+            $req = "INSERT INTO Utilisateur VALUES(0, '$nom','$prenom', '$username', '$courriel', '')";
             $result = doQuery($req);
             $userId = mysqli_insert_id($conn);
         }
         if($userId > 0){
-            echo "{\"Status\" : " ;
+            echo "{\"Status\" : ";
             echo "\"Success\"";
             echo ", \"Id\" : \"$userId\"}";
         }
         else
-            returnFail("")
+            returnFail("");
     }
 }
 /*

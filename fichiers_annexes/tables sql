@@ -22,7 +22,6 @@ create table MessagePacket(
     id_msg int NOT NULL AUTO_INCREMENT,
     source int NOT NULL,
     conversation_id int NOT NULL,
-    destinataires text,
     message text,
     time DATETIME NOT NULL,
     attachement text,

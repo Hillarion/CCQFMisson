@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import com.devel.ccqf.ccqfmisson.ReseauSocial.ConversationHead;
 import com.devel.ccqf.ccqfmisson.ReseauSocial.MessagePacket;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.*;
+import com.devel.ccqf.ccqfmisson.Users;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -210,4 +211,11 @@ public class InterfaceDB {
         return cHead;
     }
 
+    public ArrayList<Users> getUserList(){
+        ArrayList<Users> uList = null;
+        if(rDb != null){
+            uList = rDb.getUserList(currentUser);
+        }
+        return uList;
+    }
 }

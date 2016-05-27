@@ -1,12 +1,15 @@
 package com.devel.ccqf.ccqfmisson;
 
+import android.app.Dialog;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
+import com.devel.ccqf.ccqfmisson.Adapters.CustomContactListAdapter;
 import com.devel.ccqf.ccqfmisson.Database.InterfaceDB;
 import com.devel.ccqf.ccqfmisson.ReseauSocial.ConversationHead;
 
@@ -49,6 +52,24 @@ public class FeedListActivity extends AppCompatActivity {
         fabNewFeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final Dialog d = new Dialog(FeedListActivity.this);
+                d.setContentView(R.layout.dialog_destinataires);
+                d.setTitle("qwerjhgfdsdfgh");
+                Button btnOK = (Button)d.findViewById(R.id.btnUserListOk);
+                Button btnRefreshUserList = (Button)d.findViewById(R.id.btnRefreshUserList);
+                final ListView lstUserList = (ListView)d.findViewById(R.id.lstUserList);
+                btnRefreshUserList.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        InterfaceDB iDb = new InterfaceDB(FeedListActivity.this);
+                        ArrayList<Users> uList = null;
+                        if(iDb != null){
+                            uList = iDb.getUserList();
+                            lstUserList.setAdapter(new CustomContactListAdapter(FeedListActivity.this, uList));
+                        }
+                    }
+                });
+                d.show();
                     /*Ici, on créé une  nouvelle conversation puis on va au FeedActivity*/
             }
         });
