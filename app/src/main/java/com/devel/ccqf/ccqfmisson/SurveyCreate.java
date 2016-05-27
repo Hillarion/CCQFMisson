@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 
 import com.devel.ccqf.ccqfmisson.Adapters.CustomSurveyAnswerAdapter;
-import com.devel.ccqf.ccqfmisson.Database.interfaceDB;
+import com.devel.ccqf.ccqfmisson.Database.InterfaceDB;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyGroup;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObject;
 
@@ -174,7 +174,7 @@ public class SurveyCreate extends AppCompatActivity {
     private class SendSurveyAsyncTask extends AsyncTask<SurveyGroup, Void, Void> {
         @Override
         protected Void doInBackground(SurveyGroup... srvGrp) {
-            interfaceDB iDb = new interfaceDB(SurveyCreate.this);
+            InterfaceDB iDb = new InterfaceDB(SurveyCreate.this);
             if(iDb != null)
                 iDb.sendSurvey(srvGrp[0]);
             return null;

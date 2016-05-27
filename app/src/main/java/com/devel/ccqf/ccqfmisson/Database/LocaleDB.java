@@ -5,10 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
+import com.devel.ccqf.ccqfmisson.ReseauSocial.ConversationHead;
 import com.devel.ccqf.ccqfmisson.ReseauSocial.MessagePacket;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -79,9 +80,9 @@ public class LocaleDB {
     }
 
 
-    public void setPrivilege(int UserId, interfaceDB.privilegeType privilege){
+    public void setPrivilege(int UserId, InterfaceDB.privilegeType privilege){
         int priv = 0;
-        if(privilege == interfaceDB.privilegeType.ADMIN)
+        if(privilege == InterfaceDB.privilegeType.ADMIN)
             priv=1;
         if(db != null){
             ContentValues values = new ContentValues();
@@ -136,5 +137,39 @@ public class LocaleDB {
             values.put("lastMsg", "" + mIdx);
             db.update("Utilisateur", values, "user_id = " + UserId, null);
         }
+    }
+
+    public List<Integer> getMessageThreadList(){
+        ArrayList<Integer> convList = null;
+        if(db != null){
+            Cursor cursor = db.rawQuery("SELECT DISTINCT conversationID FROM Messages ", null);
+            cursor.moveToFirst();
+            if(cursor != null){
+                if(cursor.getCount() > 0) {
+                    convList = new ArrayList<Integer>();
+                    while (cursor != null) {
+                        convList.add(new Integer(cursor.getInt(0)));
+                        cursor.moveToNext();
+                    }
+                }
+            }
+        }
+        return (List)convList;
+    }
+
+    public ConversationHead getmessageHead(int conversationID){
+        ConversationHead cHead = null;
+        if(db != null){
+            Cursor cursor = db.rawQuery("SELECT source, timestamp, message FROM Messages ORDER BY msg_id, DESC LIMIT 1 WHERE conversationID = ?", new String[] {""+conversationID});
+            cursor.moveToFirst();
+            if(cursor!=null){
+                cHead = new ConversationHead(
+                        ""+conversationID,
+                        cursor.getString(0),
+                        cursor.getString(2),
+                        cursor.getString(1));
+            }
+        }
+        return cHead;
     }
 }

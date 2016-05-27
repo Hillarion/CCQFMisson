@@ -1,7 +1,6 @@
 package com.devel.ccqf.ccqfmisson.Database;
 
 import android.content.Context;
-import android.support.v4.util.Pair;
 
 import com.devel.ccqf.ccqfmisson.ReseauSocial.MessagePacket;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyGroup;
@@ -99,26 +98,22 @@ public class RemoteDB {
      *      Retourne un identifiant pouvant être utilisé pour les conversations et les sondages.
      */
 
-    public int validateUser(String userName, String password){
+    public int registerUser(String nom, String prenom, String userName, String courriel){
         int userId = -1;
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
-        pairs.add(new BasicNameValuePair("action", "validateLogin"));
+        pairs.add(new BasicNameValuePair("action", "registerUser"));
         pairs.add(new BasicNameValuePair("userName", userName));
-        pairs.add(new BasicNameValuePair("userPass", password));
+        pairs.add(new BasicNameValuePair("nom", nom));
+        pairs.add(new BasicNameValuePair("prenom", prenom));
+        pairs.add(new BasicNameValuePair("courriel", courriel));
         String ligneResult = sendRequest(pairs);
 
         if(ligneResult != null) {
             parser = new JSONParser(ligneResult);
             String status = parser.getStatus();
             if (!status.isEmpty()) {
-                if (status.equalsIgnoreCase("Success")) {
-                    try {
-                        JSONObject loginObject = parser.getJSONObject("login");
-                        userId = loginObject.getInt("id");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
+                if (status.equalsIgnoreCase("Success"))
+                    userId = parser.getIndex();
             }
         }
         if(userId > 0){
@@ -134,8 +129,8 @@ public class RemoteDB {
     *       Reçoit l'identifiant de l'usager
     *       Retourne le niveau de privilege ( NO_PRIVILEGE ou ADMIN) de l'usager
     */
-    public interfaceDB.privilegeType getPrivilege(int UserId){
-        interfaceDB.privilegeType privilege = interfaceDB.privilegeType.NO_PRIVILEGE;
+    public InterfaceDB.privilegeType getPrivilege(int UserId){
+        InterfaceDB.privilegeType privilege = InterfaceDB.privilegeType.NO_PRIVILEGE;
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
         pairs.add(new BasicNameValuePair("action", "getPrivilege"));
         pairs.add(new BasicNameValuePair("userID", "" + UserId));
@@ -149,7 +144,7 @@ public class RemoteDB {
                     String val = parser.getString("privilege");
                     if (val != null) {
                         if (val.equalsIgnoreCase("admin"))
-                            privilege = interfaceDB.privilegeType.ADMIN;
+                            privilege = InterfaceDB.privilegeType.ADMIN;
                     }
                 }
             }
@@ -170,6 +165,7 @@ public class RemoteDB {
         pairs.add(new BasicNameValuePair("messageContent", msg.getMessage()));
         pairs.add(new BasicNameValuePair("msgSource", "" + msg.getSource()));
         pairs.add(new BasicNameValuePair("destinataires", msg.getDestinataires()));
+        pairs.add(new BasicNameValuePair("conversationID", ""+msg.getConvID()));
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date tStmp = msg.getTimestamp();
 		String time = sdf.format(tStmp);
@@ -184,6 +180,11 @@ public class RemoteDB {
                 if (status.equalsIgnoreCase("Success")) {
                     msgId = parser.getIndex();
                     msg.setId_msg(msgId);
+                    if(msg.getConvID() < 0) {
+                        int convID = parser.getInt("conversationID");
+                        if (convID > 0)
+                            msg.setConvID(convID);
+                    }
                     msg.setSelf(true);
                     if(lDb != null){
                         lDb.writeMessage(msg);

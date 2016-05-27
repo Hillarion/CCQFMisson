@@ -4,19 +4,30 @@ use CCQFMission;
 
 create table Utilisateur (
     user_id int NOT NULL AUTO_INCREMENT,
+    nom text NOT NULL,
+    prenom text NOT NULL,
     userName text NOT NULL,
+    courriel text NOT NULL,
     privilege  enum ('', 'admin'),
     PRIMARY KEY(user_id)
+);
+
+create table ConversationThread(
+    conversation_id int NOT NULL AUTO_INCREMENT,
+    groupe_ids text,
+    PRIMARY KEY(conversation_id)
 );
 
 create table MessagePacket(
     id_msg int NOT NULL AUTO_INCREMENT,
     source int NOT NULL,
+    conversation_id int NOT NULL,
     destinataires text,
     message text,
     time DATETIME NOT NULL,
     attachement text,
-    PRIMARY KEY(id_msg)
+    PRIMARY KEY(id_msg),
+    FOREIGN KEY(conversation_id) REFERENCES ConversationThread (conversation_id)
 );
 
 create table MessageQueue(
