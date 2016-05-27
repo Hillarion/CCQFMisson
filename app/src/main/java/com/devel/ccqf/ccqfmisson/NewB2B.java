@@ -61,61 +61,6 @@ public class NewB2B extends AppCompatActivity {
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-
-
-
-        /*btnDebut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Dialog d = new Dialog(NewB2B.this);
-                d.setContentView(R.layout.popup_time_picker_layout);
-                final TimePicker timePicker = (TimePicker)d.findViewById(R.id.timePicker);
-                Button ok = (Button)d.findViewById(R.id.btnOkTimePIcker);
-                d.show();
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int hour =  timePicker.getCurrentHour();
-                        int minute = timePicker.getCurrentMinute();
-                        if(minute < 10){
-                            temp = hour+"h0"+minute;
-                        }else{
-                            temp = hour+"h"+minute;
-                        }
-                        d.dismiss();
-                    }
-                });
-                txtDebut.setText(temp);
-                heureDebut = temp;
-            }
-        });
-
-        btnFin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Dialog d = new Dialog(NewB2B.this);
-                d.setContentView(R.layout.popup_time_picker_layout);
-                final TimePicker timePicker = (TimePicker)d.findViewById(R.id.timePicker);
-                Button ok = (Button)d.findViewById(R.id.btnOkTimePIcker);
-                d.show();
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int hour =  timePicker.getCurrentHour();
-                        int minute = timePicker.getCurrentMinute();
-                        if(minute < 10){
-                            temp = hour+"h0"+minute;
-                        }else{
-                            temp = hour+"h"+minute;
-                        }
-                        d.dismiss();
-                    }
-                });
-                txtFin.setText(temp);
-                heureFin = temp;
-            }
-        });*/
-
         btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
