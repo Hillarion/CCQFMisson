@@ -15,6 +15,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.devel.ccqf.ccqfmisson.AgendaObjects.Event;
+import com.devel.ccqf.ccqfmisson.Utilitairies.Verify;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -76,13 +77,56 @@ public class NewB2B extends AppCompatActivity {
                 if(spinner.getSelectedItem().toString().equals("Batiment Extérieur Vrai")){
                     ext = true;
                 }
-                else
+                else {
                     ext = false;
-
-                Event e = new Event
-                        (destinataire, heureDebut, heureFin, nom, poste,
-                                telephnone, email, batiment, ext);
-                Toast.makeText(NewB2B.this, ""+e, Toast.LENGTH_SHORT).show();
+                }
+                //Validation
+                Verify ve = new Verify();
+                if(!heureDebut.equals("")){
+                    if(!heureFin.equals("")){
+                        if(!nom.equals("")){
+                            if(!poste.equals("")){
+                                if(ve.isValidPhone(telephnone)){
+                                    if(ve.isValidEmail(email)){
+                                        if(!batiment.equals("")){
+                                            Event e = new Event
+                                                    (destinataire, heureDebut, heureFin, nom, poste,
+                                                            telephnone, email, batiment, ext);
+                                            Toast.makeText(NewB2B.this, ""+e, Toast.LENGTH_SHORT)
+                                                    .show();
+                                        }
+                                        else{
+                                            Toast.makeText
+                                                    (NewB2B.this, "Batiment invalide",
+                                                            Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                    else {
+                                        Toast.makeText
+                                                (NewB2B.this, "Email invalide", Toast.LENGTH_SHORT)
+                                                .show();
+                                    }
+                                }
+                                else {
+                                    Toast.makeText
+                                            (NewB2B.this, "Numero invalide", Toast.LENGTH_SHORT)
+                                            .show();
+                                }
+                            }
+                            else{Toast.makeText
+                                    (NewB2B.this, "Poste vide", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        else {
+                            Toast.makeText(NewB2B.this, "Nom invalide", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    else {
+                        Toast.makeText(NewB2B.this, "Heure invalide", Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(NewB2B.this, "Heure invalide", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
