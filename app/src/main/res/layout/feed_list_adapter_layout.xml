@@ -4,7 +4,16 @@
     android:layout_height="wrap_content"
     android:background="@drawable/bg_list_feed"
     android:orientation="vertical">
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        >
+    <TextView
+        android:id="@+id/txtConversationID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"/>
     <TextView
         android:id="@+id/txtNameList"
         android:layout_width="match_parent"
@@ -14,6 +23,7 @@
         android:textColor="#000000"
         android:padding="7dp"
         android:text="Who"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

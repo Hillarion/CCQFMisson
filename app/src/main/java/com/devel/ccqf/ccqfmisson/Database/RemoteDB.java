@@ -186,7 +186,7 @@ public class RemoteDB {
                     msg.setId_msg(msgId);
                     msg.setSelf(true);
                     if(lDb != null){
-                        lDb.writeOutMessage(msg);
+                        lDb.writeMessage(msg);
                     }
                 }
             }
@@ -227,6 +227,7 @@ public class RemoteDB {
                                 MessagePacket msg = new MessagePacket(
                                         jsonObject.getInt("msgId"),
                                         jsonObject.getInt("source"),
+                                        jsonObject.getInt("conversationID"),
                                         jsonObject.getString("destinataires"),
                                         jsonObject.getString("message"),
                                         convertedDate,
@@ -235,7 +236,7 @@ public class RemoteDB {
                                 if(lDb != null){
                                     if(msg.getId_msg() > lastMessageID) {
                                         lastMessageID = msg.getId_msg();
-                                        lDb.writeInMessage(msg);
+                                        lDb.writeMessage(msg);
                                         lDb.setLastMsgIndex(userId, lastMessageID);
                                     }
                                 }

@@ -8,46 +8,9 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/bg_patern"
     tools:context="com.devel.ccqf.ccqfmisson.Feed">
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.Toolbar
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/tToolbar"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_width="match_parent"
-            android:minHeight="?attr/actionBarSize"
-            android:background="@drawable/toolbar_background"
-            android:gravity="top|start"
-            app:theme="@style/ThemeOverlay.AppCompat.Light"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
-
-            <android.support.v7.widget.ActionMenuView
-                android:id="@+id/amvMenu"
-                android:gravity="top|start"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"/>
-        </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
-
-    <fragment
-        android:name="com.devel.ccqf.ccqfmisson.FeedListFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout="@layout/fragment_feed_list"
-        />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabFeed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_menu_edit" />
+    <include layout="@layout/feed_view_layout"/>
 
 </android.support.design.widget.CoordinatorLayout>

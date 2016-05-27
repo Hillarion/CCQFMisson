@@ -23,17 +23,18 @@ public class LocaleDB {
             db = (new SQLiteHelper(cntx)).getReadableDatabase();
     }
 
-    public void writeOutMessage(MessagePacket msg){
+    public void writeMessage(MessagePacket msg){
 
         ContentValues values = new ContentValues();
         values.put("id_msg", msg.getId_msg());
         values.put("source", msg.getSource());
+        values.put("conversationID", msg.getConvID());
         values.put("destinataires", msg.getDestinataires());
         values.put("message", msg.getMessage());
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         values.put("timestamp", sdf.format(msg.getTimestamp()));
         values.put("attachement", msg.getAttachement());
-        db.insert("MessageOut", null, values);
+        db.insert("Messages", null, values);
 
     }
 
@@ -52,18 +53,6 @@ public class LocaleDB {
                 db.insert("Utilisateur", null, values);
             }
         }
-    }
-
-    public void writeInMessage(MessagePacket msg){
-        ContentValues values = new ContentValues();
-        values.put("id_msg", msg.getId_msg());
-        values.put("source", msg.getSource());
-        values.put("destinataires", msg.getDestinataires());
-        values.put("message", msg.getMessage());
-        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        values.put("timestamp", sdf.format(msg.getTimestamp()));
-        values.put("attachement", msg.getAttachement());
-        db.insert("MessageIn", null, values);
     }
 
     public List<MessagePacket> readOutMessage(int startMsgId, int nMessage){
