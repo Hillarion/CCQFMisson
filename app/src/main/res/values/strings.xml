@@ -5,4 +5,5 @@
     <string name="action_nouveau">Results</string>
     <string name="txtNouvelleQuestion">Nouveau Choix de Réponse</string>
     <string name="nouvelleReponse">Nouvelle Réponse</string>
+    <string name="btnEnvoisMessage">Send</string>
 </resources>

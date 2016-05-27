@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_list_feed"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/txtNameList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textSize="12pt"
+        android:textColor="#000000"
+        android:padding="7dp"
+        android:text="Who"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        >
+        <TextView
+            android:id="@+id/txtLastMsgHdr"
+            android:layout_weight="5"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="left|start|center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="3dp"
+            android:textSize="8pt"
+            android:textColor="#000000"
+            android:text="what"/>
+        <TextView
+            android:id="@+id/txtLastMsgTime"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right|end|center_vertical"
+            android:paddingLeft="5dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="3dp"
+            android:textSize="8pt"
+            android:textColor="#000000"
+            android:text="when" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -8,10 +8,11 @@ import java.util.Date;
 public class MessagePacket {
     int id_msg;
     int source;
-    String destinataires;
-    String message;
-    Date timestamp;
-    String attachement;
+    private String destinataires;
+    private String message;
+    private Date timestamp;
+    private String attachement;
+    private boolean isSelf;
 
     public MessagePacket(int id, int src, String dest, String msg, Date tStamp, String attach) {
         id_msg = id;
@@ -20,6 +21,7 @@ public class MessagePacket {
         message=msg;
         timestamp = tStamp;
         attachement=attach;
+        isSelf = false;
     }
 
     public MessagePacket(int src, String dest, String msg, String attach){
@@ -72,6 +74,14 @@ public class MessagePacket {
 
     public void setAttachement(String attachement) {
         this.attachement = attachement;
+    }
+
+    public boolean isSelf() {
+        return isSelf;
+    }
+
+    public void setSelf(boolean isSelf) {
+        this.isSelf = isSelf;
     }
 
     public String toString (){

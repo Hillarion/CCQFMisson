@@ -184,6 +184,7 @@ public class RemoteDB {
                 if (status.equalsIgnoreCase("Success")) {
                     msgId = parser.getIndex();
                     msg.setId_msg(msgId);
+                    msg.setSelf(true);
                     if(lDb != null){
                         lDb.writeOutMessage(msg);
                     }
