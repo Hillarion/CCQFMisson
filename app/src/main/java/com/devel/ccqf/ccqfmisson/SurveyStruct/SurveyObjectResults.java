@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Created by jo on 5/12/16.
  */
-public class SurveyObjectResults /*implements Parcelable*/ {
+public class SurveyObjectResults implements Parcelable {
     private String question;
     private int totalHit;
     private ArrayList<SurveyPair> answersAndHit;
@@ -67,7 +67,7 @@ public class SurveyObjectResults /*implements Parcelable*/ {
                 ", answersAndHit=" + answersAndHit +
                 '}';
     }
-/*
+
     public static final Parcelable.Creator<SurveyObjectResults> CREATOR =
             new Creator<SurveyObjectResults>() {
                 @Override
@@ -75,7 +75,7 @@ public class SurveyObjectResults /*implements Parcelable*/ {
                     SurveyObjectResults sor = new SurveyObjectResults();
                     sor.question = source.readString();
                     sor.totalHit = source.readInt();
-                    sor.answersAndHit = source.readArrayList();
+                    source.readTypedList(sor.answersAndHit, SurveyPair.CREATOR);
                     return sor;
                 }
 
@@ -94,6 +94,6 @@ public class SurveyObjectResults /*implements Parcelable*/ {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(question);
         dest.writeInt(totalHit);
-        dest.writeList(answersAndHit);
-    }*/
+        dest.writeTypedList(answersAndHit);
+    }
 }

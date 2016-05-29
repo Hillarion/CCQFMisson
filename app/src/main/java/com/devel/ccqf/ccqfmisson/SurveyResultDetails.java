@@ -1,5 +1,6 @@
 package com.devel.ccqf.ccqfmisson;
 
+import android.content.Intent;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,11 +25,21 @@ public class SurveyResultDetails extends AppCompatActivity {
         setContentView(R.layout.activity_survey_result_details);
         txtDetails = (TextView)findViewById(R.id.txtAnswerDetails);
         txtQuestion = (TextView)findViewById(R.id.txtQuestionResultDetails);
+        Intent i = getIntent();
 
-        txtQuestion.setText(dummyObject().getQuestion());
-        ArrayList<SurveyPair> p = dummyObject().getAnswersAndHit();
+        Bundle bundle = i.getExtras();
 
-        txtDetails.setText(textDetails());
+        String q = bundle.getString(SurveyResults.PAR_KEY);
+
+        ArrayList<SurveyPair> p = bundle.getParcelableArrayList(SurveyResults.PAR_KEY2);
+
+        txtQuestion.setText(q);
+
+        StringBuilder s = new StringBuilder();
+        for(int idx = 0; idx < p.size(); idx++) {
+            s.append(("\n" + p.get(idx).getAnswer() + " " + p.get(idx).getHits()));
+            txtDetails.setText(s);
+        }
     }
 
     private SurveyObjectResults dummyObject(){

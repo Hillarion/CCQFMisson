@@ -16,8 +16,8 @@ import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyPair;
 import java.util.ArrayList;
 
 public class SurveyResults extends AppCompatActivity {
-//    public final static String PAR_KEY = "com.devel.ccqf.ccqfmisson.PAR_KEY";
-//    public final static String PAR_KEY2 = "com.devel.ccqf.ccqfmisson.PAR_KEY2";
+    public final static String PAR_KEY = "com.devel.ccqf.ccqfmisson.SurveyResults.PAR_KEY";
+    public final static String PAR_KEY2 = "com.devel.ccqf.ccqfmisson.SurveyResults.PAR_KEY2";
     private ListView listResults;
     private ArrayList<SurveyObjectResults> l;
     private ArrayList<SurveyPair> listPair;
@@ -34,11 +34,12 @@ public class SurveyResults extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(SurveyResults.this, SurveyResultDetails.class);
-/*                Bundle donnees = new Bundle();
-                donnees.putString(PAR_KEY, l.get(position).getQuestion()   );
-                donnees.putParcelableArrayList(PAR_KEY2, l.get(position).getAnswersAndHit());
-                i.putExtra("Question", donnees);
-*/
+                Bundle donnees = new Bundle();
+                SurveyObjectResults sor = l.get(position);
+                donnees.putString(PAR_KEY, sor.getQuestion());
+                donnees.putParcelableArrayList(PAR_KEY2, sor.getAnswersAndHit());
+                i.putExtras(donnees);
+
                 startActivity(i);
             }
         });
@@ -66,8 +67,10 @@ public class SurveyResults extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<SurveyObjectResults>  sList) {
             // execution of result of Long time consuming operation
-            if(sList != null)
+            if(sList != null) {
+                l = sList;
                 listResults.setAdapter(new CustomSurveyResultsAdapter(SurveyResults.this, sList));
+            }
         }
 
         @Override

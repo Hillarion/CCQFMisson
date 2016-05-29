@@ -22,7 +22,7 @@ public class SurveyPair implements Parcelable {
     }
 
     public SurveyPair(Parcel in){
-        String[] data = new String[3];
+        String[] data = new String[2];
 
         in.readStringArray(data);
         this.answer = data[0];
