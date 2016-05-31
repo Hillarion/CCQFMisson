@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class ProgramDays extends AppCompatActivity {
+public class ProgramDays extends CCQFBaseActivity/*AppCompatActivity*/ {
     private ListView listViewEvents;
     private ArrayList<Event> events;
 

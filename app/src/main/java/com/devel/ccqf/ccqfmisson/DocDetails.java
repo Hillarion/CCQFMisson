@@ -7,7 +7,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class DocDetails extends AppCompatActivity {
+public class DocDetails extends CCQFBaseActivity/*AppCompatActivity*/ {
     ListView listViewDocDetail;
 
     @Override

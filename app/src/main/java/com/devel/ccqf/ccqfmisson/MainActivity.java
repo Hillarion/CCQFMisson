@@ -21,8 +21,7 @@ import com.devel.ccqf.ccqfmisson.LoginObjects.Login;
 import com.devel.ccqf.ccqfmisson.Pub.DialogRep;
 import com.devel.ccqf.ccqfmisson.Utilitairies.Verify;
 
-public class MainActivity extends AppCompatActivity {
-    ActionMenuView amvMenu;
+public class MainActivity extends CCQFBaseActivity {
     private Button btnDoc;
     private Button btnProg;
     private Button btnAgenda;
@@ -36,30 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
         dr.dialogPub(MainActivity.this);
         dialogLogin();
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tToolbar);
-        amvMenu = (ActionMenuView) toolbar.findViewById(R.id.amvMenu);
-        amvMenu.setOnMenuItemClickListener(new ActionMenuView.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                return onOptionsItemSelected(menuItem);
-            }
-        });
-        setSupportActionBar(toolbar);
-        Drawable logo = null;
-        logo = getResources().getDrawable(R.mipmap.ccqf_logo);
-        getSupportActionBar().setTitle(R.string.app_name);
-        getSupportActionBar().setLogo(logo);
-        for (int i = 0; i < toolbar.getChildCount(); i++) {
-            View child = toolbar.getChildAt(i);
-            if (child != null)
-                if (child.getClass() == ImageView.class) {
-                    ImageView iv2 = (ImageView) child;
-                    if (iv2.getDrawable() == logo) {
-                        iv2.setAdjustViewBounds(true);
-                    }
-                }
-        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -107,37 +82,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main,  amvMenu.getMenu());
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        //Options réservés au compte admin
-        int id = item.getItemId();
-
-        switch (id){
-            case R.id.action_settings://Nouveau Survey
-                Intent i = new Intent(MainActivity.this, SurveyCreate.class);
-                startActivity(i);
-                break;
-            case R.id.action_result://Consulter résulat du survey
-                Intent i2 = new Intent(MainActivity.this, SurveyResults.class);
-                startActivity(i2);
-                break;
-            case R.id.action_newB2b://Nouveau B2B (formulaire quie crée un object Event)
-                Intent b2b = new Intent(MainActivity.this, NewB2B.class);
-                startActivity(b2b);
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     public void dialogLogin(){

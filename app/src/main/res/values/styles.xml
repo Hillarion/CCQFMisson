@@ -14,6 +14,13 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="AppTheme.ActionBarLogo" parent="Theme.AppCompat.Light">
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
+        <item name="android:background">#ffffffff</item>
+        <item name="logo">@mipmap/ccqf_logo</item>
+        <item name="displayOptions">useLogo</item>
+    </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
