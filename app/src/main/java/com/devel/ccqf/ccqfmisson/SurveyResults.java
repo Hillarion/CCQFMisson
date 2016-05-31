@@ -15,7 +15,7 @@ import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyPair;
 
 import java.util.ArrayList;
 
-public class SurveyResults extends AppCompatActivity {
+public class SurveyResults extends CCQFBaseActivity/*AppCompatActivity*/ {
     public final static String PAR_KEY = "com.devel.ccqf.ccqfmisson.SurveyResults.PAR_KEY";
     public final static String PAR_KEY2 = "com.devel.ccqf.ccqfmisson.SurveyResults.PAR_KEY2";
     private ListView listResults;

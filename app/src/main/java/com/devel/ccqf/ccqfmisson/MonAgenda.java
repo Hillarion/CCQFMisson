@@ -15,7 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class MonAgenda extends AppCompatActivity {
+public class MonAgenda extends CCQFBaseActivity/*AppCompatActivity*/ {
     private ListView listViewEvents;
     private ArrayList<Event> events;
 

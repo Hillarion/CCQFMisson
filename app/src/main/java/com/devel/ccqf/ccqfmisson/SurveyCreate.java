@@ -20,7 +20,7 @@ import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObject;
 
 import java.util.ArrayList;
 
-public class SurveyCreate extends AppCompatActivity {
+public class SurveyCreate extends CCQFBaseActivity/*AppCompatActivity*/ {
     private Button btnNewAnswer;
     private EditText txtNewQuestion;
     private Button btnOK;

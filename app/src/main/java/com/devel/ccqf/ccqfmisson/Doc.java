@@ -17,7 +17,7 @@ import android.widget.SimpleAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Doc extends AppCompatActivity {
+public class Doc extends CCQFBaseActivity/*AppCompatActivity*/ {
     private ListView listViewDoc;
     ActionMenuView amvMenu;
 

@@ -18,8 +18,8 @@ import com.devel.ccqf.ccqfmisson.ReseauSocial.MessagePacket;
 
 import java.util.List;
 
-public class Feed extends AppCompatActivity {
-    ActionMenuView amvMenu;
+public class Feed extends CCQFBaseActivity/*AppCompatActivity*/ {
+
     private Button btnSend;
     private EditText inputMsg;
     private ListView listViewMessages;

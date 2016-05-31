@@ -21,7 +21,7 @@ import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Survey extends AppCompatActivity {
+public class Survey extends CCQFBaseActivity/*AppCompatActivity*/ {
     private List<SurveyObject> listAnswers;
     private List<List<SurveyObject>> listList;
     private ListView listViewAnswers;

@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by thierry on 26/05/16.
  */
-public class FeedListActivity extends AppCompatActivity {
+public class FeedListActivity extends CCQFBaseActivity/*AppCompatActivity*/ {
     ListView lstFeedList;
 
     @Override
