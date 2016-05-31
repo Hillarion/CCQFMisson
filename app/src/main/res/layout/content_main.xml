@@ -43,7 +43,7 @@
         android:layout_below="@+id/docActivityBtn"
         android:layout_alignStart="@+id/docActivityBtn"
         android:layout_marginTop="64dp"
-        android:background="@drawable/calendar_300px"/>
+        android:background="@drawable/program_closed"/>
 
     <Button
         android:layout_width="39pt"
@@ -52,7 +52,7 @@
         android:id="@+id/myAgendaActivityBtn"
         android:layout_alignBottom="@+id/programActivityBtn"
         android:layout_alignEnd="@+id/feedActivityBtn"
-        android:background="@drawable/calendar_green"/>
+        android:background="@drawable/calendar_300px"/>
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -60,6 +60,7 @@
         android:id="@+id/imageButton"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:background="@drawable/dummy_banner"/>
 
 </RelativeLayout>

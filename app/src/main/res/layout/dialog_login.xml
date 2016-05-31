@@ -33,11 +33,11 @@
         android:ems="10"
         android:id="@+id/txtLoginScreenName"
         android:layout_gravity="center_horizontal"
-        android:hint="Surnom"
+        android:hint="Companie"
         android:textAlignment="center"
 
         />
-    <EditText
+   <!-- <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
@@ -47,7 +47,7 @@
         android:hint="Email"
         android:textAlignment="center"
         android:paddingBottom="15dp"
-        />
+        />-->
     <Button
         android:id="@+id/btnLoginOk"
         android:layout_width="match_parent"

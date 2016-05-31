@@ -6,14 +6,13 @@ package com.devel.ccqf.ccqfmisson.LoginObjects;
 public class Login {
     String nom;
     String prenom;
-    String email;
-    String nickname;
+   // String email;
+    String companie;
 
-    public Login(String nom, String prenom, String email, String nickname) {
+    public Login(String nom, String prenom, String companie) {
         this.nom = nom;
         this.prenom = prenom;
-        this.email = email;
-        this.nickname = nickname;
+        this.companie = companie;
     }
 
     @Override
@@ -21,8 +20,7 @@ public class Login {
         return "Login{" +
                 "nom='" + nom + '\'' +
                 ", prenom='" + prenom + '\'' +
-                ", email='" + email + '\'' +
-                ", nickname='" + nickname + '\'' +
+                ", companie='" + companie + '\'' +
                 '}';
     }
 
@@ -42,19 +40,12 @@ public class Login {
         this.prenom = prenom;
     }
 
-    public String getEmail() {
-        return email;
+    public String getCompanie(){
+        return companie;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setCompanie(String companie){
+        this.companie = companie;
     }
 
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
 }

@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.devel.ccqf.ccqfmisson.LoginObjects.Login;
+import com.devel.ccqf.ccqfmisson.Pub.DialogRep;
 import com.devel.ccqf.ccqfmisson.Utilitairies.Verify;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,7 +32,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        DialogRep dr = new DialogRep();
 
+        dr.dialogPub(MainActivity.this);
         dialogLogin();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tToolbar);
@@ -145,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         //d.setCancelable(false);
         final EditText txtPrenom = (EditText)d.findViewById(R.id.txtLoginName);
         final EditText txtNom = (EditText)d.findViewById(R.id.txtLoginLastName);
-        final EditText txtEmail = (EditText)d.findViewById(R.id.txtLoginEmail);
+      //  final EditText txtEmail = (EditText)d.findViewById(R.id.txtLoginEmail);
         final EditText txtSurnom = (EditText)d.findViewById(R.id.txtLoginScreenName);
         Button btnOK = (Button)d.findViewById(R.id.btnLoginOk);
         d.show();
@@ -155,26 +158,21 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String prenom = txtPrenom.getText().toString();
                 String nom = txtNom.getText().toString();
-                String email = txtEmail.getText().toString();
-                String surnom = txtSurnom.getText().toString();
+               // String email = txtEmail.getText().toString();
+                String companie = txtSurnom.getText().toString();
                 Verify verify = new Verify();
 
                 if(verify.isValidName(prenom)){
 
                      if(verify.isValidName(nom)) {
                          
-                         if(!surnom.isEmpty()){
-
-                             if (verify.isValidEmail(email)){
-                                 d.dismiss(); //a vérifier
-
-                             } else if(!verify.isValidEmail(email)) {
-                                 Toast.makeText(MainActivity.this, "Email Invalide",
-                                         Toast.LENGTH_SHORT).show();
-                             }
-
+                         if(!companie.isEmpty()){
+                             Toast.makeText
+                                     (MainActivity.this, ""+nom +"_"+prenom+"@"+companie,
+                                             Toast.LENGTH_SHORT).show();
+                             d.dismiss();
                          } else{
-                             Toast.makeText(MainActivity.this, "Surnom vide", Toast.LENGTH_SHORT).
+                             Toast.makeText(MainActivity.this, "Companie vide", Toast.LENGTH_SHORT).
                                      show();
                          }
 
@@ -194,6 +192,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }
