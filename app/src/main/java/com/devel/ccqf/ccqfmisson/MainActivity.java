@@ -3,6 +3,7 @@ package com.devel.ccqf.ccqfmisson;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.devel.ccqf.ccqfmisson.Database.InterfaceDB;
 import com.devel.ccqf.ccqfmisson.LoginObjects.Login;
 import com.devel.ccqf.ccqfmisson.Pub.DialogRep;
 import com.devel.ccqf.ccqfmisson.Utilitairies.Verify;
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnProg;
     private Button btnAgenda;
     private Button btnFeed;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,6 +173,9 @@ public class MainActivity extends AppCompatActivity {
                              Toast.makeText
                                      (MainActivity.this, ""+nom +"_"+prenom+"@"+companie,
                                              Toast.LENGTH_SHORT).show();
+
+                            Login l = new Login(nom, prenom, companie);
+
                              d.dismiss();
                          } else{
                              Toast.makeText(MainActivity.this, "Companie vide", Toast.LENGTH_SHORT).
@@ -192,4 +198,33 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private class SendLoginAsyncTask extends AsyncTask<String, Void, Login>{
+
+        @Override
+        protected Login doInBackground(String... login) {
+            InterfaceDB iDb = new InterfaceDB(MainActivity.this);
+
+            if(iDb != null){
+                iDb.registerUser(login[0],  login[1], login[2]);
+            }return null;
+        }
+        protected void onPostExecute(Void...unused){
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            // Things to be done before execution of long running operation. For
+            // example showing ProgessDialog
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... text) {
+            // Things to be done while execution of long running operation is in
+            // progress. For example updating ProgessDialog
+        }
+
+    }
+
 }

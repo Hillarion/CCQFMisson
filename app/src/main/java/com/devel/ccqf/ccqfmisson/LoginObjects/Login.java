@@ -8,6 +8,7 @@ public class Login {
     String prenom;
    // String email;
     String companie;
+    String loginAdress;
 
     public Login(String nom, String prenom, String companie) {
         this.nom = nom;
@@ -46,6 +47,13 @@ public class Login {
 
     public void setCompanie(String companie){
         this.companie = companie;
+    }
+    public void setLoginAdress(String loginAdress){
+        this.loginAdress = loginAdress;
+    }
+    public String getLoginAdress(){
+        loginAdress = ""+nom+"_"+prenom+"@"+companie;
+        return loginAdress;
     }
 
 }

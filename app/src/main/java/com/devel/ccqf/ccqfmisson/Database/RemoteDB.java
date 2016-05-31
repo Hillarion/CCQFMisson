@@ -99,14 +99,15 @@ public class RemoteDB {
      *      Retourne un identifiant pouvant être utilisé pour les conversations et les sondages.
      */
 
-    public int registerUser(String nom, String prenom, String userName, String courriel){
+    public int registerUser(String nom, String prenom, String companie){  //<---Modification : effacer email et
+                                                                            // remplacer par companie
         int userId = -1;
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
         pairs.add(new BasicNameValuePair("action", "registerUser"));
-        pairs.add(new BasicNameValuePair("userName", userName));
+        //pairs.add(new BasicNameValuePair("userName", userName));
+        pairs.add(new BasicNameValuePair("companie", companie));
         pairs.add(new BasicNameValuePair("nom", nom));
         pairs.add(new BasicNameValuePair("prenom", prenom));
-        pairs.add(new BasicNameValuePair("courriel", courriel));
         String ligneResult = sendRequest(pairs);
 
         if(ligneResult != null) {
@@ -119,7 +120,7 @@ public class RemoteDB {
         }
         if(userId > 0){
             if(lDb != null){
-                lDb.setUser(userId, userName);
+                lDb.setUser(userId, companie);
             }
         }
         return userId;

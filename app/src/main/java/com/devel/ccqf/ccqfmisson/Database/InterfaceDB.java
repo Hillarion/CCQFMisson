@@ -89,7 +89,7 @@ public class InterfaceDB {
      *      Recoit un nom d'usager, et le mot de passe
      *      Retourne un identifiant pouvant être utilisé pour les conversations et les sondages.
      */
-    public int registerUser(String nom, String prenom, String userName, String courriel) {
+    public int registerUser(String nom, String prenom, String userName) {
         if(rDb != null)
             currentUser = rDb.registerUser(nom, prenom, userName, courriel) ;
         return currentUser;
