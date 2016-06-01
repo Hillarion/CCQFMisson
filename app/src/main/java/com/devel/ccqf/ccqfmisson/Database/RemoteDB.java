@@ -99,13 +99,13 @@ public class RemoteDB {
      *      Retourne un identifiant pouvant être utilisé pour les conversations et les sondages.
      */
 
-    public int registerUser(String nom, String prenom, String companie){  //<---Modification : effacer email et
+    public int registerUser(String nom, String prenom, String compagnie){  //<---Modification : effacer email et
                                                                             // remplacer par companie
         int userId = -1;
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
         pairs.add(new BasicNameValuePair("action", "registerUser"));
         //pairs.add(new BasicNameValuePair("userName", userName));
-        pairs.add(new BasicNameValuePair("companie", companie));
+        pairs.add(new BasicNameValuePair("compagnie", compagnie));
         pairs.add(new BasicNameValuePair("nom", nom));
         pairs.add(new BasicNameValuePair("prenom", prenom));
         String ligneResult = sendRequest(pairs);
@@ -120,7 +120,7 @@ public class RemoteDB {
         }
         if(userId > 0){
             if(lDb != null){
-                lDb.setUser(userId, companie);
+                lDb.setUser(userId, nom+"_"+prenom+"@"+compagnie);
             }
         }
         return userId;
@@ -175,8 +175,8 @@ public class RemoteDB {
                                 if(uId != currentUser){
                                     String nom = jsonObject.getString("nom");
                                     String prenom = jsonObject.getString("prenom");
-                                    String username = jsonObject.getString("userName");
-                                    Users user=new Users(uId, nom, prenom, username, "", "");
+                                    String compagnie = jsonObject.getString("compagnie");
+                                    Users user=new Users(uId, nom, prenom, compagnie, "");
                                     uList.add(user);
                                 }
                             } catch (JSONException e) {

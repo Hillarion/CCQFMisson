@@ -6,8 +6,7 @@ create table Utilisateur (
     user_id int NOT NULL AUTO_INCREMENT,
     nom text NOT NULL,
     prenom text NOT NULL,
-    userName text NOT NULL,
-    courriel text NOT NULL,
+    compagnie text NOT NULL,
     privilege  enum ('', 'admin'),
     PRIMARY KEY(user_id)
 );
@@ -60,7 +59,8 @@ create table SurveyForm(
     PRIMARY KEY(id_survey)
 );
 
-insert into Utilisateur values(0, 'Admin', 'admin');
-insert into Utilisateur values(0, 'User', '');
-insert into Utilisateur values(0, 'User2', '');
+insert into Utilisateur values(0, 'Racicot', 'Vanessa', 'ccqf', 'admin');
+insert into Utilisateur values(0, '', 'User', 'company1', '');
+insert into Utilisateur values(0, '', 'User2', 'company2', '');
+
 

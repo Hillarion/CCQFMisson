@@ -2,6 +2,7 @@ package com.devel.ccqf.ccqfmisson;
 
 import android.app.Dialog;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -50,27 +51,51 @@ public class FeedListActivity extends CCQFBaseActivity/*AppCompatActivity*/ {
 
         FloatingActionButton fabNewFeed = (FloatingActionButton) findViewById(R.id.fabNewFeed);
         fabNewFeed.setOnClickListener(new View.OnClickListener() {
+             ListView lstUserList;
             @Override
             public void onClick(View view) {
                 final Dialog d = new Dialog(FeedListActivity.this);
                 d.setContentView(R.layout.dialog_destinataires);
-                d.setTitle("qwerjhgfdsdfgh");
+                d.setTitle("Send to:");
                 Button btnOK = (Button)d.findViewById(R.id.btnUserListOk);
                 Button btnRefreshUserList = (Button)d.findViewById(R.id.btnRefreshUserList);
-                final ListView lstUserList = (ListView)d.findViewById(R.id.lstUserList);
+                lstUserList = (ListView)d.findViewById(R.id.lstUserList);
                 btnRefreshUserList.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        InterfaceDB iDb = new InterfaceDB(FeedListActivity.this);
-                        ArrayList<Users> uList = null;
-                        if(iDb != null){
-                            uList = iDb.getUserList();
-                            lstUserList.setAdapter(new CustomContactListAdapter(FeedListActivity.this, uList));
-                        }
+                        new GetUserListAsyncTask().execute();
                     }
                 });
                 d.show();
                     /*Ici, on créé une  nouvelle conversation puis on va au FeedActivity*/
+            }
+            class GetUserListAsyncTask extends AsyncTask<Void, Void, ArrayList<Users>>{
+                @Override
+                protected ArrayList<Users> doInBackground(Void... userId){
+                    ArrayList<Users> uList = null;
+                    InterfaceDB iDb = new InterfaceDB(FeedListActivity.this);
+                    if(iDb != null){
+                        uList = iDb.getUserList();
+                    }
+                    return uList;
+                }
+                @Override
+                protected void onPostExecute(ArrayList<Users> uList) {
+                    lstUserList.setAdapter(new CustomContactListAdapter(FeedListActivity.this, uList));
+
+                }
+
+                @Override
+                protected void onPreExecute() {
+                    // Things to be done before execution of long running operation. For
+                    // example showing ProgessDialog
+                }
+
+                @Override
+                protected void onProgressUpdate(Void... text) {
+                    // Things to be done while execution of long running operation is in
+                    // progress. For example updating ProgessDialog
+                }
             }
         });
 
@@ -79,5 +104,10 @@ public class FeedListActivity extends CCQFBaseActivity/*AppCompatActivity*/ {
 
     public void dialogSelectUsers() {
     }
+
+
+
+
+
 
 }

@@ -114,6 +114,8 @@ public class MainActivity extends CCQFBaseActivity {
                      if(verify.isValidName(nom)) {
                          
                          if(!companie.isEmpty()){
+//   pour référence
+//                       int  userID =  iDb.registerUser(String nom, String prenom, String compagnie) ;
                              Toast.makeText
                                      (MainActivity.this, ""+nom +"_"+prenom+"@"+companie,
                                              Toast.LENGTH_SHORT).show();
