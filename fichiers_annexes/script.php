@@ -2,16 +2,28 @@
 //header ("Access-Control-Allow-Origin : localhost");
 require_once("connexion.php");
 
+/* Routine pour valider le format de la date */
 function validateDate($date, $format = 'Y-m-d H:i:s')
 {
     $d = DateTime::createFromFormat($format, $date);
     return $d && $d->format($format) == $date;
 }
 
+/* Routine pour valider le format de l'adresse courriel */
 function validerCourriel($courriel){
     return filter_var($courriel, FILTER_VALIDATE_EMAIL);
 }
 
+/* Routine qui retourne les droits administratifs d'un usager
+   reçoit : userID, un entier
+
+    retourne, en cas de succès :
+
+    { "Status" : "Success",
+       "privilege" : "typePrivilege"
+    }
+
+    ou :  typePrivilege peur être "admin" ou "nil"      */
 function getPrivilege(){
     $userID = $_POST["userID"];
     if(($userID != "") && is_numeric($userID)){
@@ -37,20 +49,39 @@ function getPrivilege(){
     }
 }
 
+function getUserList(){
+    $userId = -1;
+
+    $req = "SELECT user_id, nom, prenom, compagnie FROM Utilisateur";
+    $result = doQuery($req);
+    $row = mysqli_num_rows($result);
+    if($row > 0){
+        echo "{\"status\" : \"Success\", \"users\" :[";
+        while($ligne = mysqli_fetch_object($result))
+        {
+            echo "{\"user_id\" : \"$ligne->user_id\", ";
+            echo "\"nom\" : \"$ligne->nom\", ";
+            echo "\"prenom\" : \"$ligne->prenom\", ";
+            echo "\"compagnie\" : \"$ligne->compagnie\"} ";
+            if(--$row>0) echo ",";
+        }
+        echo "]}";
+    }
+    else
+        returnFail("No Data found");
+}
+
 function registerUser(){
     $nom = $_POST("nom");
     $prenom = $_POST("prenom");
-    $userName = $_POST("userName");
-    $courriel = $_POST("courriel");
+    $compagnie = $_POST("compagnie");
     $userId = -1;
 
-    if(($nom == "") || ($prenom == "") ||($userName == "") || (courriel == ""))
+    if(($nom == "") || ($prenom == "") ||($compagnie == ""))
         returnFail("fields must not be empty");
-    else if(!validerCourriel)
-        returnFail("Not a valid email");
     else {
         $req = "SELECT user_id FROM Utilisateur WHERE nom='$nom' AND prenom='$prenom'".
-            " AND userName='$username' AND courriel='$courriel'";
+            " AND compagnie='$compagnie'";
         $result = doQuery($req);
         $row = mysqli_num_rows($result);
         if($row > 0){
@@ -58,7 +89,7 @@ function registerUser(){
             $userId = $ligne->user_id;
         }
         else{
-            $req = "INSERT INTO Utilisateur VALUES(0, '$nom','$prenom', '$username', '$courriel', '')";
+            $req = "INSERT INTO Utilisateur VALUES(0, '$nom','$prenom', '$compagnie', '')";
             $result = doQuery($req);
             $userId = mysqli_insert_id($conn);
         }
@@ -102,22 +133,6 @@ function validateLogin(){
         returnFail("empty user or pass");
 }
 */
-function getUserList(){
-    $req="SELECT user_id, userName from Utilisateur";
-    $result = doQuery($req);
-    $row = mysqli_num_rows($result);
-    if($row>0){
-        echo "{\"Status\" : \"Success\", ";
-        echo "\"users\" : [";
-        while($ligne=mysqli_fetch_object($result)){
-            echo "{\"id\" : \"$ligne->user_id\", \"name\" : \"$ligne->userName\"}";
-            if(--$row>0) echo ",";
-        }
-        echo "]}";
-    }
-    else
-        returnFail("no result");
-}
 
 function sendMessage(){
     global $conn;
@@ -417,6 +432,9 @@ $action=$_POST['action'];
 switch ($action){
     case "getPrivilege" :
        getPrivilege();
+    break;
+    case "getUserList" :
+       getUserList();
     break;
     case "registerUser" :
        registerUser();
