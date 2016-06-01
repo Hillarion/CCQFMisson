@@ -18,6 +18,7 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -183,10 +184,22 @@ public class InterfaceDB {
     *       Reçoit un MessagePacket
     *       Ne retourne rien
     */
-    public void sendMessage(MessagePacket msg){
+    public int sendMessage(MessagePacket msg){
+        int msgId = -1;
         if(rDb != null)
-            rDb.sendMessage( msg);
+            msgId = rDb.sendMessage(msg);
+        return msgId;
     }
+
+    public int sendMessage(String dest, String msgText){
+        int msgId = -1;
+        if(rDb != null) {
+            MessagePacket msg = new MessagePacket(-1, currentUser, -1, dest, msgText, new Date(), "");
+            msgId = rDb.sendMessage(msg);
+        }
+        return msgId;
+    }
+
 
     public ArrayList<SurveyObjectResults> readSurveyResults(int surveyId){
         ArrayList<SurveyObjectResults> rsltList = null;

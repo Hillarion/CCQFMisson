@@ -161,7 +161,11 @@ public class RemoteDB {
         String ligneResult = sendRequest(pairs);
 
         if(ligneResult != null) {
+            System.out.print("CCQF getUserList lres = " + ligneResult + "\n\n");
+            System.out.flush();
             parser = new JSONParser(ligneResult);
+            System.out.print("CCQF getUserList parser = " + parser + "\n\n");
+            System.out.flush();
             String status = parser.getStatus();
             if (!status.isEmpty()) {
                 if (status.equalsIgnoreCase("Success")) {
@@ -178,6 +182,9 @@ public class RemoteDB {
                                     String compagnie = jsonObject.getString("compagnie");
                                     Users user=new Users(uId, nom, prenom, compagnie, "");
                                     uList.add(user);
+                                    System.out.print("CCQF getUserList user = " + user + "\n\n");
+                                    System.out.flush();
+
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -196,7 +203,7 @@ public class RemoteDB {
     *       Ne retourne rien
     * Pour tout message envoyé une copie est insctite dans la BD locale, si celle-ci existe.
     */
-    public void sendMessage(MessagePacket msg){
+    public int sendMessage(MessagePacket msg){
         int msgId = -1;
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
         pairs.add(new BasicNameValuePair("action", "sendMessage"));
@@ -230,6 +237,7 @@ public class RemoteDB {
                 }
             }
         }
+        return msgId;
     }
 
     /*

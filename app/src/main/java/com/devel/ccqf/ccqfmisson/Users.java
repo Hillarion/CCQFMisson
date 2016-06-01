@@ -22,6 +22,14 @@ public class Users {
         this.privilege = privilege;
     }
 
+    public int getUserID() {
+        return user_id;
+    }
+
+    public String getUID() {
+        return ""+user_id;
+    }
+
     public String getNom() {
         return nom;
     }
@@ -39,7 +47,7 @@ public class Users {
     }
 
     public String getUserName() {
-        return nom + "_" + prenom + "@" + compagnie;
+        return prenom + "_" + nom + "@" + compagnie;
     }
 
     public String getPrivilege() {
@@ -48,5 +56,9 @@ public class Users {
 
     public void setPrivilege(String privilege) {
         this.privilege = privilege;
+    }
+
+    public String toString(){
+        return "" + user_id + " : " + getUserName();
     }
 }

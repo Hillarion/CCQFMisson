@@ -42,7 +42,7 @@ public class Verify {
         if(TextUtils.isEmpty(target)){
             return false;
         }else {
-            String regex = "[A-Z][a-z]+( [A-Z][a-z]+)?";
+            String regex = "[A-Z][a-z]+([ -][A-Z][a-z]+)?";
             return Pattern.matches(regex, target);
         }
     }
