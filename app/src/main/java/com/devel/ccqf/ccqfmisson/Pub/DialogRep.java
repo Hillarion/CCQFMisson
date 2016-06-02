@@ -3,6 +3,7 @@ package com.devel.ccqf.ccqfmisson.Pub;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 
 import com.devel.ccqf.ccqfmisson.R;
@@ -14,7 +15,9 @@ public class DialogRep {
 
     public void dialogPub(Context c){
         final Dialog d = new Dialog(c);
+        d.requestWindowFeature(Window.FEATURE_NO_TITLE);
         d.setContentView(R.layout.dialog_pub);
+
         d.setCancelable(false);
         final Button btnDismiss = (Button)d.findViewById(R.id.btnDialogPubDismiss);
         d.show();

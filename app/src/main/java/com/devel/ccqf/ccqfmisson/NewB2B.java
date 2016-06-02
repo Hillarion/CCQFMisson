@@ -2,6 +2,7 @@ package com.devel.ccqf.ccqfmisson;
 
 import android.app.Dialog;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.ActionMenuView;
@@ -20,12 +21,15 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.devel.ccqf.ccqfmisson.AgendaObjects.Event;
+import com.devel.ccqf.ccqfmisson.Database.InterfaceDB;
+import com.devel.ccqf.ccqfmisson.LoginObjects.Login;
+import com.devel.ccqf.ccqfmisson.Utilitairies.FontsOverride;
 import com.devel.ccqf.ccqfmisson.Utilitairies.Verify;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class NewB2B extends AppCompatActivity {
+public class NewB2B extends CCQFBaseActivity {
     private EditText txtDestinataire;
     private EditText btnDebut;
     private TextView txtDebut;
@@ -55,6 +59,7 @@ public class NewB2B extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_b2_b);
+        FontsOverride.setDefaultFont(NewB2B.this, "SANS", "fonts/Cronus Round.otf");
 
         initialize();
 
@@ -173,6 +178,35 @@ public class NewB2B extends AppCompatActivity {
         txtEmail = (EditText)findViewById(R.id.editTextB2bEmail);
         spinner = (Spinner)findViewById(R.id.spinnerBatiementExterieur);
         btnDone = (Button)findViewById(R.id.btnB2bOk);
+    }
+
+
+    private class SendB2BAsyncTask extends AsyncTask<Event, Void, Login> {
+
+        @Override
+        protected Login doInBackground(Event... param) {
+            InterfaceDB iDb = new InterfaceDB(NewB2B.this);
+
+            if(iDb != null){
+
+            }return null;
+        }
+        protected void onPostExecute(Void...unused){
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            // Things to be done before execution of long running operation. For
+            // example showing ProgessDialog
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... text) {
+            // Things to be done while execution of long running operation is in
+            // progress. For example updating ProgessDialog
+        }
+
     }
 
 }
