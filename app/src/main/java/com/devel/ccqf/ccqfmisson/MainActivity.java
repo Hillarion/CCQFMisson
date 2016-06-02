@@ -21,8 +21,6 @@ import android.widget.Toast;
 import com.devel.ccqf.ccqfmisson.Database.InterfaceDB;
 import com.devel.ccqf.ccqfmisson.LoginObjects.Login;
 import com.devel.ccqf.ccqfmisson.Pub.DialogRep;
-import com.devel.ccqf.ccqfmisson.Utilitairies.FontsOverride;
-import com.devel.ccqf.ccqfmisson.Utilitairies.TypefaceUtil;
 import com.devel.ccqf.ccqfmisson.Utilitairies.Verify;
 
 public class MainActivity extends CCQFBaseActivity {
@@ -36,8 +34,6 @@ public class MainActivity extends CCQFBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FontsOverride.setDefaultFont(MainActivity.this, "MONOSPACE", "fonts/Cronus Round.otf");//<- changer la font ici !
-
         DialogRep dr = new DialogRep();
 
         dr.dialogPub(MainActivity.this);
@@ -118,26 +114,33 @@ public class MainActivity extends CCQFBaseActivity {
                      if(verify.isValidName(nom)) {
                          
                          if(!companie.isEmpty()){
-
-                           /*  Toast.makeText
+//   pour référence
+//                       int  userID =  iDb.registerUser(String nom, String prenom, String compagnie) ;
+                             Toast.makeText
                                      (MainActivity.this, ""+nom +"_"+prenom+"@"+companie,
-                                             Toast.LENGTH_SHORT).show();*/
+                                             Toast.LENGTH_SHORT).show();
 
+                            Login l = new Login(nom, prenom, companie);
 
-                             new SendLoginAsyncTask().execute(nom, prenom, companie);
                              d.dismiss();
-
                          } else{
                              Toast.makeText(MainActivity.this, "Companie vide", Toast.LENGTH_SHORT).
                                      show();
                          }
+
                      } else{
                          Toast.makeText(MainActivity.this, "Nom Invalide", Toast.LENGTH_SHORT).
                                  show();
                      }
+
                 } else{
                     Toast.makeText(MainActivity.this, "Prenom Invalide", Toast.LENGTH_SHORT).show();
                 }
+                
+                
+                
+             /*   Login login = new Login(prenom, nom, email, surnom);
+                d.dismiss();*/
             }
         });
     }

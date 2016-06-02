@@ -21,7 +21,8 @@
         android:layout_height="wrap_content"
         android:text="OK"
         android:textSize="10pt"
-        android:background="@color/colorCCQFGreen1"
-        android:layout_below="@id/lstUserList"
-        />
+        android:background="@color/colorCCQFOrange"
+        android:textColor="@color/colorWhite"
+        android:layout_below="@+id/lstUserList"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>

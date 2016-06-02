@@ -18,6 +18,7 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -89,9 +90,9 @@ public class InterfaceDB {
      *      Recoit un nom d'usager, et le mot de passe
      *      Retourne un identifiant pouvant être utilisé pour les conversations et les sondages.
      */
-    public int registerUser(String nom, String prenom, String companie) {
+    public int registerUser(String nom, String prenom, String compagnie) {
         if(rDb != null)
-            currentUser = rDb.registerUser(nom, prenom, companie) ;
+            currentUser = rDb.registerUser(nom, prenom, compagnie) ;
         return currentUser;
     }
 
@@ -183,10 +184,22 @@ public class InterfaceDB {
     *       Reçoit un MessagePacket
     *       Ne retourne rien
     */
-    public void sendMessage(MessagePacket msg){
+    public int sendMessage(MessagePacket msg){
+        int msgId = -1;
         if(rDb != null)
-            rDb.sendMessage( msg);
+            msgId = rDb.sendMessage(msg);
+        return msgId;
     }
+
+    public int sendMessage(String dest, String msgText){
+        int msgId = -1;
+        if(rDb != null) {
+            MessagePacket msg = new MessagePacket(-1, currentUser, -1, dest, msgText, new Date(), "");
+            msgId = rDb.sendMessage(msg);
+        }
+        return msgId;
+    }
+
 
     public ArrayList<SurveyObjectResults> readSurveyResults(int surveyId){
         ArrayList<SurveyObjectResults> rsltList = null;

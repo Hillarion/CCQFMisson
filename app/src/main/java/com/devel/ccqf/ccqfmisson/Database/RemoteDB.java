@@ -99,14 +99,13 @@ public class RemoteDB {
      *      Retourne un identifiant pouvant être utilisé pour les conversations et les sondages.
      */
 
-    public int registerUser(String nom, String prenom, String companie){  /*<---Modification : effacer email et
-                                                                           * remplacer par companie
-                                                                           */
+    public int registerUser(String nom, String prenom, String compagnie){  //<---Modification : effacer email et
+                                                                            // remplacer par companie
         int userId = -1;
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
         pairs.add(new BasicNameValuePair("action", "registerUser"));
         //pairs.add(new BasicNameValuePair("userName", userName));
-        pairs.add(new BasicNameValuePair("compagnie", companie));
+        pairs.add(new BasicNameValuePair("compagnie", compagnie));
         pairs.add(new BasicNameValuePair("nom", nom));
         pairs.add(new BasicNameValuePair("prenom", prenom));
         String ligneResult = sendRequest(pairs);
@@ -121,7 +120,7 @@ public class RemoteDB {
         }
         if(userId > 0){
             if(lDb != null){
-                lDb.setUser(userId, companie);
+                lDb.setUser(userId, nom+"_"+prenom+"@"+compagnie);
             }
         }
         return userId;
@@ -162,7 +161,11 @@ public class RemoteDB {
         String ligneResult = sendRequest(pairs);
 
         if(ligneResult != null) {
+            System.out.print("CCQF getUserList lres = " + ligneResult + "\n\n");
+            System.out.flush();
             parser = new JSONParser(ligneResult);
+            System.out.print("CCQF getUserList parser = " + parser + "\n\n");
+            System.out.flush();
             String status = parser.getStatus();
             if (!status.isEmpty()) {
                 if (status.equalsIgnoreCase("Success")) {
@@ -176,9 +179,12 @@ public class RemoteDB {
                                 if(uId != currentUser){
                                     String nom = jsonObject.getString("nom");
                                     String prenom = jsonObject.getString("prenom");
-                                    String username = jsonObject.getString("userName");
-                                    Users user=new Users(uId, nom, prenom, username, "", "");
+                                    String compagnie = jsonObject.getString("compagnie");
+                                    Users user=new Users(uId, nom, prenom, compagnie, "");
                                     uList.add(user);
+                                    System.out.print("CCQF getUserList user = " + user + "\n\n");
+                                    System.out.flush();
+
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -197,7 +203,7 @@ public class RemoteDB {
     *       Ne retourne rien
     * Pour tout message envoyé une copie est insctite dans la BD locale, si celle-ci existe.
     */
-    public void sendMessage(MessagePacket msg){
+    public int sendMessage(MessagePacket msg){
         int msgId = -1;
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
         pairs.add(new BasicNameValuePair("action", "sendMessage"));
@@ -231,6 +237,7 @@ public class RemoteDB {
                 }
             }
         }
+        return msgId;
     }
 
     /*

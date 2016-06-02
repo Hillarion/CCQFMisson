@@ -7,21 +7,27 @@ public class Users {
     private int user_id;
     private String nom;
     private String prenom;
-    private String userName;
-    private String courriel;
+    private String compagnie;
     private String privilege;
 
     public Users(){
-        this(-1, "", "", "", "", "");
+        this(-1, "", "", "", "");
     }
 
-    public Users(int uId, String nom, String prenom, String userName, String courriel, String privilege){
+    public Users(int uId, String nom, String prenom, String compagnie, String privilege){
         user_id = uId;
         this.nom = nom;
         this.prenom = prenom;
-        this.userName = userName;
-        this.courriel = courriel;
+        this.compagnie = compagnie;
         this.privilege = privilege;
+    }
+
+    public int getUserID() {
+        return user_id;
+    }
+
+    public String getUID() {
+        return ""+user_id;
     }
 
     public String getNom() {
@@ -41,19 +47,7 @@ public class Users {
     }
 
     public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getCourriel() {
-        return courriel;
-    }
-
-    public void setCourriel(String courriel) {
-        this.courriel = courriel;
+        return prenom + "_" + nom + "@" + compagnie;
     }
 
     public String getPrivilege() {
@@ -62,5 +56,9 @@ public class Users {
 
     public void setPrivilege(String privilege) {
         this.privilege = privilege;
+    }
+
+    public String toString(){
+        return "" + user_id + " : " + getUserName();
     }
 }

@@ -31,7 +31,7 @@ function getPrivilege(){
         $result = doQuery($req);
         
         $row = mysqli_num_rows($result);
-        echo "{\"status\" : ";
+        echo "{\"Status\" : ";
         if($row > 0) {
             echo "\"Success\","; 
             if($ligne=mysqli_fetch_object($result)){
@@ -49,6 +49,21 @@ function getPrivilege(){
     }
 }
 
+/* Routine qui retourne la liste des usager.
+
+    retourne, en cas de succès :
+
+{"Status" : "Success", 
+  "users" :
+  [
+     {"user_id" : "id", 
+      "nom" : "NomUsager", 
+      "prenom" : "PrenomUsager", 
+      "compagnie" : "nomCompagnie"},
+	 {}, ...
+  ]
+}
+*/
 function getUserList(){
     $userId = -1;
 
@@ -56,13 +71,13 @@ function getUserList(){
     $result = doQuery($req);
     $row = mysqli_num_rows($result);
     if($row > 0){
-        echo "{\"status\" : \"Success\", \"users\" :[";
+        echo "{\"Status\" : \"Success\", \"users\" :[";
         while($ligne = mysqli_fetch_object($result))
         {
             echo "{\"user_id\" : \"$ligne->user_id\", ";
             echo "\"nom\" : \"$ligne->nom\", ";
             echo "\"prenom\" : \"$ligne->prenom\", ";
-            echo "\"compagnie\" : \"$ligne->compagnie\"} ";
+            echo "\"compagnie\" : \"$ligne->compagnie\"}";
             if(--$row>0) echo ",";
         }
         echo "]}";

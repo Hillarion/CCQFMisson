@@ -1,5 +1,7 @@
 package com.devel.ccqf.ccqfmisson;
 
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
 import android.support.v7.app.ActionBar;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -7,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,7 +31,8 @@ public class CCQFBaseActivity extends AppCompatActivity {
         ab.setDisplayUseLogoEnabled(true);
         ab.setDisplayShowHomeEnabled(true);
         ab.setTitle("");
-        ab.setLogo(R.mipmap.ccqf_logo);
+        Drawable logo = getResources().getDrawable(R.mipmap.ccqf_logo);
+        ab.setLogo(logo);
     }
 
     @Override
