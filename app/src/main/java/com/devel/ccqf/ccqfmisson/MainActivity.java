@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.devel.ccqf.ccqfmisson.Database.InterfaceDB;
 import com.devel.ccqf.ccqfmisson.LoginObjects.Login;
 import com.devel.ccqf.ccqfmisson.Pub.DialogRep;
+import com.devel.ccqf.ccqfmisson.Utilitairies.FontsOverride;
 import com.devel.ccqf.ccqfmisson.Utilitairies.Verify;
 
 public class MainActivity extends CCQFBaseActivity {
@@ -34,6 +35,7 @@ public class MainActivity extends CCQFBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FontsOverride.setDefaultFont(MainActivity.this, "SANS", "fonts/Cronus Round.otf");
         DialogRep dr = new DialogRep();
 
         dr.dialogPub(MainActivity.this);
