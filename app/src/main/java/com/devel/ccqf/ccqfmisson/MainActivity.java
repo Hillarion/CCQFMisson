@@ -35,7 +35,7 @@ public class MainActivity extends CCQFBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FontsOverride.setDefaultFont(MainActivity.this, "SANS", "fonts/Cronus Round.otf");
+        FontsOverride.setDefaultFont(MainActivity.this, "MONOSPACE", "fonts/Cronus Round.otf");//<- changer la font ici
         DialogRep dr = new DialogRep();
 
         dr.dialogPub(MainActivity.this);
