@@ -87,9 +87,9 @@ function getUserList(){
 }
 
 function registerUser(){
-    $nom = $_POST("nom");
-    $prenom = $_POST("prenom");
-    $compagnie = $_POST("compagnie");
+    $nom = $_POST["nom"];
+    $prenom = $_POST["prenom"];
+    $compagnie = $_POST["compagnie"];
     $userId = -1;
 
     if(($nom == "") || ($prenom == "") ||($compagnie == ""))
@@ -167,7 +167,7 @@ function sendMessage(){
         else if(!validateDate($timeStamp))
             returnFail("bad time stamp $timeStamp");
         else{
-            if($convId < 0){  // vérifier si une conversation existe avec le même groupe d'usagers
+            if($convId <= 0){  // vérifier si une conversation existe avec le même groupe d'usagers
                 $group_id = $destinataires . "," .$msgSource;
                 $gList = explode(',', trim($group_id, " \n\r"));
                 sort($gList);

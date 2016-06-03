@@ -6,36 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.devel.ccqf.ccqfmisson.MainActivity">
+    tools:context="com.devel.ccqf.ccqfmisson.MainActivity"
+    android:theme="@style/AppTheme">
 
-    <!--android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/tToolbar"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_width="match_parent"
-            android:minHeight="?attr/actionBarSize"
-            android:background="@drawable/toolbar_background"
-            android:gravity="top|start"
-            app:theme="@style/ThemeOverlay.AppCompat.Light"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
-
-            <android.support.v7.widget.ActionMenuView
-                android:id="@+id/amvMenu"
-                android:gravity="top|start"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"/>
-        </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout-->
-
-
-    <include
+   <include
         layout="@layout/content_main" />
 
     <android.support.design.widget.FloatingActionButton

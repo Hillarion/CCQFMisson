@@ -25,7 +25,7 @@ import com.devel.ccqf.ccqfmisson.Utilitairies.Verify;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class NewB2B extends CCQFBaseActivity/*AppCompatActivity*/ {
+public class NewB2B extends CCQFBaseActivity {
     private EditText txtDestinataire;
     private EditText btnDebut;
     private TextView txtDebut;

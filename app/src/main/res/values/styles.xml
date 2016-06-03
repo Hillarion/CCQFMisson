@@ -8,6 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
         <!-- you should set typeface which you want to override with TypefaceUtil -->
         <item name="android:typeface">monospace</item>
+        <item name="android:buttonStyle">@style/CCQFButton</item>
+        <item name="android:windowBackground">@drawable/bg_pattern</item>
 
     </style>
 
@@ -39,5 +41,10 @@
     <style name="MyCustomTheme.OverFlow">
         <item name="android:src">@drawable/my_overflow_image</item>
     </style>-->
-
+    <style name="CCQFButton" parent="android:style/Widget.Button">
+        <item name="android:textSize">19sp</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:layout_margin">0dip</item>
+        <item name="android:background">@color/colorCCQFOrange</item>
+    </style>
 </resources>

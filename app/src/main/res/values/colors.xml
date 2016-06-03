@@ -10,5 +10,7 @@
     <color name="colorChatCCQF">#eab4a8</color>
     <color name="colorChatUser">#bcf7c3</color>
     <color name="colorWhite">#FFFFFFFF</color>
+    <color name="background_material_light">#ffffff</color>
+    <color name="colorBackground">#ffffff</color>
 
 </resources>

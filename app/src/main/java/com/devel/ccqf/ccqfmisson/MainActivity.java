@@ -108,21 +108,22 @@ public class MainActivity extends CCQFBaseActivity {
                 String prenom = txtPrenom.getText().toString();
                 String nom = txtNom.getText().toString();
                // String email = txtEmail.getText().toString();
-                String companie = txtSurnom.getText().toString();
+                String compagnie = txtSurnom.getText().toString();
                 Verify verify = new Verify();
 
                 if(verify.isValidName(prenom)){
 
                      if(verify.isValidName(nom)) {
                          
-                         if(!companie.isEmpty()){
+                         if(!compagnie.isEmpty()){
 //   pour référence
 //                       int  userID =  iDb.registerUser(String nom, String prenom, String compagnie) ;
+                             new SendLoginAsyncTask().execute(nom, prenom, compagnie);
                              Toast.makeText
-                                     (MainActivity.this, ""+nom +"_"+prenom+"@"+companie,
+                                     (MainActivity.this, ""+nom +"_"+prenom+"@"+compagnie,
                                              Toast.LENGTH_SHORT).show();
 
-                            Login l = new Login(nom, prenom, companie);
+                            Login l = new Login(nom, prenom, compagnie);
 
                              d.dismiss();
                          } else{
@@ -154,7 +155,10 @@ public class MainActivity extends CCQFBaseActivity {
             InterfaceDB iDb = new InterfaceDB(MainActivity.this);
 
             if(iDb != null){
-                iDb.registerUser(login[0],  login[1], login[2]);
+                int id = iDb.registerUser(login[0],  login[1], login[2]);
+                System.out.print("CCQF SendLoginAsyncTask user Id = " + id + "\n\n");
+                System.out.flush();
+
             }return null;
         }
         protected void onPostExecute(Void...unused){

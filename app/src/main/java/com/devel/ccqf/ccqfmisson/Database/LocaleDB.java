@@ -44,7 +44,7 @@ public class LocaleDB {
             Cursor cursor = null;
             cursor = db.rawQuery("SELECT * FROM Utilisateur WHERE user_id = ?" , new String[]{"" + userId});
             cursor.moveToFirst();
-            if(cursor == null){
+            if(cursor == null){// Usager n'existe pas
                 ContentValues values = new ContentValues();
                 values.put("user_id", "" + userId);
                 values.put("userName", userName);
@@ -142,7 +142,7 @@ public class LocaleDB {
     public List<Integer> getMessageThreadList(){
         ArrayList<Integer> convList = null;
         if(db != null){
-            Cursor cursor = db.rawQuery("SELECT DISTINCT conversationID FROM Messages ", null);
+            Cursor cursor = db.rawQuery("SELECT DISTINCT conversationID FROM Messages", null);
             cursor.moveToFirst();
             if(cursor != null){
                 if(cursor.getCount() > 0) {

@@ -86,6 +86,7 @@ public class FeedListActivity extends CCQFBaseActivity/*AppCompatActivity*/ {
             @Override
             public void onClick(View c) {
                 String userList = "";
+                int selectedIndex = 0;
                 for (int cIdx = 0; cIdx < lstUserList.getChildCount(); cIdx++) {
                     LinearLayout itemLayout = (LinearLayout) lstUserList.getChildAt(cIdx);
                     AppCompatCheckBox chBox = (AppCompatCheckBox) itemLayout.getChildAt(2);
@@ -94,18 +95,19 @@ public class FeedListActivity extends CCQFBaseActivity/*AppCompatActivity*/ {
                         if (userList != "")
                             userList += ",";
                         userList += uIDText.getText().toString();
+                        selectedIndex++;
                     }
                 }
                 d.hide();
                 System.out.print("CCQF dialogSelectUsers userList = " + userList + "\n\n");
                 System.out.flush();
-                Intent i = new Intent(FeedListActivity.this, Feed.class);
-                Bundle donnees = new Bundle();
-                donnees.putString(USER_KEY, userList);
-                i.putExtras(donnees);
-                startActivity(i);
-
-
+                if(selectedIndex>0) {
+                    Intent i = new Intent(FeedListActivity.this, Feed.class);
+                    Bundle donnees = new Bundle();
+                    donnees.putString(USER_KEY, userList);
+                    i.putExtras(donnees);
+                    startActivity(i);
+                }
             }
         });
         d.show();

@@ -50,41 +50,39 @@ public class JSONParser {
     }
 
     public int getIndex(){
+        int value = -1;
         if(reader != null) {
             try{
-                return reader.getInt("Id");
+                value =  reader.getInt("Id");
             } catch (JSONException e) {
                 e.printStackTrace();
-                return -1;
             }
         }
-        else
-            return -1;
+        return value;
     }
 
     public int getInt(String str) {
+        int value = -1;
         if (reader != null) {
             try {
-                return reader.getInt(str);
+                value = reader.getInt(str);
             } catch (JSONException e) {
                 e.printStackTrace();
-                return -1;
             }
         }
-        else
-            return -1;
+        return value;
     }
 
     public String getString(String str) {
+        String value = null;
+
         if (reader != null) {
             try {
-                return reader.getString(str);
+                value =  reader.getString(str);
             } catch (JSONException e) {
                 e.printStackTrace();
-                return null;
             }
         }
-        else
-            return null;
+        return value;
     }
 }
