@@ -10,10 +10,10 @@
     android:background="@color/colorWhite"
     tools:context="com.devel.ccqf.ccqfmisson.NewB2B">
 
-    <EditText
+    <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/txtB2BDestinataire"
+        android:id="@+id/spnB2BDestinataire"
         android:hint="Destinataire"
         android:inputType="textEmailAddress"
         android:layout_alignParentTop="true"
@@ -25,9 +25,9 @@
         android:layout_height="wrap_content"
         android:hint="Heure Début"
         android:id="@+id/txtB2bHeureDebut"
-        android:layout_below="@+id/txtB2BDestinataire"
-        android:layout_toStartOf="@+id/txtB2BDestinataire"
-        android:inputType="time" />
+        android:inputType="time"
+        android:layout_below="@+id/spnB2BDestinataire"
+        android:layout_alignParentStart="true" />
 
     <EditText
 
@@ -35,9 +35,10 @@
         android:layout_height="wrap_content"
         android:hint="Heure Fin"
         android:id="@+id/txtB2bHeureFin"
-        android:layout_below="@+id/txtB2BDestinataire"
-        android:layout_toEndOf="@+id/txtB2BDestinataire"
-        android:inputType="time" />
+
+        android:inputType="time"
+        android:layout_below="@+id/spnB2BDestinataire"
+        android:layout_alignParentEnd="true" />
 
 
     <EditText
@@ -113,7 +114,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/editTextB2bBatiment"
-        android:hint="Batiment"
+        android:hint="Adresse"
         android:paddingTop="10dp"
         android:layout_below="@+id/editTextB2bEmail"
         android:layout_alignStart="@+id/spinnerBatiementExterieur"

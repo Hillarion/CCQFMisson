@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +38,10 @@ public class MainActivity extends CCQFBaseActivity {
         setContentView(R.layout.activity_main);
         FontsOverride.setDefaultFont(MainActivity.this, "MONOSPACE", "fonts/Cronus Round.otf");//<- changer la font ici
         DialogRep dr = new DialogRep();
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
 
         dr.dialogPub(MainActivity.this);
         dialogLogin();

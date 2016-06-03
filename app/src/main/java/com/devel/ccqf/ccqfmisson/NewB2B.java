@@ -1,32 +1,26 @@
 package com.devel.ccqf.ccqfmisson;
 
 import android.app.Dialog;
-import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.ActionMenuView;
-import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.Patterns;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.devel.ccqf.ccqfmisson.AgendaObjects.Event;
+import com.devel.ccqf.ccqfmisson.Database.InterfaceDB;
+import com.devel.ccqf.ccqfmisson.Database.RemoteDB;
+import com.devel.ccqf.ccqfmisson.LoginObjects.Login;
 import com.devel.ccqf.ccqfmisson.Utilitairies.Verify;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class NewB2B extends CCQFBaseActivity {
-    private EditText txtDestinataire;
+    private Spinner spnDestinataire;
     private EditText btnDebut;
     private TextView txtDebut;
     private TextView txtFin;
@@ -42,7 +36,7 @@ public class NewB2B extends CCQFBaseActivity {
     private String destinataire;
     private String heureDebut;
     private String heureFin;
-    private String companie;
+    private String compagnie;
     private String nom;
     private String poste;
     private String telephnone;
@@ -57,23 +51,23 @@ public class NewB2B extends CCQFBaseActivity {
         setContentView(R.layout.activity_new_b2_b);
 
         initialize();
+        fillBatimentSpinner();
+        //get Login adresse
+        ArrayList<String> alTempLoginList = new ArrayList<>();
+        alTempLoginList.add("jonathan_bleau@derp.com");
+        alTempLoginList.add("jacinthe_desrochers@derp.com");
+        alTempLoginList.add("simon_petit@derp.com");
+        fillDestinataireSpinner(alTempLoginList);
 
-        ArrayList<String> spinnerArray = new ArrayList<>();
-        spinnerArray.add("Batiment Extérieur Faux");
-        spinnerArray.add("Batiment Extérieur Vrai");
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                this, android.R.layout.simple_spinner_item, spinnerArray
-        );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+
         btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                destinataire = txtDestinataire.getText().toString();
+                destinataire = spnDestinataire.getSelectedItem().toString();
                 heureDebut = txtDebut.getText().toString();
                 heureFin = txtFin.getText().toString();
-                companie = txtCompanie.getText().toString();
+                compagnie = txtCompanie.getText().toString();
                 nom = txtNom.getText().toString();
                 poste = txtPoste.getText().toString();
                 telephnone = txtTelephone.getText().toString();
@@ -87,50 +81,56 @@ public class NewB2B extends CCQFBaseActivity {
                 }
                 //Validation
                 Verify ve = new Verify();
-                if(!heureDebut.equals("")){
-                    if(!heureFin.equals("")){
-                        if(!nom.equals("")){
-                            if(!poste.equals("")){
-                                if(ve.isValidPhone(telephnone)){
-                                    if(ve.isValidEmail(email)){
-                                        if(!batiment.equals("")){
-                                            Event e = new Event
-                                                    (destinataire, heureDebut, heureFin, nom, poste,
-                                                            telephnone, email, batiment, ext);
-                                            Toast.makeText(NewB2B.this, ""+e, Toast.LENGTH_SHORT)
-                                                    .show();
+                if (!compagnie.equals("")) {
+                    if(!heureDebut.equals("")){
+                        if(!heureFin.equals("")){
+                            if(!nom.equals("")){
+                                if(!poste.equals("")){
+                                    if(ve.isValidPhone(telephnone)){
+                                        if(ve.isValidEmail(email)){
+                                            if(!batiment.equals("")){
+                                                Toast.makeText(NewB2B.this, ""+destinataire + " "+ext, Toast.LENGTH_SHORT).show();
+                                                InterfaceDB iDb = new InterfaceDB(NewB2B.this);
+                                                iDb.registerEvent
+                                                        (destinataire, heureDebut, heureFin,
+                                                                compagnie, nom, poste, telephnone,
+                                                                email, batiment, ext);
+
+                                            }
+                                            else{
+                                                Toast.makeText
+                                                        (NewB2B.this, "Batiment invalide",
+                                                                Toast.LENGTH_SHORT).show();
+                                            }
                                         }
-                                        else{
+                                        else {
                                             Toast.makeText
-                                                    (NewB2B.this, "Batiment invalide",
-                                                            Toast.LENGTH_SHORT).show();
+                                                    (NewB2B.this, "Email invalide", Toast.LENGTH_SHORT)
+                                                    .show();
                                         }
                                     }
                                     else {
                                         Toast.makeText
-                                                (NewB2B.this, "Email invalide", Toast.LENGTH_SHORT)
+                                                (NewB2B.this, "Numero invalide", Toast.LENGTH_SHORT)
                                                 .show();
                                     }
                                 }
-                                else {
-                                    Toast.makeText
-                                            (NewB2B.this, "Numero invalide", Toast.LENGTH_SHORT)
-                                            .show();
+                                else{Toast.makeText
+                                        (NewB2B.this, "Poste vide", Toast.LENGTH_SHORT).show();
                                 }
                             }
-                            else{Toast.makeText
-                                    (NewB2B.this, "Poste vide", Toast.LENGTH_SHORT).show();
+                            else {
+                                Toast.makeText(NewB2B.this, "Nom invalide", Toast.LENGTH_SHORT).show();
                             }
                         }
                         else {
-                            Toast.makeText(NewB2B.this, "Nom invalide", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewB2B.this, "Heure invalide", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                    else {
+                    }else{
                         Toast.makeText(NewB2B.this, "Heure invalide", Toast.LENGTH_SHORT).show();
                     }
                 }else{
-                    Toast.makeText(NewB2B.this, "Heure invalide", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NewB2B.this, "Companie Invalide", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -161,8 +161,20 @@ public class NewB2B extends CCQFBaseActivity {
 
 
     }
+
+    public void fillBatimentSpinner(){
+        ArrayList<String> spinnerArray = new ArrayList<>();
+        spinnerArray.add("Batiment Extérieur Faux");
+        spinnerArray.add("Batiment Extérieur Vrai");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, spinnerArray);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+    }
     public void initialize(){
-        txtDestinataire = (EditText)findViewById(R.id.txtB2BDestinataire);
+        spnDestinataire = (Spinner)findViewById(R.id.spnB2BDestinataire);
         txtDebut = (TextView)findViewById(R.id.txtB2bHeureDebut);
         txtFin = (TextView)findViewById(R.id.txtB2bHeureFin);
         txtCompanie = (EditText)findViewById(R.id.editTextB2bCompanie);
@@ -173,6 +185,13 @@ public class NewB2B extends CCQFBaseActivity {
         txtEmail = (EditText)findViewById(R.id.editTextB2bEmail);
         spinner = (Spinner)findViewById(R.id.spinnerBatiementExterieur);
         btnDone = (Button)findViewById(R.id.btnB2bOk);
+    }
+
+    public void fillDestinataireSpinner(ArrayList<String> alLoginAdress){
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>
+                (this, android.R.layout.simple_spinner_item, alLoginAdress);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnDestinataire.setAdapter(adapter);
     }
 
 }

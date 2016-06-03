@@ -96,6 +96,15 @@ public class InterfaceDB {
         return currentUser;
     }
 
+    public void registerEvent(String destinataire, String hDebut, String hFin,
+                             String compagnie, String nom, String poste,
+                             String telephone, String email, String adresse,
+                             boolean batimentExterier){
+        if(rDb != null)
+            rDb.registerEvent(destinataire, hDebut, hFin, compagnie, nom,
+                    poste, telephone, email, adresse, batimentExterier);
+    }
+
     /*
     *  Méthode pour retrouver le privilège associé à l'usager,
     *       Reçoit l'identifiant de l'usager

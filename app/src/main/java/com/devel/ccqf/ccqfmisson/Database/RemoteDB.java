@@ -99,8 +99,7 @@ public class RemoteDB {
      *      Retourne un identifiant pouvant être utilisé pour les conversations et les sondages.
      */
 
-    public int registerUser(String nom, String prenom, String compagnie){  //<---Modification : effacer email et
-                                                                            // remplacer par companie
+    public int registerUser(String nom, String prenom, String compagnie){
         int userId = -1;
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
         pairs.add(new BasicNameValuePair("action", "registerUser"));
@@ -124,6 +123,37 @@ public class RemoteDB {
             }
         }
         return userId;
+    }
+
+    public int registerEvent(String destinataire, String hDebut, String hFin,
+                             String compagnie, String nom, String poste,
+                             String telephone, String email, String adresse,
+                             boolean batimentExterier){
+        int eventId = -1;
+        ArrayList<NameValuePair> pairs = new ArrayList<>();
+        pairs.add(new BasicNameValuePair("action", "registerEvent"));
+        pairs.add(new BasicNameValuePair("destinataire", destinataire));
+        pairs.add(new BasicNameValuePair("hDebut", hDebut));
+        pairs.add(new BasicNameValuePair("hFin", hFin));
+        pairs.add(new BasicNameValuePair("compagnie", compagnie));
+        pairs.add(new BasicNameValuePair("nom", nom));
+        pairs.add(new BasicNameValuePair("poste", poste));
+        pairs.add(new BasicNameValuePair("telephone", telephone));
+        pairs.add(new BasicNameValuePair("email", email));
+        pairs.add(new BasicNameValuePair("adresse", adresse));
+        pairs.add(new BasicNameValuePair("batiment", ""+batimentExterier));
+
+        String ligneResult = sendRequest(pairs);
+        if(ligneResult != null){
+            parser = new JSONParser(ligneResult);
+            String status = parser.getStatus();
+            if(!status.isEmpty()){
+                if(status.equalsIgnoreCase("Sucess"))
+                    eventId = parser.getIndex();
+            }
+        }
+        return eventId;
+
     }
 
     /*
