@@ -86,6 +86,20 @@ function getUserList(){
         returnFail("No Data found");
 }
 
+/* Routine qui sert à inscrire un nouvel usager sur le réseau privé.
+   Reçoit : le nom, prénom de l'usager ainsi que le nom de la compagnie dont l'usager est membre.
+   Retourne, en cas de succès :
+
+    {
+      "Status" : "Success", 
+      "Id" : "IdentifiantUniqueDeLUsager"
+    }
+
+    La routine vérifie si une fiche contenant les informations de l'usager existe dans la base de données.
+        Si elle existe, la routine retourne l'identifiant de la fiche.
+        Si aucune fiche correspondant n'existe, une nouvelle fiche est créée et l'identifiant correspondant est retourné.
+
+*/
 function registerUser(){
     $nom = $_POST["nom"];
     $prenom = $_POST["prenom"];
@@ -117,38 +131,17 @@ function registerUser(){
             returnFail("");
     }
 }
-/*
-function validateLogin(){
-    $userName=$_POST["userName"];
-    $userPass=$_POST["userPass"];
-    $userID = -1;
-    if(($userName != "") && ($userPass != "")){
-        
-        if(success){
-            echo "{\"Status\" : \"Success\", \"login\" :";
-            $localReq = "SELECT user_id FROM Utilisateur WHERE userName = '$userName'";
-            $result = doQuery($localReq);
-            $row = mysqli_num_rows($result);
-            if($row>0) {
-                $ligne = mysqli_fetch_object($result);
-                $userID = $ligne->user_id;
-                mysql_free_result($result);
-            }
-            else{
-                $localReq = "INSERT INTO Utilisateur VALUEs (0, '$userName', '')";
-                $result = doQuery($localReq);
-                $userID = mysqli_insert_id($conn);
-            }
-            echo "{ \"id\" : \"$userID\" }}";
-        }
-        else
-            returnFail("bad user or pass");
-    }
-    else
-        returnFail("empty user or pass");
-}
-*/
 
+/* Routine qui envois un nouveau message sur le fil de conversations de l'application.
+
+   Retourne, en cas de succès :
+
+    {
+      "Status" : "Success", 
+      "Id" : "IdentifiantDuMessage"
+    }
+
+*/
 function sendMessage(){
     global $conn;
     $message=$_POST["messageContent"];
@@ -205,6 +198,24 @@ function sendMessage(){
         returnFail("missing field values");
 }
 
+/*  Routine qui permet de retrouver les messages destinés à un usager.
+    Reçoit "userID" l'identifiant de l'usager,  "msgID" l'identifiant du dernier message lu par l'usager.
+
+   Retourne, en cas de succès :
+
+    {
+      "Status" : "Success", 
+      "msgQueue" : 
+        [
+            {"msgId" : "IdentifiantDuMessage",
+
+            },
+	 {}, ...
+
+        ]
+    }
+
+*/
 function readMessages(){
     $userId=$_POST["userID"];
     $lastMsgId=$_POST["msgID"];
