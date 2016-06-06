@@ -118,7 +118,7 @@ function registerUser(){
             $userId = $ligne->user_id;
         }
         else{
-            $req = "INSERT INTO Utilisateur VALUES(0, '$nom','$prenom', '$compagnie', '')";
+            $req = "INSERT INTO Utilisateur VALUES (0, '$nom','$prenom', '$compagnie', '')";
             $result = doQuery($req);
             $userId = mysqli_insert_id($conn);
         }
@@ -453,6 +453,50 @@ function readSurveyResults(){
     }
 }
 
+function registerEvent(){
+    $destinataire = $_POST["destinataire"];
+    $hDebut = $_POST["hDebut"];
+    $hFin = $_POST["hFin"];
+    $nom = $_POST["nom"];
+    $poste = $_POST["poste"];
+    $telephone = $_POST["telephone"];
+    $email = $_POST["email"];
+    $adresse = $_POST["adresse"];
+    $batiment = $_POST["batiment"];
+    $compagnie = $_POST["compagnie"];
+    $id_event = -1;
+
+    if(($destinataire == "") || ($hDebut == "") || ($hFin == "") || ($nom == "") ||
+       ($poste == "") || ($email == "") || ($adresse == "")){
+        return ("fields must not be empty");
+    }else{
+        $req = "SELECT id_event FROM event WHERE destinataire='$destinataire' AND".
+        " hDebut = '$hDebut' AND hFin='$hFin' AND nom='$nom' AND poste = '$poste'".
+        " AND telephone = '$telephone' AND email='$email' AND adresse='$adresse'".
+        " AND batiment=$batiment";
+        $result = doQuery($req);
+        $row = mysqli_num_rows($result);
+        if($row > 0){
+            $ligne = mysqli_fetch_object($result);
+            $id_event = $ligne->id_event;
+        }
+        else{
+            mysqli_free_result($result);
+            $req2 = "INSERT INTO event VALUES(0, '$destinataire', '$hDebut', '$hFin',".
+            "'$compagnie', '$nom', '$poste','$telephone', '$email', '$adresse', $batiment)";
+            $result2 = doQuery($req2);
+//            $id_event = mysqli_insert_id($conn);
+        }
+        if($id_event > 0){
+            echo "{\"Status\" : ";
+            echo "\"Success\"";
+            echo ", \"Id\" : \"$id_event\"}";
+        }
+        else
+            returnFail("");
+    }
+}
+
 //Le controleur
 $action=$_POST['action'];
 switch ($action){
@@ -488,6 +532,9 @@ switch ($action){
     break;
     case "answerSurveyQuestion":
         answerSurveyQuestion();
+    break;
+    case "registerEvent":
+        registerEvent();
     break;
     default :
         returnFail("Commande inconnue : $action");

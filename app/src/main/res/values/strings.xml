@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CCQF Misson</string>
+    <string name="app_name">CCQF Mission</string>
     <string name="action_settings">New Survey</string>
     <string name="title_activity_doc">Doc</string>
     <string name="action_nouveau">Results</string>

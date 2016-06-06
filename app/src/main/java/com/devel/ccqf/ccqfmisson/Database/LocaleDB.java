@@ -143,14 +143,24 @@ public class LocaleDB {
         ArrayList<Integer> convList = null;
         if(db != null){
             Cursor cursor = db.rawQuery("SELECT DISTINCT conversationID FROM Messages", null);
+            System.out.print("CCQF getMessageThreadList cursor = " + cursor + "\n\n");
+            System.out.flush();
             cursor.moveToFirst();
+            System.out.print("CCQF getMessageThreadList cursor (bis) = " + cursor + "\n\n");
+            System.out.flush();
             if(cursor != null){
                 if(cursor.getCount() > 0) {
+                    System.out.print("CCQF getMessageThreadList cursor.count = " + cursor.getCount() + "\n\n");
+                    System.out.flush();
                     convList = new ArrayList<Integer>();
-                    while (cursor != null) {
+                    int loopCount = 0;
+                    while (loopCount < cursor.getCount()) {
                         convList.add(new Integer(cursor.getInt(0)));
                         cursor.moveToNext();
+                        loopCount++;
                     }
+                    System.out.print("CCQF getMessageThreadList convList = " + convList + "\n\n");
+                    System.out.flush();
                 }
             }
         }

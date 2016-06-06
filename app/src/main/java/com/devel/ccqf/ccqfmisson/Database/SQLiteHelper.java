@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by thierry on 11/05/16.
  */
 public class SQLiteHelper extends SQLiteOpenHelper {
-    public static final String DATABASE_NAME = "CCQFMisson";
+    public static final String DATABASE_NAME = "CCQFMission";
     public SQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
     }

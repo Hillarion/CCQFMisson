@@ -59,6 +59,22 @@ create table SurveyForm(
     PRIMARY KEY(id_survey)
 );
 
+
+create table event (
+    id_event int NOT NULL AUTO_INCREMENT,
+    destinataire text NOT NULL,
+    hDebut text,
+    hFin text,
+    compagnie text,
+    nom text,
+    poste text,
+    telephone text,
+    email text,
+    adresse text,
+    batiment boolean,
+    PRIMARY KEY(id_event)
+);
+
 insert into Utilisateur values(0, 'Racicot', 'Vanessa', 'ccqf', 'admin');
 insert into Utilisateur values(0, '', 'User', 'company1', '');
 insert into Utilisateur values(0, '', 'User2', 'company2', '');
