@@ -1,6 +1,7 @@
 package com.devel.ccqf.ccqfmisson;
 
 import android.app.Dialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -28,7 +29,7 @@ public class NewB2B extends CCQFBaseActivity {
     private EditText txtNom;
     private EditText txtPoste;
     private EditText txtTelephone;
-    private EditText txtBatiment;
+    private EditText txtAdresse;
     private EditText txtEmail;
     private Spinner spinner;
     private Button btnDone;
@@ -53,11 +54,11 @@ public class NewB2B extends CCQFBaseActivity {
         initialize();
         fillBatimentSpinner();
         //get Login adresse
-        ArrayList<String> alTempLoginList = new ArrayList<>();
+     /*   ArrayList<String> alTempLoginList = new ArrayList<>();
         alTempLoginList.add("jonathan_bleau@derp.com");
         alTempLoginList.add("jacinthe_desrochers@derp.com");
-        alTempLoginList.add("simon_petit@derp.com");
-        fillDestinataireSpinner(alTempLoginList);
+        alTempLoginList.add("simon_petit@derp.com");*/
+        fillDestinataireSpinner(loginAdressList());
 
 
 
@@ -72,7 +73,7 @@ public class NewB2B extends CCQFBaseActivity {
                 poste = txtPoste.getText().toString();
                 telephnone = txtTelephone.getText().toString();
                 email = txtEmail.getText().toString();
-                batiment = txtBatiment.getText().toString();
+                batiment = txtAdresse.getText().toString();
                 if(spinner.getSelectedItem().toString().equals("Batiment Extérieur Vrai")){
                     ext = true;
                 }
@@ -89,12 +90,10 @@ public class NewB2B extends CCQFBaseActivity {
                                     if(ve.isValidPhone(telephnone)){
                                         if(ve.isValidEmail(email)){
                                             if(!batiment.equals("")){
-                                                Toast.makeText(NewB2B.this, ""+destinataire + " "+ext, Toast.LENGTH_SHORT).show();
-                                                InterfaceDB iDb = new InterfaceDB(NewB2B.this);
-                                                iDb.registerEvent
-                                                        (destinataire, heureDebut, heureFin,
-                                                                compagnie, nom, poste, telephnone,
-                                                                email, batiment, ext);
+                                                Event e = new Event(destinataire, heureDebut,
+                                                        heureFin, compagnie, nom, poste, telephnone,
+                                                        email, batiment, ext);
+                                                new SendB2BAsyncTask().execute(e);
 
                                             }
                                             else{
@@ -136,31 +135,6 @@ public class NewB2B extends CCQFBaseActivity {
         });
 
     }
-    public String timePicker(){
-        String date = "";
-        final Dialog d = new Dialog(NewB2B.this);
-        d.setContentView(R.layout.popup_time_picker_layout);
-        final TimePicker timePicker = (TimePicker)d.findViewById(R.id.timePicker);
-        Button ok = (Button)d.findViewById(R.id.btnOkTimePIcker);
-        d.show();
-        ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int hour =  timePicker.getCurrentHour();
-                int minute = timePicker.getCurrentMinute();
-                if(minute < 10){
-                    temp = hour+"h0"+minute;
-                }else{
-                    temp = hour+"h"+minute;
-                }
-                d.dismiss();
-            }
-        });
-        date = temp;
-        return date;
-
-
-    }
 
     public void fillBatimentSpinner(){
         ArrayList<String> spinnerArray = new ArrayList<>();
@@ -181,7 +155,7 @@ public class NewB2B extends CCQFBaseActivity {
         txtNom = (EditText)findViewById(R.id.editTextB2bNom);
         txtPoste = (EditText)findViewById(R.id.editTextB2bPoste);
         txtTelephone = (EditText)findViewById(R.id.editTextB2bPhone);
-        txtBatiment = (EditText)findViewById(R.id.editTextB2bBatiment);
+        txtAdresse = (EditText)findViewById(R.id.editTextB2bBatiment);
         txtEmail = (EditText)findViewById(R.id.editTextB2bEmail);
         spinner = (Spinner)findViewById(R.id.spinnerBatiementExterieur);
         btnDone = (Button)findViewById(R.id.btnB2bOk);
@@ -193,5 +167,56 @@ public class NewB2B extends CCQFBaseActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnDestinataire.setAdapter(adapter);
     }
+
+    public ArrayList<String> loginAdressList(){
+        ArrayList<String> alLoginAdress;
+        alLoginAdress = new ArrayList<>();
+        InterfaceDB iDb = new InterfaceDB(NewB2B.this);
+        ArrayList<Users> alUser = iDb.getUserList();
+        for(int i = 0; i<alUser.size(); i++){
+            alLoginAdress.add(alUser.get(i).getUserName());
+        }
+        return alLoginAdress;
+    }
+
+    public void clean(){
+        txtDebut.setText("");
+        txtFin.setText("");
+        txtCompanie.setText("");
+        txtPoste.setText("");
+        txtTelephone.setText("");
+        txtEmail.setText("");
+        txtAdresse.setText("");
+
+    }
+
+    private class SendB2BAsyncTask extends AsyncTask<Event, Void, Event>{
+
+        @Override
+        protected Event doInBackground(Event... event) {
+            InterfaceDB iDb = new InterfaceDB(NewB2B.this);
+
+            if(iDb != null){
+                iDb.registerEvent(event[0]);
+
+            }return null;
+        }
+        protected void onPostExecute(Void...unused){
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            // Things to be done before execution of long running operation. For
+            // example showing ProgessDialog
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... text) {
+            // Things to be done while execution of long running operation is in
+            // progress. For example updating ProgessDialog
+        }
+    }
+
 
 }

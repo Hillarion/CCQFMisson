@@ -3,6 +3,7 @@ package com.devel.ccqf.ccqfmisson.Database;
 import android.content.Context;
 import android.net.ConnectivityManager;
 
+import com.devel.ccqf.ccqfmisson.AgendaObjects.Event;
 import com.devel.ccqf.ccqfmisson.ReseauSocial.ConversationHead;
 import com.devel.ccqf.ccqfmisson.ReseauSocial.MessagePacket;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.*;
@@ -96,13 +97,9 @@ public class InterfaceDB {
         return currentUser;
     }
 
-    public void registerEvent(String destinataire, String hDebut, String hFin,
-                             String compagnie, String nom, String poste,
-                             String telephone, String email, String adresse,
-                             boolean batimentExterier){
+    public void registerEvent(Event e){
         if(rDb != null)
-            rDb.registerEvent(destinataire, hDebut, hFin, compagnie, nom,
-                    poste, telephone, email, adresse, batimentExterier);
+            rDb.registerEvent(e);
     }
 
     /*
