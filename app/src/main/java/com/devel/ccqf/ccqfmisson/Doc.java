@@ -1,20 +1,14 @@
 package com.devel.ccqf.ccqfmisson;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.ActionMenuView;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
+
+import com.devel.ccqf.ccqfmisson.Adapters.CCQFCategorieAdapter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,13 +20,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Doc extends CCQFBaseActivity {
 
     private ListView listViewDoc;
     final static String dirUrl = "http://thierrystpierre.ddns.net:81/CCQFMission/Documents";
+    final static String DOC_PARCEL_KEY = "com.devel.ccqf.ccqfmisson.Doc.PARCEL_KEY";
+    final static String DOC_PARCEL_KEY2 = "com.devel.ccqf.ccqfmisson.Doc.PARCEL_KEY2";
     private static String baseApplicationFilesPath;
-    private File fileMenu = null;
+    private CCQFCategorieAdapter arrayAdapter = null;
+    private ArrayList<CCQFCategorie> menu =  null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,89 +38,100 @@ public class Doc extends CCQFBaseActivity {
         setContentView(R.layout.activity_doc);
 
         listViewDoc = (ListView)findViewById(R.id.listViewDoc);
-
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>
-                (Doc.this, R.layout.doc_row_layout, dummyList());
-        listViewDoc.setAdapter(arrayAdapter);
         listViewDoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(Doc.this, DocDetails.class);
+                Bundle bundle = new Bundle();
+                CCQFCategorie categorie = menu.get(position);
+                System.out.print("CCQF Doc outgoing categorie " + categorie + "\n\n");
+                System.out.flush();
+                bundle.putString(DOC_PARCEL_KEY, categorie.getNom());
+                bundle.putParcelableArrayList(DOC_PARCEL_KEY2, categorie.getItemsList());
+
+                System.out.print("CCQF Doc outgoing bundle " + bundle + "\n\n");
+                System.out.flush();
+//                bundle.putString(DOC_PARCEL_KEY, "Fish !!");
+                i.putExtras(bundle);
+                System.out.print("CCQF Doc outgoing Intent " + i + "\n\n");
+                System.out.flush();
                 startActivity(i);
             }
         });
         baseApplicationFilesPath = "" + Environment.getDataDirectory().getPath() + "/data/" +
                 getPackageName() + "/files/Documents";
-        File docBaseDir = new File(baseApplicationFilesPath);
-        fileMenu = new File(baseApplicationFilesPath, "menu.csv");
-/*        if(!docBaseDir.exists()) {
-            docBaseDir.mkdirs();
-*/
-            new GetMenuAsyncTask().execute(null, null);
-/*        }
-        else if(fileMenu.exists()){
 
-        }*/
+        String [] params = {dirUrl, baseApplicationFilesPath, "menu.csv"};
+        new GetMenuAsyncTask().execute(params);
+        listViewDoc.setAdapter(arrayAdapter);
     }
 
-    public String[] dummyList(){
-        String[] list = new String[]{"Documents", "Information Floride",
-                                     "List Participants", "Mot du président"};
-        return list;
-    }
-
-
-
-
-    private class GetMenuAsyncTask extends AsyncTask<Void, Void, List<String>> {
+    private class GetMenuAsyncTask extends AsyncTask<String, Void, List<CCQFCategorie>> {
         private static final int  MEGABYTE = 1024 * 1024;
-        private String baseApplicationFilesPath = null;
+        private boolean uploadFile = false;
 
         @Override
-        protected List<String> doInBackground(Void... unused) {
-            ArrayList<String> menu =  null;
-
-            System.out.print("CCQF Doc GetMenuAsyncTask");
-            System.out.flush();
+        protected List<CCQFCategorie> doInBackground(String... params) {
+            long date = 0;
 
             try {
-                URL url = new URL(dirUrl+"/menu.csv");
-                System.out.print("CCQF Doc GetMenuAsyncTask url = " + url + "\n\n");
-                System.out.flush();
-                HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
-                System.out.print("CCQF Doc GetMenuAsyncTask urlConnection = " + urlConnection + "\n\n");
-                System.out.flush();
-                urlConnection.setRequestMethod("GET");
-                System.out.print("CCQF Doc GetMenuAsyncTask 2");
-                System.out.flush();
-                urlConnection.setDoOutput(true);
-                System.out.print("CCQF Doc GetMenuAsyncTask 3");
-                System.out.flush();
-                urlConnection.connect();
-                System.out.print("CCQF Doc GetMenuAsyncTask 4");
-                System.out.flush();
-                InputStream inputStream = urlConnection.getInputStream();
-                System.out.print("CCQF Doc GetMenuAsyncTask 5");
-                System.out.flush();
-                if(!fileMenu.exists())
-                    fileMenu.createNewFile();
-                System.out.print("CCQF Doc GetMenuAsyncTask fileCopy (2) = " + fileMenu + "\n\n");
-                System.out.flush();
-                FileOutputStream fileOutputStream = new FileOutputStream(fileMenu);
-                System.out.print("CCQF Doc GetMenuAsyncTask 6");
-                System.out.flush();
-                int totalSize = urlConnection.getContentLength();
-                System.out.print("CCQF Doc GetMenuAsyncTask fileCopy (3) = " + fileMenu + "\n\n");
-                System.out.flush();
-                byte[] buffer = new byte[MEGABYTE];
-                int bufferLength = 0;
-                while((bufferLength = inputStream.read(buffer))>0 ){
-                    fileOutputStream.write(buffer, 0, bufferLength);
-//                    menu.add(new String(buffer));
-                    System.out.write(buffer, 0, bufferLength);
-                    System.out.flush();
+                URL url = new URL(params[0]+"/"+params[2]);
+
+                File docBaseDir = new File(params[1]);
+                if(!docBaseDir.exists())
+                    docBaseDir.mkdirs();
+                File fileMenu = new File(params[1], params[2]);
+                if(fileMenu.exists()) {
+                    HttpURLConnection.setFollowRedirects(false);
+                    HttpURLConnection con = (HttpURLConnection)url.openConnection();
+                    date = con.getLastModified();
+                    long dateLocal = fileMenu.lastModified();
+                    if(dateLocal < date)
+                        uploadFile = true;
                 }
-                fileOutputStream.close();
+                else
+                    uploadFile=true;
+
+                if(uploadFile) {
+                    HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
+                    urlConnection.setRequestMethod("GET");
+                    urlConnection.setDoOutput(true);
+                    urlConnection.connect();
+                    InputStream inputStream = urlConnection.getInputStream();
+                    fileMenu.createNewFile();
+                    FileOutputStream fileOutputStream = new FileOutputStream(fileMenu);
+                    int totalSize = urlConnection.getContentLength();
+                    byte[] buffer = new byte[totalSize+1/*MEGABYTE*/];
+                    int bufferLength = 0;
+                    while ((bufferLength = inputStream.read(buffer)) > 0) {
+                        fileOutputStream.write(buffer, 0, bufferLength);
+                    }
+                    fileOutputStream.close();
+                }
+
+                Scanner fSc = new Scanner(fileMenu);
+                fSc.useDelimiter("\n");
+                CCQFCategorie cat = null;
+                menu = new ArrayList<>();
+                do{
+                    String line = fSc.next();
+                    String [] linetbl = line.split(";");
+                    int t=0;
+                    for(t=0; t<menu.size(); t++) {
+                        if(linetbl[0].equals(menu.get(t).getNom()))
+                            break;
+                    }
+                    if(t >= menu.size()) {
+                        cat = new CCQFCategorie(linetbl[0]);
+                        menu.add(cat);
+                    }
+                    CCQFDocument  doc = new CCQFDocument(linetbl[1], linetbl[2]);
+                    doc.setFilePath(params[1]);
+                    System.out.print("CCQF Doc.java doInBackground document = " + doc + "\n\n");
+                    System.out.flush();
+                    cat.addDocument(doc);
+                }while(fSc.hasNext());
+                fSc.close();
             }catch (FileNotFoundException fnfe){
 
             }catch (MalformedURLException e) {
@@ -133,5 +142,11 @@ public class Doc extends CCQFBaseActivity {
             return menu;
         }
 
+        @Override
+        protected void onPostExecute(List<CCQFCategorie> liste) {
+            super.onPostExecute(liste);
+            arrayAdapter = new CCQFCategorieAdapter(Doc.this.getBaseContext(), liste);
+            listViewDoc.setAdapter(arrayAdapter);
+        }
     }
 }

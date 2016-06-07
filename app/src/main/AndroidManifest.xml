@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -39,7 +40,7 @@
         <activity android:name=".SurveyResultDetails" />
         <activity android:name=".NewB2B" />
         <activity android:name=".ProgramDays" />
-        <activity android:name=".DocDetails"></activity>
+        <activity android:name=".DocDetails" />
     </application>
 
 </manifest>
