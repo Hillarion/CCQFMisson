@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.devel.ccqf.ccqfmisson.ReseauSocial.ConversationHead;
 import com.devel.ccqf.ccqfmisson.ReseauSocial.MessagePacket;
+import com.devel.ccqf.ccqfmisson.Users;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class LocaleDB {
 
     }
 
-    public void setUser(int userId, String userName){
+    public void setUser(int userId, String nom, String prenom, String compagnie){
         if(db != null){
             Cursor cursor = null;
             cursor = db.rawQuery("SELECT * FROM Utilisateur WHERE user_id = ?" , new String[]{"" + userId});
@@ -47,13 +48,25 @@ public class LocaleDB {
             if(cursor == null){// Usager n'existe pas
                 ContentValues values = new ContentValues();
                 values.put("user_id", "" + userId);
-                values.put("userName", userName);
+                values.put("prenom", prenom);
+                values.put("nom", nom);
+                values.put("compagnie", compagnie);
                 values.put("lastMsg", "-1");
                 values.put("lastSurvey","-1");
                 values.put("privilege","-1");
                 db.insert("Utilisateur", null, values);
             }
         }
+    }
+    public int isUserEmpty(){
+        int cursorCount = 0;
+        if(db!=null){
+            Cursor cursor;
+            cursor = db.rawQuery("SELECT * FROM Utilisateur", null);
+            cursor.moveToFirst();
+            cursorCount = cursor.getCount();
+        }
+        return cursorCount;
     }
 
     public List<MessagePacket> readOutMessage(int startMsgId, int nMessage){

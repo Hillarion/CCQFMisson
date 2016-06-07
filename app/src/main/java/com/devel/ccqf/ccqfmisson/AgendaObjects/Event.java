@@ -9,11 +9,12 @@ public class Event {
     protected String destinataire;
     protected String DTStart;
     protected String DTEnd;
+    protected String compagnie;
     protected String nom;
     protected String poste;
     protected String telephone;
     protected String email;
-    protected String nomBatiment;
+    protected String adresse;
     protected boolean autreBatiment;
 
     public Event( String title, String timeStart, String timeEnd) {
@@ -27,16 +28,17 @@ public class Event {
         this.DTStart = timeStart;
     }
 
-    public Event(String destinataire, String DTStart, String DTEnd, String nom, String poste,
-                 String telephone,String email,  String nomBatiment, boolean autreBatiment) {
+    public Event(String destinataire, String DTStart, String DTEnd,String compagnie, String nom, String poste,
+                 String telephone,String email,  String adresse, boolean autreBatiment) {
         this.destinataire = destinataire;
         this.DTStart = DTStart;
         this.DTEnd = DTEnd;
+        this.compagnie = compagnie;
         this.nom = nom;
         this.poste = poste;
         this.telephone = telephone;
         this.email = email;
-        this.nomBatiment = nomBatiment;
+        this.adresse = adresse;
         this.autreBatiment = autreBatiment;
     }
 
@@ -46,11 +48,12 @@ public class Event {
                 "destinataire='" + destinataire + '\'' +
                 ", DTStart='" + DTStart + '\'' +
                 ", DTEnd='" + DTEnd + '\'' +
+                ", compagnie='" + compagnie + '\'' +
                 ", nom='" + nom + '\'' +
                 ", poste='" + poste + '\'' +
                 ", telephone='" + telephone + '\'' +
                 ", email='" + email +'\''+
-                ", nomBatiment='" + nomBatiment + '\'' +
+                ", adresse='" + adresse + '\'' +
                 ", autreBatiment=" + autreBatiment +
                 '}';
     }
@@ -77,6 +80,14 @@ public class Event {
 
     public void setDTEnd(String DTEnd) {
         this.DTEnd = DTEnd;
+    }
+
+    public String getCompagnie() {
+        return compagnie;
+    }
+
+    public void setCompagnie(String compagnie) {
+        this.compagnie = compagnie;
     }
 
     public String getNom() {
@@ -111,12 +122,12 @@ public class Event {
         this.email = email;
     }
 
-    public String getNomBatiment() {
-        return nomBatiment;
+    public String getAdresse() {
+        return adresse;
     }
 
-    public void setNomBatiment(String nomBatiment) {
-        this.nomBatiment = nomBatiment;
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
     }
 
     public boolean isAutreBatiment() {

@@ -50,6 +50,14 @@ public class Users {
         return prenom + "_" + nom + "@" + compagnie;
     }
 
+    public String getCompagnie() {
+        return compagnie;
+    }
+
+    public void setCompagnie(String compagnie) {
+        this.compagnie = compagnie;
+    }
+
     public String getPrivilege() {
         return privilege;
     }

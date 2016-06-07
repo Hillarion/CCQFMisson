@@ -29,7 +29,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
         sql = "CREATE TABLE IF NOT EXISTS Utilisateur (" +
               "user_id INTEGER PRIMARY KEY," +
-              "userName TEXT," +
+              "prenom TEXT," +
+              "nom  TEXT," +
+              "compagnie TEXT," +
               "privilege INTEGER," +
               "lastMsg INTEGER," +
               "lastSurvey INTEGER)";

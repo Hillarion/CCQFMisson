@@ -2,6 +2,7 @@ package com.devel.ccqf.ccqfmisson.Database;
 
 import android.content.Context;
 
+import com.devel.ccqf.ccqfmisson.AgendaObjects.Event;
 import com.devel.ccqf.ccqfmisson.ReseauSocial.MessagePacket;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyGroup;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyAnswer;
@@ -104,9 +105,9 @@ public class RemoteDB {
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
         pairs.add(new BasicNameValuePair("action", "registerUser"));
         //pairs.add(new BasicNameValuePair("userName", userName));
-        pairs.add(new BasicNameValuePair("compagnie", compagnie));
         pairs.add(new BasicNameValuePair("nom", nom));
         pairs.add(new BasicNameValuePair("prenom", prenom));
+        pairs.add(new BasicNameValuePair("compagnie", compagnie));
         String ligneResult = sendRequest(pairs);
 
         if(ligneResult != null) {
@@ -119,36 +120,33 @@ public class RemoteDB {
         }
         if(userId > 0){
             if(lDb != null){
-                lDb.setUser(userId, nom+"_"+prenom+"@"+compagnie);
+                lDb.setUser(userId, nom, prenom, compagnie);
             }
         }
         return userId;
     }
 
-    public int registerEvent(String destinataire, String hDebut, String hFin,
-                             String compagnie, String nom, String poste,
-                             String telephone, String email, String adresse,
-                             boolean batimentExterier){
+    public int registerEvent(Event e){
         int eventId = -1;
         ArrayList<NameValuePair> pairs = new ArrayList<>();
         pairs.add(new BasicNameValuePair("action", "registerEvent"));
-        pairs.add(new BasicNameValuePair("destinataire", destinataire));
-        pairs.add(new BasicNameValuePair("hDebut", hDebut));
-        pairs.add(new BasicNameValuePair("hFin", hFin));
-        pairs.add(new BasicNameValuePair("compagnie", compagnie));
-        pairs.add(new BasicNameValuePair("nom", nom));
-        pairs.add(new BasicNameValuePair("poste", poste));
-        pairs.add(new BasicNameValuePair("telephone", telephone));
-        pairs.add(new BasicNameValuePair("email", email));
-        pairs.add(new BasicNameValuePair("adresse", adresse));
-        pairs.add(new BasicNameValuePair("batiment", ""+batimentExterier));
+        pairs.add(new BasicNameValuePair("destinataire", e.getDestinataire()));
+        pairs.add(new BasicNameValuePair("hDebut", e.getDTStart()));
+        pairs.add(new BasicNameValuePair("hFin", e.getDTEnd()));
+        pairs.add(new BasicNameValuePair("compagnie", e.getCompagnie()));
+        pairs.add(new BasicNameValuePair("nom", e.getNom()));
+        pairs.add(new BasicNameValuePair("poste", e.getPoste()));
+        pairs.add(new BasicNameValuePair("telephone", e.getTelephone()));
+        pairs.add(new BasicNameValuePair("email", e.getEmail()));
+        pairs.add(new BasicNameValuePair("adresse", e.getAdresse()));
+        pairs.add(new BasicNameValuePair("batiment", ""+e.isAutreBatiment()));
 
         String ligneResult = sendRequest(pairs);
         if(ligneResult != null){
             parser = new JSONParser(ligneResult);
             String status = parser.getStatus();
             if(!status.isEmpty()){
-                if(status.equalsIgnoreCase("Sucess"))
+                if(status.equalsIgnoreCase("Success"))
                     eventId = parser.getIndex();
             }
         }

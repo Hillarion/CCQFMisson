@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.devel.ccqf.ccqfmisson.Database.InterfaceDB;
+import com.devel.ccqf.ccqfmisson.Database.LocaleDB;
 import com.devel.ccqf.ccqfmisson.LoginObjects.Login;
 import com.devel.ccqf.ccqfmisson.Pub.DialogRep;
 import com.devel.ccqf.ccqfmisson.Utilitairies.FontsOverride;
@@ -44,7 +45,11 @@ public class MainActivity extends CCQFBaseActivity {
 
 
         dr.dialogPub(MainActivity.this);
-        dialogLogin();
+        LocaleDB lDb = new LocaleDB(MainActivity.this);
+        Toast.makeText(MainActivity.this, ""+ lDb.isUserEmpty(), Toast.LENGTH_SHORT).show();
+        if(lDb.isUserEmpty() == 0){
+            dialogLogin();
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -99,10 +104,9 @@ public class MainActivity extends CCQFBaseActivity {
         final Dialog d = new Dialog(MainActivity.this);
         d.setContentView(R.layout.dialog_login);
         d.setTitle("Enregistrez-Vous");
-        //d.setCancelable(false);
+        d.setCancelable(false);
         final EditText txtPrenom = (EditText)d.findViewById(R.id.txtLoginName);
         final EditText txtNom = (EditText)d.findViewById(R.id.txtLoginLastName);
-      //  final EditText txtEmail = (EditText)d.findViewById(R.id.txtLoginEmail);
         final EditText txtSurnom = (EditText)d.findViewById(R.id.txtLoginScreenName);
         Button btnOK = (Button)d.findViewById(R.id.btnLoginOk);
         d.show();
@@ -112,7 +116,6 @@ public class MainActivity extends CCQFBaseActivity {
             public void onClick(View v) {
                 String prenom = txtPrenom.getText().toString();
                 String nom = txtNom.getText().toString();
-               // String email = txtEmail.getText().toString();
                 String compagnie = txtSurnom.getText().toString();
                 Verify verify = new Verify();
 
@@ -128,7 +131,8 @@ public class MainActivity extends CCQFBaseActivity {
                                      (MainActivity.this, ""+nom +"_"+prenom+"@"+compagnie,
                                              Toast.LENGTH_SHORT).show();
 
-                            Login l = new Login(nom, prenom, compagnie);
+                             InterfaceDB iDb = new InterfaceDB(MainActivity.this);
+                             iDb.registerUser(nom, prenom, compagnie);
 
                              d.dismiss();
                          } else{
