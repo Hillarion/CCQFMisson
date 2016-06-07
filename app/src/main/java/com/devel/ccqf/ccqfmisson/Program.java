@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Program extends CCQFBaseActivity/*AppCompatActivity*/ {
+public class Program extends CCQFBaseActivity {
     private ListView listViewEvents;
     private ArrayList<Event> events;
 

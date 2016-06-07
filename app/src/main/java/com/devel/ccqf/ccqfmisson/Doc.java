@@ -44,22 +44,15 @@ public class Doc extends CCQFBaseActivity {
                 Intent i = new Intent(Doc.this, DocDetails.class);
                 Bundle bundle = new Bundle();
                 CCQFCategorie categorie = menu.get(position);
-                System.out.print("CCQF Doc outgoing categorie " + categorie + "\n\n");
-                System.out.flush();
                 bundle.putString(DOC_PARCEL_KEY, categorie.getNom());
                 bundle.putParcelableArrayList(DOC_PARCEL_KEY2, categorie.getItemsList());
 
-                System.out.print("CCQF Doc outgoing bundle " + bundle + "\n\n");
-                System.out.flush();
-//                bundle.putString(DOC_PARCEL_KEY, "Fish !!");
                 i.putExtras(bundle);
-                System.out.print("CCQF Doc outgoing Intent " + i + "\n\n");
-                System.out.flush();
                 startActivity(i);
             }
         });
-        baseApplicationFilesPath = "" + Environment.getDataDirectory().getPath() + "/data/" +
-                getPackageName() + "/files/Documents";
+        baseApplicationFilesPath = "" + Environment.getExternalStorageDirectory() + "/" +
+                getPackageName() + "/Documents";
 
         String [] params = {dirUrl, baseApplicationFilesPath, "menu.csv"};
         new GetMenuAsyncTask().execute(params);
@@ -125,10 +118,7 @@ public class Doc extends CCQFBaseActivity {
                         cat = new CCQFCategorie(linetbl[0]);
                         menu.add(cat);
                     }
-                    CCQFDocument  doc = new CCQFDocument(linetbl[1], linetbl[2]);
-                    doc.setFilePath(params[1]);
-                    System.out.print("CCQF Doc.java doInBackground document = " + doc + "\n\n");
-                    System.out.flush();
+                    CCQFDocument  doc = new CCQFDocument(linetbl[1], linetbl[2], params[1], params[0]);
                     cat.addDocument(doc);
                 }while(fSc.hasNext());
                 fSc.close();

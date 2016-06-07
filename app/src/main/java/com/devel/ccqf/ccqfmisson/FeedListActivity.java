@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * Created by thierry on 26/05/16.
  */
-public class FeedListActivity extends CCQFBaseActivity/*AppCompatActivity*/ {
+public class FeedListActivity extends CCQFBaseActivity {
     public final static String USER_KEY = "com.devel.ccqf.ccqfmisson.FeedListActivity.USER_KEY";
     private ListView lstFeedList;
     private ListView lstUserList;

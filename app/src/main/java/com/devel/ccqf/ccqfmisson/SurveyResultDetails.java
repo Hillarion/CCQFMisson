@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
-public class SurveyResultDetails extends CCQFBaseActivity/*AppCompatActivity*/ {
+public class SurveyResultDetails extends CCQFBaseActivity {
     private TextView txtQuestion;
     private TextView txtDetails;
 

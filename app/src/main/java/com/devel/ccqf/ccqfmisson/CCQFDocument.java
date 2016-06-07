@@ -9,21 +9,24 @@ public class CCQFDocument implements Parcelable {
     private String titre;
     private String nomFichier;
     private String filePath;
+    private String baseURL;
 
     public CCQFDocument(){
-        this("", "");
+        this("", "", "", "");
     }
 
-    public CCQFDocument(String titre, String nom){
+    public CCQFDocument(String titre, String nom, String path, String url){
         this.titre = titre;
         this.nomFichier = nom;
-        filePath = "";
+        filePath = path;
+        baseURL = url;
     }
 
     public CCQFDocument(Parcel in){
         titre = in.readString();
         nomFichier = in.readString();
         filePath = in.readString();
+        baseURL = in.readString();
     }
 
     public String getTitre() {
@@ -54,6 +57,22 @@ public class CCQFDocument implements Parcelable {
         filePath = path;
     }
 
+    public String getBaseURL() {
+        return baseURL;
+    }
+
+    public void setBaseURL(String baseURL) {
+        this.baseURL = baseURL;
+    }
+
+    public String getFullURL() {
+        return baseURL+"/"+ nomFichier;
+    }
+
+    public String getFullPath() {
+        return filePath+"/"+ nomFichier;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -64,6 +83,7 @@ public class CCQFDocument implements Parcelable {
         dest.writeString(titre);
         dest.writeString(nomFichier);
         dest.writeString(filePath);
+        dest.writeString(baseURL);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
@@ -77,6 +97,6 @@ public class CCQFDocument implements Parcelable {
     };
 
     public String toString(){
-        return "CCQFDocument " + titre + ", " + nomFichier + ", path = " + filePath;
+        return "CCQFDocument " + titre + ", local : " + filePath +"/"+ nomFichier + ", url : " + baseURL+"/"+ nomFichier;
     }
 }
