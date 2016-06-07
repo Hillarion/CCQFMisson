@@ -45,11 +45,13 @@ public class MainActivity extends CCQFBaseActivity {
 
 
         dr.dialogPub(MainActivity.this);
-        LocaleDB lDb = new LocaleDB(MainActivity.this);
-        Toast.makeText(MainActivity.this, ""+ lDb.isUserEmpty(), Toast.LENGTH_SHORT).show();
-        if(lDb.isUserEmpty() == 0){
+        InterfaceDB iDb = new InterfaceDB(MainActivity.this);
+        Toast.makeText(MainActivity.this, ""+ iDb.isUserEmpty(), Toast.LENGTH_SHORT).show();
+        if(iDb.isUserEmpty() == 0){
             dialogLogin();
         }
+        else
+            iDb.getCurrentUserID();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +99,10 @@ public class MainActivity extends CCQFBaseActivity {
                 startActivity(i);
             }
         });
+
+
+//        InterfaceDB iDb = new InterfaceDB(MainActivity.this);
+//        int userID = iDb.getCurrentUserID();
     }
 
     public void dialogLogin(){

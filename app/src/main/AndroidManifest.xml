@@ -29,18 +29,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Doc" />
-        <activity android:name=".Program" />
-        <activity android:name=".MonAgenda" />
-        <activity android:name=".FeedListActivity" />
-        <activity android:name=".Feed" />
-        <activity android:name=".Survey" />
-        <activity android:name=".SurveyCreate" />
-        <activity android:name=".SurveyResults" />
-        <activity android:name=".SurveyResultDetails" />
-        <activity android:name=".NewB2B" />
-        <activity android:name=".ProgramDays" />
-        <activity android:name=".DocDetails" />
+        <activity android:name=".Doc"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Program"
+            android:screenOrientation="portrait" />
+        <activity android:name=".MonAgenda"
+            android:screenOrientation="portrait" />
+        <activity android:name=".FeedListActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Feed"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Survey"
+            android:screenOrientation="portrait" />
+        <activity android:name=".SurveyCreate"
+            android:screenOrientation="portrait" />
+        <activity android:name=".SurveyResults"
+            android:screenOrientation="portrait" />
+        <activity android:name=".SurveyResultDetails"
+            android:screenOrientation="portrait" />
+        <activity android:name=".NewB2B"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ProgramDays"
+            android:screenOrientation="portrait" />
+        <activity android:name=".DocDetails"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

@@ -206,7 +206,6 @@ public class InterfaceDB {
         return msgId;
     }
 
-
     public ArrayList<SurveyObjectResults> readSurveyResults(int surveyId){
         ArrayList<SurveyObjectResults> rsltList = null;
 
@@ -223,10 +222,10 @@ public class InterfaceDB {
         return list;
     }
 
-    public ConversationHead getmessageHead(int conversationID) {
+    public ConversationHead getMessageHead(int conversationID) {
         ConversationHead cHead = null;
         if(lDb != null)
-            cHead = lDb.getmessageHead(conversationID);
+            cHead = lDb.getMessageHead(conversationID);
         return cHead;
     }
 
@@ -237,4 +236,20 @@ public class InterfaceDB {
         }
         return uList;
     }
+
+    public int getCurrentUserID(){
+        if(lDb != null)
+            currentUser = lDb.getCurrentUserID();
+        return currentUser;
+
+    }
+
+    public int isUserEmpty(){
+        int userCount = 0;
+        if(lDb != null){
+            userCount = lDb.isUserEmpty();
+        }
+        return userCount;
+    }
+
 }

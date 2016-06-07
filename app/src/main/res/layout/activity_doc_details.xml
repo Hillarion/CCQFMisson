@@ -9,10 +9,19 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.devel.ccqf.ccqfmisson.DocDetails">
 
+    <TextView
+        android:id="@+id/txtTitrePage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="26dp"
+        android:textColor="@color/colorCCQFOrange"
+        android:text="qwertyu"
+        android:textStyle="bold|italic" />
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listViewDocDetails"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/txtTitrePage"/>
 </RelativeLayout>

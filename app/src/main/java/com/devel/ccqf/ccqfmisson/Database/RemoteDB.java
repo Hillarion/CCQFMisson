@@ -247,20 +247,14 @@ public class RemoteDB {
         String ligneResult = sendRequest(pairs);
 
         if(ligneResult != null) {
-            System.out.print("CCQF RemoteDB sendMessage ligneResult =" + ligneResult + "\n\n");
-            System.out.flush();
             parser = new JSONParser(ligneResult);
             String status = parser.getStatus();
             if (!status.isEmpty()) {
                 if (status.equalsIgnoreCase("Success")) {
                     msgId = parser.getIndex();
-                    System.out.print("CCQF RemoteDB sendMessage msgId =" + msgId + "\n\n");
-                    System.out.flush();
                     msg.setId_msg(msgId);
                     if(msg.getConvID() <= 0) {
                         int convID = parser.getInt("conversationID");
-                        System.out.print("CCQF RemoteDB sendMessage convID =" + convID + "\n\n");
-                        System.out.flush();
                         if (convID > 0)
                             msg.setConvID(convID);
                     }

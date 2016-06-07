@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.devel.ccqf.ccqfmisson.Adapters.CustomContactListAdapter;
+import com.devel.ccqf.ccqfmisson.Adapters.TheadListAdapter;
 import com.devel.ccqf.ccqfmisson.Database.InterfaceDB;
 import com.devel.ccqf.ccqfmisson.ReseauSocial.ConversationHead;
 
@@ -34,26 +35,27 @@ public class FeedListActivity extends CCQFBaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.feed_list_listview_layout);
-/*        Drawable logo = null;
-        logo = getResources().getDrawable(R.mipmap.ccqf_logo);
-        getSupportActionBar().setTitle(R.string.app_name);
-        getSupportActionBar().setLogo(logo);*/
-
+        ArrayList<ConversationHead> cHeadList = null;
         lstFeedList = (ListView)findViewById(R.id.lstFeedList);
 
         InterfaceDB iDb = new InterfaceDB(this);
         if(iDb != null) {
             List<Integer>  convList = iDb.getMessageThreadList();
             if(convList != null){
-                ArrayList<ConversationHead> cHeadList = new ArrayList<ConversationHead>();
+                cHeadList = new ArrayList<ConversationHead>();
                 Iterator<Integer> iter = convList.iterator();
                 while(iter.hasNext()){
-                    ConversationHead tmpHead = iDb.getmessageHead(iter.next().intValue());
+                    ConversationHead tmpHead = iDb.getMessageHead(iter.next().intValue());
+                    System.out.print("CCQF FeedListActivity cHead = " + tmpHead + "\n\n");
+                    System.out.flush();
                     if(tmpHead != null)
                         cHeadList.add(tmpHead);
                 }
             }
         }
+
+        TheadListAdapter tlAdapter = new TheadListAdapter(this, cHeadList);
+        lstFeedList.setAdapter(tlAdapter);
 
         FloatingActionButton fabNewFeed = (FloatingActionButton) findViewById(R.id.fabNewFeed);
         fabNewFeed.setOnClickListener(new View.OnClickListener() {

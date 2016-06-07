@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.devel.ccqf.ccqfmisson.Adapters.CCQFCategorieAdapter;
 import com.devel.ccqf.ccqfmisson.Adapters.CCQFDocumentAdapter;
@@ -36,11 +37,13 @@ public class DocDetails extends CCQFBaseActivity {
         setContentView(R.layout.activity_doc_details);
 
         listViewDocDetail = (ListView)findViewById(R.id.listViewDocDetails);
+        TextView txtTitrePage = (TextView)findViewById(R.id.txtTitrePage);
         Intent i = getIntent();
 
         Bundle bundle = i.getExtras();
 
         String categorie = bundle.getString(Doc.DOC_PARCEL_KEY);
+        txtTitrePage.setText(categorie);
         liste =  bundle.getParcelableArrayList(Doc.DOC_PARCEL_KEY2);
 
         CCQFDocumentAdapter arrayAdapter = new CCQFDocumentAdapter(DocDetails.this, liste);

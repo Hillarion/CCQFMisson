@@ -36,28 +36,37 @@ public class LocaleDB {
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         values.put("timestamp", sdf.format(msg.getTimestamp()));
         values.put("attachement", msg.getAttachement());
-        db.insert("Messages", null, values);
 
+        System.out.print("CCQF LocalDb writeMessage values = " + values + "\n\n");
+        System.out.flush();
+        db.insert("Messages", null, values);
     }
 
     public void setUser(int userId, String nom, String prenom, String compagnie){
+        System.out.print("CCQF LocalDB setUser (entry)");
+        System.out.flush();
         if(db != null){
             Cursor cursor = null;
             cursor = db.rawQuery("SELECT * FROM Utilisateur WHERE user_id = ?" , new String[]{"" + userId});
             cursor.moveToFirst();
-            if(cursor == null){// Usager n'existe pas
+            if(cursor.getCount() == 0){// Usager n'existe pas
+                System.out.print("CCQF LocalDB setUser (writing)");
+                System.out.flush();
                 ContentValues values = new ContentValues();
                 values.put("user_id", "" + userId);
                 values.put("prenom", prenom);
                 values.put("nom", nom);
                 values.put("compagnie", compagnie);
                 values.put("lastMsg", "-1");
-                values.put("lastSurvey","-1");
-                values.put("privilege","-1");
-                db.insert("Utilisateur", null, values);
+                values.put("lastSurvey", "-1");
+                values.put("privilege", "-1");
+                long val = db.insert("Utilisateur", null, values);
+                System.out.print("CCQF LocalDB setUser (finally) val = " + val + "\n\n");
+                System.out.flush();
             }
         }
     }
+
     public int isUserEmpty(){
         int cursorCount = 0;
         if(db!=null){
@@ -85,13 +94,12 @@ public class LocaleDB {
             Cursor cursor;
             cursor = db.rawQuery("SELECT privilege FROM Utilisateur WHERE user_id = ?" , new String[]{"" + UserId});
             cursor.moveToFirst();
-            if(cursor != null){
+            if(cursor.getCount() != 0){
                 privilege = cursor.getInt(0);
             }
         }
         return privilege;
     }
-
 
     public void setPrivilege(int UserId, InterfaceDB.privilegeType privilege){
         int priv = 0;
@@ -110,7 +118,7 @@ public class LocaleDB {
             Cursor cursor;
             cursor = db.rawQuery("SELECT lastSurvey FROM Utilisateur WHERE user_id = ?", new String[]{"" + UserId});
             cursor.moveToFirst();
-            if (cursor != null) {
+            if (cursor.getCount() != 0) {
                 sIdx = cursor.getInt(0);
             }
         }
@@ -131,9 +139,7 @@ public class LocaleDB {
             Cursor cursor;
             cursor = db.rawQuery("SELECT lastMsg FROM Utilisateur WHERE user_id = ?", new String[]{"" + UserId});
             cursor.moveToFirst();
-            if (cursor != null) {
-                System.out.print("Chat Test ldb.getLastMsgIndex() cursor (bis)= " + cursor + "\n\n");
-                System.out.flush();
+            if (cursor.getCount() != 0) {
                 try {
                     mIdx = cursor.getInt(0);
                 }catch(CursorIndexOutOfBoundsException cioobe) {//entry does not exist
@@ -156,15 +162,9 @@ public class LocaleDB {
         ArrayList<Integer> convList = null;
         if(db != null){
             Cursor cursor = db.rawQuery("SELECT DISTINCT conversationID FROM Messages", null);
-            System.out.print("CCQF getMessageThreadList cursor = " + cursor + "\n\n");
-            System.out.flush();
             cursor.moveToFirst();
-            System.out.print("CCQF getMessageThreadList cursor (bis) = " + cursor + "\n\n");
-            System.out.flush();
-            if(cursor != null){
+            if(cursor.getCount() != 0){
                 if(cursor.getCount() > 0) {
-                    System.out.print("CCQF getMessageThreadList cursor.count = " + cursor.getCount() + "\n\n");
-                    System.out.flush();
                     convList = new ArrayList<Integer>();
                     int loopCount = 0;
                     while (loopCount < cursor.getCount()) {
@@ -172,20 +172,18 @@ public class LocaleDB {
                         cursor.moveToNext();
                         loopCount++;
                     }
-                    System.out.print("CCQF getMessageThreadList convList = " + convList + "\n\n");
-                    System.out.flush();
                 }
             }
         }
         return (List)convList;
     }
 
-    public ConversationHead getmessageHead(int conversationID){
+    public ConversationHead getMessageHead(int conversationID){
         ConversationHead cHead = null;
         if(db != null){
-            Cursor cursor = db.rawQuery("SELECT source, timestamp, message FROM Messages ORDER BY msg_id, DESC LIMIT 1 WHERE conversationID = ?", new String[] {""+conversationID});
+            Cursor cursor = db.rawQuery("SELECT source, timestamp, message FROM Messages WHERE conversationID = ? ORDER BY id_msg DESC LIMIT 1", new String[] {""+conversationID});
             cursor.moveToFirst();
-            if(cursor!=null){
+            if(cursor.getCount() != 0){
                 cHead = new ConversationHead(
                         ""+conversationID,
                         cursor.getString(0),
@@ -194,5 +192,21 @@ public class LocaleDB {
             }
         }
         return cHead;
+    }
+
+    public int getCurrentUserID(){
+        int user = -1;
+        if(db != null){
+            System.out.print("CCQF LocalDB getCurrentUserID \n\n");
+            System.out.flush();
+            Cursor cursor = db.rawQuery("Select user_id from Utilisateur", null);
+            cursor.moveToFirst();
+            if(cursor.getCount() != 0){
+                user = cursor.getInt(0);
+                System.out.print("CCQF LocalDB getCurrentUserID user = "+ user +"\n\n");
+                System.out.flush();
+            }
+        }
+        return user;
     }
 }
