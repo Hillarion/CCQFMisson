@@ -78,6 +78,24 @@ public class LocaleDB {
         return cursorCount;
     }
 
+    public String getCurrentUserLogin(){
+        String userLogin = "";
+        if(db!=null){
+            Cursor cursor;
+            cursor = db.rawQuery("SELECT * FROM Utilisateur", null);
+            cursor.moveToFirst();
+            if( cursor.getCount() != 0){
+                int user_id = cursor.getInt(0);
+                String prenom = cursor.getString(1);
+                String nom = cursor.getString(2);
+                String companie = cursor.getString(3);
+                userLogin = prenom+"_"+nom+"@"+companie;
+            }
+
+        }
+        return userLogin;
+    }
+
     public List<MessagePacket> readOutMessage(int startMsgId, int nMessage){
         List<MessagePacket> msgList = null;
         return msgList;

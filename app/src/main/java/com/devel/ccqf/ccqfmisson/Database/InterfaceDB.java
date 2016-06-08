@@ -101,6 +101,13 @@ public class InterfaceDB {
         if(rDb != null)
             rDb.registerEvent(e);
     }
+    public ArrayList<Event>getEventList(String destinataire){
+        ArrayList<Event> alEventList = null;
+        if(rDb != null){
+            alEventList = rDb.getEventList(destinataire);
+        }
+        return alEventList;
+    }
 
     /*
     *  Méthode pour retrouver le privilège associé à l'usager,

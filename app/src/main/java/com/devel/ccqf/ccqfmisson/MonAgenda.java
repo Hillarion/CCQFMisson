@@ -7,7 +7,9 @@ import android.widget.Toast;
 
 import com.devel.ccqf.ccqfmisson.Adapters.CustomEventAdapter;
 import com.devel.ccqf.ccqfmisson.AgendaObjects.Event;
+import com.devel.ccqf.ccqfmisson.Database.InterfaceDB;
 
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ public class MonAgenda extends CCQFBaseActivity {
 
 
     }
-
+        //get current user
     public void setListViewEvents() {
         CustomEventAdapter adapter = new CustomEventAdapter(this, dummyList());
         listViewEvents.setAdapter(adapter);
@@ -43,4 +45,22 @@ public class MonAgenda extends CCQFBaseActivity {
         }
         return n;
     }
+
+    public ArrayList<Event> getEventListFromDb(String currentUser){
+        ArrayList<Event>alEventRaw = null;
+        InterfaceDB iDb = new InterfaceDB(MonAgenda.this);
+        alEventRaw = iDb.getEventList(currentUser);
+
+        ArrayList<Event> alEvent = new ArrayList<>();
+        for(int i = 0;i<alEventRaw.size();i++){
+           Event eTemp =  alEventRaw.get(i);
+           String title =  eTemp.getNom();
+           String hDebut = eTemp.getDTStart();
+           String hFin = eTemp.getDTEnd();
+           String heure = ""+hDebut+" "+hFin;
+           alEvent.add(new Event(title, heure));
+        }
+        return alEvent;
+    }
+
 }

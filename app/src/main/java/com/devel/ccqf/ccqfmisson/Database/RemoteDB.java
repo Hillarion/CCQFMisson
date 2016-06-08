@@ -154,6 +154,52 @@ public class RemoteDB {
 
     }
 
+    public ArrayList<Event> getEventList(String destinataire){
+        ArrayList<Event> alEvent = null;
+
+        ArrayList<NameValuePair> pairs = new ArrayList<>();
+        pairs.add(new BasicNameValuePair("action", "getB2BList"));
+        pairs.add(new BasicNameValuePair("destinataire", destinataire));
+        String lineResult = sendRequest(pairs);
+
+        if(lineResult != null){
+            parser = new JSONParser(lineResult);
+            String status = parser.getStatus();
+            if(!status.isEmpty()){
+                if(status.equalsIgnoreCase("Sucess")){
+                    JSONArray jsonArray = parser.getList("event");//<-- ?
+                    if(jsonArray != null){
+                        alEvent = new ArrayList<Event>();
+                        for(int i = 0; i<jsonArray.length();i++){
+                            try {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String hDebut = jsonObject.getString("hDebut");
+                                String hFin = jsonObject.getString("hFin");
+                                String compagnie = jsonObject.getString("compagnie");
+                                String nom = jsonObject.getString("nom");
+                                String poste = jsonObject.getString("poste");
+                                String telephone = jsonObject.getString("telephone");
+                                String email = jsonObject.getString("email");
+                                String adresse = jsonObject.getString("adresse");
+                                String batiment = jsonObject.getString("batiment");
+                                Boolean b = Boolean.valueOf(batiment);
+
+                                Event e = new Event(destinataire, hDebut, hFin, compagnie, nom, poste,
+                                        telephone, email, adresse,  b);
+                                alEvent.add(e);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+        return alEvent;
+    }
+
+
     /*
     *  Méthode pour retrouver le privilège associé à l'usager,
     *       Reçoit l'identifiant de l'usager

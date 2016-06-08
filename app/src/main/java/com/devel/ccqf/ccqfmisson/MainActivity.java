@@ -138,7 +138,9 @@ public class MainActivity extends CCQFBaseActivity {
                                              Toast.LENGTH_SHORT).show();
 
                              InterfaceDB iDb = new InterfaceDB(MainActivity.this);
+                             LocaleDB lDb = new LocaleDB(MainActivity.this);
                              iDb.registerUser(nom, prenom, compagnie);
+                             lDb.setUser(1, nom, prenom, compagnie);
 
                              d.dismiss();
                          } else{
