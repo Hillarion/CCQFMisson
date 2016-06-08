@@ -22,6 +22,7 @@ public class MessagePacket {
         message=msg;
         timestamp = tStamp;
         attachement=attach;
+        convID = cID;
         isSelf = false;
     }
 

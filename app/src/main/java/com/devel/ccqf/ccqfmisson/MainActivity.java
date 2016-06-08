@@ -43,7 +43,7 @@ public class MainActivity extends CCQFBaseActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-
+int user = -1;
         dr.dialogPub(MainActivity.this);
         InterfaceDB iDb = new InterfaceDB(MainActivity.this);
         Toast.makeText(MainActivity.this, ""+ iDb.isUserEmpty(), Toast.LENGTH_SHORT).show();
@@ -51,8 +51,10 @@ public class MainActivity extends CCQFBaseActivity {
             dialogLogin();
         }
         else
-            iDb.getCurrentUserID();
+            user = iDb.getCurrentUserID();
 
+        System.out.print("CCQF MainActivity OnCreate id=" + user + " \n\n");
+        System.out.flush();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

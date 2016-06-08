@@ -47,6 +47,8 @@ public class InterfaceDB {
                 workLocaly = false;
         }
         lDb = new LocaleDB(cntx);
+        if(lDb != null)
+            currentUser = lDb.getCurrentUserID();
 
         if (workLocaly == false) {
             rDb = new RemoteDB(cntx);
@@ -247,6 +249,7 @@ public class InterfaceDB {
     public int getCurrentUserID(){
         if(lDb != null)
             currentUser = lDb.getCurrentUserID();
+
         return currentUser;
 
     }
