@@ -94,6 +94,8 @@ public class NewB2B extends CCQFBaseActivity {
                                                         heureFin, compagnie, nom, poste, telephnone,
                                                         email, batiment, ext);
                                                 new SendB2BAsyncTask().execute(e);
+                                                clean();
+                                                Toast.makeText(NewB2B.this, "Evenement Envoyé", Toast.LENGTH_SHORT).show();
 
                                             }
                                             else{
