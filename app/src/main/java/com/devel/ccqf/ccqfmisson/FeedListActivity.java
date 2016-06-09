@@ -31,12 +31,15 @@ public class FeedListActivity extends CCQFBaseActivity {
     public final static String USER_KEY = "com.devel.ccqf.ccqfmisson.FeedListActivity.USER_KEY";
     private ListView lstFeedList;
     private ListView lstUserList;
-    ArrayList<ConversationHead> cHeadList;
+    private ArrayList<ConversationHead> cHeadList;
+    private InterfaceDB iDb;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         cHeadList = null;
+        iDb = new InterfaceDB(this);
+
         setContentView(R.layout.feed_list_listview_layout);
         ArrayList<ConversationHead> cHeadList = null;
         lstFeedList = (ListView)findViewById(R.id.lstFeedList);
@@ -121,7 +124,6 @@ public class FeedListActivity extends CCQFBaseActivity {
         @Override
         protected ArrayList<ConversationHead> doInBackground(Void... unused) {
             ArrayList<ConversationHead> cList = null;
-            InterfaceDB iDb = new InterfaceDB(FeedListActivity.this);
             if(iDb != null){
                 int userID = iDb.getCurrentUserID();
                 List<MessagePacket> lMsg =   iDb.readMessages(userID);
@@ -155,7 +157,6 @@ public class FeedListActivity extends CCQFBaseActivity {
         @Override
         protected ArrayList<Users> doInBackground(Void... userId){
             ArrayList<Users> uList = null;
-            InterfaceDB iDb = new InterfaceDB(FeedListActivity.this);
             if(iDb != null){
                 uList = iDb.getUserList();
             }

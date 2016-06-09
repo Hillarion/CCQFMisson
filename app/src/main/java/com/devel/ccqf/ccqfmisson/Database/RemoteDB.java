@@ -167,8 +167,8 @@ public class RemoteDB {
             parser = new JSONParser(lineResult);
             String status = parser.getStatus();
             if(!status.isEmpty()){
-                if(status.equalsIgnoreCase("Sucess")){
-                    JSONArray jsonArray = parser.getList("event");//<-- ?
+                if(status.equalsIgnoreCase("Success")){
+                    JSONArray jsonArray = parser.getList("B2BList");//<-- ?
                     if(jsonArray != null){
                         alEvent = new ArrayList<Event>();
                         for(int i = 0; i<jsonArray.length();i++){

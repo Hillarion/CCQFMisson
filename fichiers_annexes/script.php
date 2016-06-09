@@ -105,6 +105,7 @@ function registerUser(){
     $prenom = $_POST["prenom"];
     $compagnie = $_POST["compagnie"];
     $userId = -1;
+global $conn;
 
     if(($nom == "") || ($prenom == "") ||($compagnie == ""))
         returnFail("fields must not be empty");
@@ -227,7 +228,8 @@ function readMessages(){
         
     if(is_numeric($userId)){
         $req = "SELECT * FROM MessagePacket INNER JOIN MessageQueue ON ".
-               "MessageQueue.id_msg = MessagePacket.id_msg WHERE ".
+               "MessageQueue.id_msg = MessagePacket.id_msg JOIN ConversationThread on ".
+               "ConversationThread.conversation_id = MessagePacket.conversation_id WHERE ".
                "MessageQueue.destinataire=$userId and MessagePacket.id_msg > $lastMsgId";
 //        error_log("readMessages req = $req", 0);
         $result = doQuery($req);
@@ -237,9 +239,9 @@ function readMessages(){
             echo "\"msgQueue\" : [";
             while ($ligne= mysqli_fetch_object($result)){
                 echo "{\"msgId\" : \"$ligne->id_msg\", \"source\" : \"$ligne->source\",".
-                     "\"destinataires\" : \"$ligne->destinataires\", ".
+                     "\"destinataires\" : \"$ligne->groupe_ids\", ".
                      "\"conversationID\" : \"$ligne->conversation_id\",".
-                     "\"timeStamp\" : \"$ligne->timestamp\", ".
+                     "\"timeStamp\" : \"$ligne->time\", ".
                      "\"message\" : \"$ligne->message\", \"attachement\" : ".
                      "\"$ligne->attachement\"}";
                 if(--$row > 0) echo ",";                
@@ -497,6 +499,37 @@ function registerEvent(){
     }
 }
 
+
+function getB2BList(){
+	$destinataire=$_POST["destinataire"];
+	$req="SELECT * FROM event WHERE destinataire='$destinataire'";
+	$result=doQuery($req);
+        $row = mysqli_num_rows($result);
+
+	if($row>0){
+		echo "{\"Status\" : \"Success\",";
+		echo "\"B2BList\" : [";
+		while($ligne=mysqli_fetch_object($result)){
+			echo "{\"destinataire\" : \"$ligne->destinataire\", ";
+			echo "\"hDebut\" : \"$ligne->hDebut\", ";
+			echo "\"hFin\" : \"$ligne->hFin\", ";
+			echo "\"compagnie\" : \"$ligne->compagnie\", ";
+			echo "\"nom\" : \"$ligne->nom\", ";
+			echo "\"poste\" : \"$ligne->poste\", ";
+			echo "\"telephone\" : \"$ligne->telephone\", ";
+			echo "\"email\" : \"$ligne->email\", ";
+			echo "\"adresse\" : \"$ligne->adresse\", ";
+			echo "\"batiment\" : \"$ligne->batiment\"}";
+			if(--$row>0){
+				echo",";
+			} 
+		}
+		echo"]}";
+	}
+	else
+		returnFail("no result");
+}
+
 //Le controleur
 $action=$_POST['action'];
 switch ($action){
@@ -535,6 +568,9 @@ switch ($action){
     break;
     case "registerEvent":
         registerEvent();
+    break;
+    case "getB2BList":
+        getB2BList();
     break;
     default :
         returnFail("Commande inconnue : $action");

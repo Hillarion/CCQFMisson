@@ -1,5 +1,6 @@
 package com.devel.ccqf.ccqfmisson;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -28,7 +29,8 @@ public class MonAgenda extends CCQFBaseActivity {
         LocaleDB lDb = new LocaleDB(MonAgenda.this);
         String user = lDb.getCurrentUserLogin();
         listViewEvents = (ListView) findViewById(R.id.listViewEvents);
-        setListViewEvents(user);
+        new getEventListAsyncTask().execute(user);
+//        setListViewEvents(user);
 
 
     }
@@ -67,6 +69,27 @@ public class MonAgenda extends CCQFBaseActivity {
            alEvent.add(new Event(title, heure));
         }
         return alEvent;
+    }
+
+    private class getEventListAsyncTask extends AsyncTask<String, Void, ArrayList<Event>>{
+
+        @Override
+        protected ArrayList<Event> doInBackground(String... params) {
+            ArrayList<Event>alEventRaw =null;
+            InterfaceDB iDb = new InterfaceDB(MonAgenda.this);
+            if(iDb != null)
+                alEventRaw = iDb.getEventList(params[0]);
+
+            System.out.print("CCQF MonAgenda getEventListAsyncTask doInBackground ("+params[0] + ") alEventRaw = " + alEventRaw + "\n\n");
+            System.out.flush();
+            return alEventRaw;
+        }
+        @Override
+        protected void onPostExecute(ArrayList<Event> eList){
+            events = eList;
+            CustomEventAdapter adapter = new CustomEventAdapter(MonAgenda.this, eList);
+            listViewEvents.setAdapter(adapter);
+        }
     }
 
 }

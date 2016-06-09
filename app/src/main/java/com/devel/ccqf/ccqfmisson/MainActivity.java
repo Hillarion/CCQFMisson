@@ -31,12 +31,14 @@ public class MainActivity extends CCQFBaseActivity {
     private Button btnProg;
     private Button btnAgenda;
     private Button btnFeed;
-
+    private InterfaceDB iDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        iDb = new InterfaceDB(MainActivity.this);
+
         FontsOverride.setDefaultFont(MainActivity.this, "MONOSPACE", "fonts/Myriad Web Bold.otf");//<- changer la font ici
         DialogRep dr = new DialogRep();
 
@@ -169,7 +171,6 @@ int user = -1;
 
         @Override
         protected Login doInBackground(String... login) {
-            InterfaceDB iDb = new InterfaceDB(MainActivity.this);
 
             if(iDb != null){
                 int id = iDb.registerUser(login[0],  login[1], login[2]);
@@ -193,7 +194,14 @@ int user = -1;
             // Things to be done while execution of long running operation is in
             // progress. For example updating ProgessDialog
         }
+    }
 
+    private class getCommenditairesAsyncTask extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            return null;
+        }
     }
 
 }
