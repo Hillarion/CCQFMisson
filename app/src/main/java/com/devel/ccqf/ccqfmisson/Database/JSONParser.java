@@ -11,7 +11,6 @@ public class JSONParser {
     JSONObject reader =null ;
 
     public JSONParser(String buf){
-        System.out.print("JSONParser.JSONParser() buf = " + buf + "\n\n");
         try {
             reader = new JSONObject(buf);
         } catch (JSONException e) {
@@ -32,8 +31,6 @@ public class JSONParser {
     }
 
     public JSONArray getList(String str){
-        System.out.print("JSONParser.getList() str = " + str + "\n\n");
-        System.out.flush();
         if(reader != null)
             return reader.optJSONArray(str);
         else
@@ -41,8 +38,6 @@ public class JSONParser {
     }
 
     public JSONObject getJSONObject(String str){
-        System.out.print("JSONParser.getJSONObject() str = " + str + "\n\n");
-        System.out.flush();
         if(reader != null)
             return reader.optJSONObject(str);
         else

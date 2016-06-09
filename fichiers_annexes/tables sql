@@ -1,6 +1,11 @@
+drop database CCQFMission;
 create database CCQFMission;
 
 use CCQFMission;
+drop table MessageQueue;
+drop table MessagePacket;
+drop table ConversationThread;
+drop table Utilisateur;
 
 create table Utilisateur (
     user_id int NOT NULL AUTO_INCREMENT,

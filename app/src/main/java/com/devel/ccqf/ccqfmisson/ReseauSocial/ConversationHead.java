@@ -37,4 +37,8 @@ public class ConversationHead {
     public String getLastMsg() {
         return lastMsg;
     }
+
+    public String toString(){
+        return "{" + convID + ", from :"+ from +", "+when + ", " +lastMsg +"}";
+    }
 }

@@ -180,7 +180,7 @@ function sendMessage(){
             }
             $destList = explode(',', trim($destinataires, " \n\r"));
             $req = "INSERT INTO MessagePacket values(0, $msgSource, $convId,".
-                   "'$destinataires', '$message', '$timeStamp', '$attachement')";
+                   "'$message', '$timeStamp', '$attachement')";
             $result = doQuery($req);
             $msgId = mysqli_insert_id($conn);
             if($msgId > 0){

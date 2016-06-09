@@ -59,8 +59,6 @@ int user = -1;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
                 Intent i = new Intent(MainActivity.this, Survey.class);
                 startActivity(i);
             }
@@ -142,7 +140,7 @@ int user = -1;
                              InterfaceDB iDb = new InterfaceDB(MainActivity.this);
                              LocaleDB lDb = new LocaleDB(MainActivity.this);
                              iDb.registerUser(nom, prenom, compagnie);
-                             lDb.setUser(1, nom, prenom, compagnie);
+//                             lDb.setUser(1, nom, prenom, compagnie);
 
                              d.dismiss();
                          } else{
