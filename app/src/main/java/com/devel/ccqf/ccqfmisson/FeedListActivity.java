@@ -118,7 +118,7 @@ public class FeedListActivity extends CCQFBaseActivity {
         d.show();
     }
 
-    // retrouve tout les messages  adressés à l'usager.
+    // retrouve tout les messages adressés à l'usager.
     private class GetMessageAsyncTask extends AsyncTask<Void, Void, ArrayList<ConversationHead>>{
 
         @Override
@@ -148,10 +148,11 @@ public class FeedListActivity extends CCQFBaseActivity {
         @Override
         protected void onPostExecute(ArrayList<ConversationHead> cList) {
             cHeadList = cList;
-            TheadListAdapter tlAdapter = new TheadListAdapter(FeedListActivity.this, cHeadList);
+            TheadListAdapter tlAdapter = new TheadListAdapter(FeedListActivity.this, cList);
             lstFeedList.setAdapter(tlAdapter);
         }
     }
+
     // retrouve la liste des usager sur le réseau de la Mission
     private class GetUserListAsyncTask extends AsyncTask<Void, Void, ArrayList<Users>>{
         @Override

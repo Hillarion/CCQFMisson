@@ -56,7 +56,7 @@ public class InterfaceDB {
         }
     }
 
-    private boolean isOnline() {
+    public boolean isOnline() {
         try {
             ConnectivityManager cm = (ConnectivityManager) parentContext.getSystemService(Context.CONNECTIVITY_SERVICE);
             return cm.getActiveNetworkInfo().isConnectedOrConnecting();
@@ -65,7 +65,11 @@ public class InterfaceDB {
         }
     }
 
-    private boolean testConnexionToServer() {
+    public boolean isNetAccessible(){
+        return !workLocaly;
+    }
+
+    public boolean testConnexionToServer() {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -260,6 +264,11 @@ public class InterfaceDB {
             userCount = lDb.isUserEmpty();
         }
         return userCount;
+    }
+
+    public void initCommenditaires(int maxPages, int maxBanners){
+        if(lDb != null)
+            lDb.initCommenditaires(maxPages, maxBanners);
     }
 
 }

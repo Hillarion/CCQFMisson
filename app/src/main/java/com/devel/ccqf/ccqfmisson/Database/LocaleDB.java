@@ -215,16 +215,21 @@ public class LocaleDB {
     public int getCurrentUserID(){
         int user = -1;
         if(db != null){
-            System.out.print("CCQF LocalDB getCurrentUserID \n\n");
-            System.out.flush();
             Cursor cursor = db.rawQuery("Select user_id from Utilisateur", null);
             cursor.moveToFirst();
             if(cursor.getCount() != 0){
                 user = cursor.getInt(0);
-                System.out.print("CCQF LocalDB getCurrentUserID user = "+ user +"\n\n");
-                System.out.flush();
             }
         }
         return user;
+    }
+
+    public void initCommenditaires(int maxPages, int maxBanners) {
+        ContentValues values = new ContentValues();
+        values.put("maxPages", maxPages);
+        values.put("Pages", "0");
+        values.put("maxBanners",maxBanners);
+        values.put("Banners","0");
+        db.update("Commenditaires", values, null, null);
     }
 }
