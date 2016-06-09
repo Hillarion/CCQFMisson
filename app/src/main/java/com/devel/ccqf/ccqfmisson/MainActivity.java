@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -60,26 +61,15 @@ public class MainActivity extends CCQFBaseActivity {
                 getPackageName() + "/Commanditaires";
 
         String [] params = {dirUrl, baseApplicationFilesPath, "menu.csv"};
+        int user = -1;
+        InterfaceDB iDb = new InterfaceDB(MainActivity.this);
+        new getCommenditairesAsyncTask().execute(params);
 
         FontsOverride.setDefaultFont(MainActivity.this, "MONOSPACE", "fonts/Myriad Web Bold.otf");//<- changer la font ici
         DialogRep dr = new DialogRep(this);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-
-        int user = -1;
-        InterfaceDB iDb = new InterfaceDB(MainActivity.this);
-        new getCommenditairesAsyncTask().execute(params);
-
-        if(iDb.isUserEmpty() == 0){
-            dialogLogin();
-        }
-        else {
-            user = iDb.getCurrentUserID();
-/*            if(menuPage != null)
-                dr.setPub(menuPage[iDb.getCurrentPageIndex()]);*/
-            dr.dialogPub(MainActivity.this);
-        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +115,25 @@ public class MainActivity extends CCQFBaseActivity {
                 startActivity(i);
             }
         });
+        if(iDb.isUserEmpty() == 0){
+            dialogLogin();
+        }
+        else {
+            SystemClock.sleep(3000);
+            user = iDb.getCurrentUserID();
+            System.out.print("CCQF MainActivity CommenditairePage menuPage = "+menuPage+"\n\n");
+            System.out.flush();
+            if(menuPage != null) {
+                int idx = iDb.getCurrentPageIndex();
+                System.out.print("CCQF MainActivity CommenditairePage Index = "+idx+"\n\n");
+                System.out.flush();
+                Commenditaire cm = menuPage.get(idx);
+                System.out.print("CCQF MainActivity CommenditairePage = "+cm+"\n\n");
+                System.out.flush();
+                dr.setPub(cm);
+            }
+            dr.dialogPub(MainActivity.this);
+        }
     }
 
     public void dialogLogin(){
@@ -217,35 +226,43 @@ public class MainActivity extends CCQFBaseActivity {
         @Override
         protected Void doInBackground(String... params) {
             long date = 0;
+            FileDownLoader fd = new FileDownLoader(params[2], params[1], params[0]);
             if (iDb.isNetAccessible()) {
                 try {
-                    FileDownLoader fd = new FileDownLoader(params[2], params[1], params[0]);
                     if (!fd.isUptodate())
                         fd.getFileFromServer();
 
-                    menuPage = new ArrayList<Commenditaire>();
-                    menuBanniere = new ArrayList<Commenditaire>();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
+            menuPage = new ArrayList<Commenditaire>();
+            menuBanniere = new ArrayList<Commenditaire>();
+
+            File file = fd.getFileHandle();
+            if (file.exists()) {
+                try {
                     Scanner fSc = new Scanner(fd.getFileHandle());
                     fSc.useDelimiter("\n");
                     do {
                         String line = fSc.next();
                         String[] linetbl = line.split(";");
 
-                        FileDownLoader fgl = new FileDownLoader(linetbl[2], params[1]+"/"+linetbl[0], params[0]+"/"+linetbl[0]);
-                        if(!fgl.isUptodate())
+                        FileDownLoader fgl = new FileDownLoader(linetbl[2], params[1] + "/" + linetbl[0], params[0] + "/" + linetbl[0]);
+                        if (!fgl.isUptodate())
                             fgl.getFileFromServer();
-                        if(linetbl[0].equalsIgnoreCase("Pages"))
-                            menuPage.add(new Commenditaire(params[1]+"/"+linetbl[0], linetbl[1]));
-                        else if(linetbl[0].equalsIgnoreCase("Banners"))
-                            menuBanniere.add(new Commenditaire(params[1]+"/"+linetbl[0], linetbl[1]));
+                        if (linetbl[0].equalsIgnoreCase("Pages"))
+                            menuPage.add(new Commenditaire(params[1] + "/" + linetbl[0] + "/" + linetbl[2], linetbl[1]));
+                        else if (linetbl[0].equalsIgnoreCase("Banners"))
+                            menuBanniere.add(new Commenditaire(params[1] + "/" + linetbl[0] + "/" + linetbl[2], linetbl[1]));
                     } while (fSc.hasNext());
                     fSc.close();
                     iDb.initCommenditaires(menuPage.size(), menuBanniere.size());
                 } catch (FileNotFoundException fnfe) {
                     fnfe.printStackTrace();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

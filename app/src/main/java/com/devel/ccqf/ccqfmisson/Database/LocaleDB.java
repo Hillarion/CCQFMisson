@@ -225,11 +225,84 @@ public class LocaleDB {
     }
 
     public void initCommenditaires(int maxPages, int maxBanners) {
+        if(db != null) {
+            ContentValues values = new ContentValues();
+            values.put("maxPages", maxPages);
+            values.put("Pages", "0");
+            values.put("maxBanners", maxBanners);
+            values.put("Banners", "0");
+            Cursor cursor = db.rawQuery("SELECT * fROM Commenditaires", null);
+            cursor.moveToFirst();
+            if(cursor.getCount() != 0)
+                db.update("Commenditaires", values, null, null);
+            else
+                db.insert("Commenditaires", null, values);
+        }
+    }
+
+    public int getMaxPageCommenditaire(){
+        int mxpg = 0;
+        if(db != null) {
+            Cursor cursor = db.rawQuery("SELECT maxPages FROM Commenditaires", null);
+            cursor.moveToFirst();
+            if(cursor.getCount() != 0){
+                mxpg = cursor.getInt(0);
+            }
+        }
+        return mxpg;
+    }
+
+    public int getCurrentPageCommenditaire(){
+        int pg = 0;
+        if(db != null) {
+            Cursor cursor = db.rawQuery("SELECT Pages FROM Commenditaires", null);
+            cursor.moveToFirst();
+            if(cursor.getCount() != 0){
+                pg = cursor.getInt(0);
+            }
+        }
+        return pg;
+    }
+
+    public void setNextPageCommenditair(int val){
         ContentValues values = new ContentValues();
-        values.put("maxPages", maxPages);
-        values.put("Pages", "0");
-        values.put("maxBanners",maxBanners);
-        values.put("Banners","0");
-        db.update("Commenditaires", values, null, null);
+        if(db != null){
+            values.put("Pages", ""+val);
+            db.update("Commenditaires", values, null, null);
+
+        }
+    }
+
+    public int getMaxBannerCommenditaire(){
+        int mxpg = 0;
+        if(db != null) {
+            Cursor cursor = db.rawQuery("SELECT maxBanners FROM Commenditaires", null);
+            cursor.moveToFirst();
+            if(cursor.getCount() != 0){
+                mxpg = cursor.getInt(0);
+            }
+        }
+        return mxpg;
+    }
+
+    public int getCurrentBannerCommenditaire(){
+        int pg = 0;
+        if(db != null) {
+            Cursor cursor = db.rawQuery("SELECT Banners FROM Commenditaires", null);
+            cursor.moveToFirst();
+            if(cursor.getCount() != 0){
+                pg = cursor.getInt(0);
+            }
+        }
+        return pg;
+    }
+
+    public void setNextBannerCommenditair(int val){
+        ContentValues values = new ContentValues();
+        if(db != null){
+            values.put("Banners", ""+val);
+            db.update("Commenditaires", values, null, null);
+
+        }
     }
 }

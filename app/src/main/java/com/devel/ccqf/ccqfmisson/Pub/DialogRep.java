@@ -18,7 +18,7 @@ import com.devel.ccqf.ccqfmisson.R;
 /**
  * Created by jo on 5/31/16.
  */
-public class DialogRep extends Dialog implements DialogInterface.OnClickListener {
+public class DialogRep extends Dialog /*implements DialogInterface.OnClickListener*/ {
     private Commenditaire com = null;
     private LinearLayout pubLayout;
 
@@ -34,6 +34,20 @@ public class DialogRep extends Dialog implements DialogInterface.OnClickListener
             @Override
             public void onClick(View v) {
                 dismiss();
+            }
+        });
+        pubLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.print("CCQF DialofRep OnWindowClick() com = "+ com + "\n\n");
+                System.out.flush();
+                dismiss();
+                if(com != null){
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(com.getUrl()));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    getContext().startActivity(intent);
+                }
             }
         });
 
@@ -61,16 +75,17 @@ public class DialogRep extends Dialog implements DialogInterface.OnClickListener
     public void setPub(Commenditaire pub){
         com = pub;
 
-//        pubLayout.setBackground(pub.getFilePath());
+        pubLayout.setBackground(Drawable.createFromPath(pub.getFilePath()));
     }
-
+/*
     @Override
     public void onClick(DialogInterface dialog, int which) {
+        System.out.print("CCQF DialofRep "+"");
         if(com != null){
-/*            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.(com.getUrl()), "application/html");;
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(com.getUrl()));
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            getContext().startActivity(intent);*/
+            getContext().startActivity(intent);
         }
-    }
+    }*/
 }

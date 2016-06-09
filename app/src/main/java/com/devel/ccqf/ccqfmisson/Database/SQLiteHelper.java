@@ -37,7 +37,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
               "lastSurvey INTEGER)";
         db.execSQL(sql);
 
-        sql = "CREATE TABLE IF NOT EXIST Commenditaires ("+
+        sql = "CREATE TABLE IF NOT EXISTS Commenditaires ("+
                 "maxPages INTEGER,"+
                 "Pages INTEGER,"+
                 "maxBanners INTEGER,"+

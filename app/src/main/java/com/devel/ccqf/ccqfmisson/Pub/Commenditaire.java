@@ -27,4 +27,8 @@ public class Commenditaire {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    public String toString(){
+        return filePath + ", " + url;
+    }
 }

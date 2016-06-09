@@ -15,6 +15,7 @@ import com.devel.ccqf.ccqfmisson.Adapters.CCQFCategorieAdapter;
 import com.devel.ccqf.ccqfmisson.Adapters.CCQFDocumentAdapter;
 import com.devel.ccqf.ccqfmisson.Database.InterfaceDB;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyYesNo;
+import com.devel.ccqf.ccqfmisson.Utilitairies.FileDownLoader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -62,46 +63,15 @@ public class DocDetails extends CCQFBaseActivity {
         private static final int  MEGABYTE = 1024 * 1024;
         private boolean uploadFile = false;
 
-
         @Override
         protected File doInBackground(CCQFDocument... params) {
-            long date = 0;
-            File fileMenu = null;
             InterfaceDB iDb = new InterfaceDB(DocDetails.this);
 
-
+            FileDownLoader fd = new FileDownLoader(params[0].getNomFichier(), params[0].getFilePath(), params[0].getBaseURL());
             if (iDb.isNetAccessible()) {
                 try {
-                    URL url = new URL(params[0].getFullURL());
-
-                    fileMenu = new File(params[0].getFilePath(), params[0].getNomFichier());
-                    if (fileMenu.exists()) {
-                        HttpURLConnection.setFollowRedirects(false);
-                        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                        date = con.getLastModified();
-                        long dateLocal = fileMenu.lastModified();
-                        if (dateLocal < date)
-                            uploadFile = true;
-                    } else
-                        uploadFile = true;
-
-                    if (uploadFile) {
-                        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                        urlConnection.setRequestMethod("GET");
-                        urlConnection.setDoOutput(true);
-                        urlConnection.connect();
-                        InputStream inputStream = urlConnection.getInputStream();
-                        fileMenu.createNewFile();
-                        FileOutputStream fileOutputStream = new FileOutputStream(fileMenu);
-                        int totalSize = urlConnection.getContentLength();
-                        byte[] buffer = new byte[totalSize + 1/*MEGABYTE*/];
-                        int bufferLength = 0;
-                        while ((bufferLength = inputStream.read(buffer)) > 0) {
-                            fileOutputStream.write(buffer, 0, bufferLength);
-                        }
-                        fileOutputStream.close();
-                    }
-                } catch (FileNotFoundException fnfe) {
+                    if (!fd.isUptodate())
+                        fd.getFileFromServer();
 
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
@@ -109,7 +79,8 @@ public class DocDetails extends CCQFBaseActivity {
                     e.printStackTrace();
                 }
             }
-            return fileMenu;
+
+            return fd.getFileHandle();
         }
 
         @Override

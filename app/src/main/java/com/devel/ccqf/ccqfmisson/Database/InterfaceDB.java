@@ -271,4 +271,15 @@ public class InterfaceDB {
             lDb.initCommenditaires(maxPages, maxBanners);
     }
 
+    public int getCurrentPageIndex(){
+        int idx = -1;
+        int mxIdx = 0 ;
+        if(lDb != null){
+            mxIdx = lDb.getMaxPageCommenditaire();
+            idx = lDb.getCurrentPageCommenditaire();
+            lDb.setNextPageCommenditair((++idx) % mxIdx);
+        }
+        return idx;
+    }
+
 }

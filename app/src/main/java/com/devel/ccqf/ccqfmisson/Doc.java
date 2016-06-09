@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.devel.ccqf.ccqfmisson.Adapters.CCQFCategorieAdapter;
 import com.devel.ccqf.ccqfmisson.Database.InterfaceDB;
+import com.devel.ccqf.ccqfmisson.Utilitairies.FileDownLoader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -69,42 +70,24 @@ public class Doc extends CCQFBaseActivity {
             long date = 0;
             InterfaceDB iDb = new InterfaceDB(Doc.this);
 
+            FileDownLoader fd = new FileDownLoader(params[2], params[1], params[0]);
+
             if (iDb.isNetAccessible()) {
                 try {
-                    URL url = new URL(params[0] + "/" + params[2]);
+                    if (!fd.isUptodate())
+                        fd.getFileFromServer();
 
-                    File docBaseDir = new File(params[1]);
-                    if (!docBaseDir.exists())
-                        docBaseDir.mkdirs();
-                    File fileMenu = new File(params[1], params[2]);
-                    if (fileMenu.exists()) {
-                        HttpURLConnection.setFollowRedirects(false);
-                        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                        date = con.getLastModified();
-                        long dateLocal = fileMenu.lastModified();
-                        if (dateLocal < date)
-                            uploadFile = true;
-                    } else
-                        uploadFile = true;
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
-                    if (uploadFile) {
-                        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                        urlConnection.setRequestMethod("GET");
-                        urlConnection.setDoOutput(true);
-                        urlConnection.connect();
-                        InputStream inputStream = urlConnection.getInputStream();
-                        fileMenu.createNewFile();
-                        FileOutputStream fileOutputStream = new FileOutputStream(fileMenu);
-                        int totalSize = urlConnection.getContentLength();
-                        byte[] buffer = new byte[Math.min(totalSize + 1, MEGABYTE)];
-                        int bufferLength = 0;
-                        while ((bufferLength = inputStream.read(buffer)) > 0) {
-                            fileOutputStream.write(buffer, 0, bufferLength);
-                        }
-                        fileOutputStream.close();
-                    }
-
-                    Scanner fSc = new Scanner(fileMenu);
+            File file = fd.getFileHandle();
+            if (file.exists()) {
+                try {
+                    Scanner fSc = new Scanner(fd.getFileHandle());
                     fSc.useDelimiter("\n");
                     CCQFCategorie cat = null;
                     menu = new ArrayList<>();
@@ -126,8 +109,6 @@ public class Doc extends CCQFBaseActivity {
                     fSc.close();
                 } catch (FileNotFoundException fnfe) {
                     fnfe.printStackTrace();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
