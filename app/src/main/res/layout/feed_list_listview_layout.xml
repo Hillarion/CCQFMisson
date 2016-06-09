@@ -30,6 +30,8 @@
 </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:backgroundTint="@color/colorAccent"
     android:id="@+id/fabNewFeed"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"

@@ -38,10 +38,11 @@ public class FeedListActivity extends CCQFBaseActivity {
         super.onCreate(savedInstanceState);
         cHeadList = null;
         setContentView(R.layout.feed_list_listview_layout);
+        ArrayList<ConversationHead> cHeadList = null;
         lstFeedList = (ListView)findViewById(R.id.lstFeedList);
 
         new GetMessageAsyncTask().execute();
-/*        InterfaceDB iDb = new InterfaceDB(this);
+        InterfaceDB iDb = new InterfaceDB(this);
         if(iDb != null) {
             List<Integer>  convList = iDb.getMessageThreadList();
             if(convList != null){
@@ -49,17 +50,15 @@ public class FeedListActivity extends CCQFBaseActivity {
                 Iterator<Integer> iter = convList.iterator();
                 while(iter.hasNext()){
                     ConversationHead tmpHead = iDb.getMessageHead(iter.next().intValue());
-                    System.out.print("CCQF FeedListActivity cHead = " + tmpHead + "\n\n");
-                    System.out.flush();
                     if(tmpHead != null)
                         cHeadList.add(tmpHead);
                 }
             }
         }
-
-        TheadListAdapter tlAdapter = new TheadListAdapter(this, cHeadList);
+/*        TheadListAdapter tlAdapter = new TheadListAdapter(this, cHeadList);
         lstFeedList.setAdapter(tlAdapter);
-*/
+        lstFeedList.setVisibility(View.VISIBLE);*/
+
         FloatingActionButton fabNewFeed = (FloatingActionButton) findViewById(R.id.fabNewFeed);
         fabNewFeed.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,8 +103,6 @@ public class FeedListActivity extends CCQFBaseActivity {
                     }
                 }
                 d.hide();
-                System.out.print("CCQF dialogSelectUsers userList = " + userList + "\n\n");
-                System.out.flush();
                 if(selectedIndex>0) {
                     Intent i = new Intent(FeedListActivity.this, Feed.class);
                     Bundle donnees = new Bundle();
@@ -127,27 +124,15 @@ public class FeedListActivity extends CCQFBaseActivity {
             InterfaceDB iDb = new InterfaceDB(FeedListActivity.this);
             if(iDb != null){
                 int userID = iDb.getCurrentUserID();
-                System.out.print("CCQF FeedListActivity GetMessageAsyncTask doInBackground user Id = " + userID + " \n\n");
-                System.out.flush();
-                System.out.print("CCQF FeedListActivity GetMessageAsyncTask doInBackground retrieving messages... \n\n");
-                System.out.flush();
                 List<MessagePacket> lMsg =   iDb.readMessages(userID);
-                if(lMsg != null)
-                    System.out.print("CCQF FeedListActivity GetMessageAsyncTask doInBackground found "+ lMsg.size() + "  messages... \n\n");
-                else
-                    System.out.print("CCQF FeedListActivity GetMessageAsyncTask doInBackground no message found \n\n");
 
                 System.out.flush();
                 List<Integer> tList = iDb.getMessageThreadList();
                 if(tList != null) {
-                    System.out.print("CCQF FeedListActivity GetMessageAsyncTask doInBackground tList = " + tList + "\n\n");
-                    System.out.flush();
                     cList = new ArrayList<ConversationHead>();
                     Iterator<Integer> iter = tList.iterator();
                     while (iter.hasNext()) {
                         Integer i = iter.next();
-                        System.out.print("CCQF FeedListActivity GetMessageAsyncTask doInBackground retrieving conversation head for " + i + "\n\n");
-                        System.out.flush();
                         ConversationHead ch = iDb.getMessageHead(i);
                         if(ch != null)
                             cList.add(ch);
@@ -160,10 +145,9 @@ public class FeedListActivity extends CCQFBaseActivity {
 
         @Override
         protected void onPostExecute(ArrayList<ConversationHead> cList) {
-            System.out.print("CCQF FeedListActivity GetMessageAsyncTask onPostExecute processing list  " + cList + "\n\n");
-            System.out.flush();
             cHeadList = cList;
-            lstFeedList.setAdapter(new TheadListAdapter(FeedListActivity.this, cList));
+            TheadListAdapter tlAdapter = new TheadListAdapter(FeedListActivity.this, cHeadList);
+            lstFeedList.setAdapter(tlAdapter);
         }
     }
     // retrouve la liste des usager sur le réseau de la Mission
