@@ -168,7 +168,7 @@ public class RemoteDB {
             String status = parser.getStatus();
             if(!status.isEmpty()){
                 if(status.equalsIgnoreCase("Success")){
-                    JSONArray jsonArray = parser.getList("B2BList");//<-- ?
+                    JSONArray jsonArray = parser.getList("B2BList");
                     if(jsonArray != null){
                         alEvent = new ArrayList<Event>();
                         for(int i = 0; i<jsonArray.length();i++){
@@ -191,7 +191,6 @@ public class RemoteDB {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
                         }
                     }
                 }

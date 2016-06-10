@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.devel.ccqf.ccqfmisson.Adapters.CustomB2BAdapter;
 import com.devel.ccqf.ccqfmisson.Adapters.CustomEventAdapter;
 import com.devel.ccqf.ccqfmisson.AgendaObjects.Event;
 import com.devel.ccqf.ccqfmisson.Database.InterfaceDB;
@@ -19,7 +20,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class MonAgenda extends CCQFBaseActivity {
+public class MonAgenda extends CCQFBaseActivity { //B2B
     private ListView listViewEvents;
     private ArrayList<Event> events;
 
@@ -34,39 +35,38 @@ public class MonAgenda extends CCQFBaseActivity {
 
 
     }
-        //get current user
-    public void setListViewEvents(String user) {
-        CustomEventAdapter adapter = new CustomEventAdapter(this, getEventListFromDb(user));
-       /* InterfaceDB iDb = new InterfaceDB(this);
-        CustomEventAdapter adapter = new CustomEventAdapter(this, iDb.getEventList(user));*/
-        listViewEvents.setAdapter(adapter);
-    }
-    public ArrayList<Event> dummyList(){
-        ArrayList<Event> n = new ArrayList<>();
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-        Date d = Calendar.getInstance().getTime();
-        String date = df.format(d);
 
-        for(int i = 0 ; i < 10 ; i++ ){
-            n.add(new Event("Title", date));
-        }
-        return n;
-    }
-
-    public ArrayList<Event> getEventListFromDb(String currentUser){
-        ArrayList<Event>alEventRaw = new ArrayList<>();
-        InterfaceDB iDb = new InterfaceDB(MonAgenda.this);
-        alEventRaw = iDb.getEventList(currentUser);
-
+    public ArrayList<Event> filterEventListFromDb(ArrayList<Event> alEventRaw){
 
         ArrayList<Event> alEvent = new ArrayList<>();
-        for(int i = 0;i<alEventRaw.size();i++){
-           Event eTemp =  alEventRaw.get(i);
-           String title =  eTemp.getNom();
-           String hDebut = eTemp.getDTStart();
-           String hFin = eTemp.getDTEnd();
-           String heure = ""+hDebut+" "+hFin;
-           alEvent.add(new Event(title, heure));
+        for(int i = 0;i < alEventRaw.size();i++){
+            Event eTemp =  alEventRaw.get(i);
+            String nom =  eTemp.getNom();
+            String hDebut = eTemp.getDTStart();
+            String hFin = eTemp.getDTEnd();
+            String compagnie = eTemp.getCompagnie();
+            String poste = eTemp.getPoste();
+            String telephone = eTemp.getTelephone();
+            String email = eTemp.getEmail();
+            String adresse = eTemp.getAdresse();
+            boolean ext = eTemp.isAutreBatiment();
+
+            String heure = ""+hDebut+" "+hFin;
+            String title = nom+", "+poste+", "+compagnie;
+            String detail = telephone+", "+email;
+            String location = ""+adresse+""+ext;
+
+            /*if(ext){
+                location = adresse+" ";
+            }
+            else if(!ext){
+                location = adresse;
+            }*/
+
+
+
+
+            alEvent.add(new Event(title, heure, detail, location));
         }
         return alEvent;
     }
@@ -79,17 +79,20 @@ public class MonAgenda extends CCQFBaseActivity {
             InterfaceDB iDb = new InterfaceDB(MonAgenda.this);
             if(iDb != null)
                 alEventRaw = iDb.getEventList(params[0]);
+                ArrayList<Event> alEvent = filterEventListFromDb(alEventRaw);
 
             System.out.print("CCQF MonAgenda getEventListAsyncTask doInBackground ("+params[0] + ") alEventRaw = " + alEventRaw + "\n\n");
             System.out.flush();
-            return alEventRaw;
+            return alEvent;
         }
         @Override
         protected void onPostExecute(ArrayList<Event> eList){
             events = eList;
-            CustomEventAdapter adapter = new CustomEventAdapter(MonAgenda.this, eList);
+            CustomB2BAdapter adapter = new CustomB2BAdapter(MonAgenda.this, eList);
             listViewEvents.setAdapter(adapter);
         }
     }
+
+
 
 }

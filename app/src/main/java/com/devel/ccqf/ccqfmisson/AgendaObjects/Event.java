@@ -23,6 +23,13 @@ public class Event {
         this.DTEnd = timeEnd;
     }
 
+    public Event( String title, String timeStart, String timeEnd, String compagnie) { //constructeur pour liste b2b
+        this.nom = title;
+        this.DTStart = timeStart;
+        this.DTEnd = timeEnd;
+        this.compagnie = compagnie;
+    }
+
     public Event( String title, String timeStart) {
         this.nom = title;
         this.DTStart = timeStart;

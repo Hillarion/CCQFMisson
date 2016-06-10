@@ -7,18 +7,41 @@
     android:padding="5dp" >
 
     <TextView
+        android:id="@+id/txtListEventTime"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorCCQFOrange"
+        android:textSize="24sp"
+        android:paddingBottom="10dp"/>
+
+    <TextView
         android:id="@+id/txtListEventTitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textColor="#030303"
         android:textSize="20sp"
-        android:textStyle="bold" />
-
+        android:textStyle="bold"
+        android:paddingBottom="10dp"
+        />
     <TextView
-        android:id="@+id/txtListEventTime"
+        android:id="@+id/txtListEventDetails"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorCCQFOrange"
-        android:textSize="18sp" />
+        android:textColor="#030303"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:paddingBottom="10dp"
+        />
+    <TextView
+        android:id="@+id/txtListEventAdress"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#030303"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:paddingBottom="10dp"
+        />
+
+
 
 </LinearLayout>
