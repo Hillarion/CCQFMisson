@@ -2,6 +2,7 @@ package com.devel.ccqf.ccqfmisson;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -32,6 +33,8 @@ public class Program extends CCQFBaseActivity {
     private ListView listViewEvents;
     private ArrayList<Event> events;
     private CustomB2BAdapter adapter;
+    final static String dirUrl = "http://thierrystpierre.ddns.net:81/CCQFMission/Programme";
+    private static String baseApplicationFilesPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,13 @@ public class Program extends CCQFBaseActivity {
         InputStream inputStream = getResources().openRawResource(R.raw.program);
         listViewEvents = (ListView) findViewById(R.id.listViewEvents);
         //setListViewEvents(temp);
+        baseApplicationFilesPath = "" + Environment.getDataDirectory().getPath() + "/data/" +
+                getPackageName() + "/Files/Programme";
+        Toast.makeText(Program.this, ""+baseApplicationFilesPath, Toast.LENGTH_LONG).show();
+        new GetProgramAsyncTask().execute(dirUrl,baseApplicationFilesPath, "program.csv");
+
+        Toast.makeText(Program.this, ""+events, Toast.LENGTH_SHORT).show();
+
         listViewEvents.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -85,6 +95,12 @@ public class Program extends CCQFBaseActivity {
                     e.printStackTrace();
                 }
             }
+            File f = new File(baseApplicationFilesPath);
+
+            if(!f.exists()){
+                f.mkdirs();
+            }
+
             File file = fd.getFileHandle();
             if(file.exists()){
                 try {
@@ -97,8 +113,10 @@ public class Program extends CCQFBaseActivity {
                         String[] linetbl = line.split(";");
                         e = new Event(linetbl[0], linetbl[1], linetbl[2], linetbl[3]);
                         events.add(e);
+                      //  Toast.makeText(Program.this, "Event : "+e, Toast.LENGTH_SHORT).show();
                     }while(scanner.hasNext());
                     scanner.close();
+
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -109,7 +127,7 @@ public class Program extends CCQFBaseActivity {
         protected void onPostExecute(ArrayList<Event> liste){
             super.onPostExecute(liste);
             adapter = new CustomB2BAdapter(Program.this,liste);
-            listViewEvents.setAdapter(adapter);
+            //listViewEvents.setAdapter(adapter);
 
         }
     }
