@@ -59,6 +59,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:background="@drawable/dummy_banner"/>
+        android:background="@drawable/dummy_banner"
+        android:padding="0dp"
+        android:layout_margin="0dp" />
 
 </RelativeLayout>

@@ -3,11 +3,11 @@ package com.devel.ccqf.ccqfmisson.Pub;
 /**
  * Created by thierry on 09/06/16.
  */
-public class Commenditaire {
+public class Commanditaire {
     String filePath;
     String url;
 
-    public Commenditaire(String file, String url){
+    public Commanditaire(String file, String url){
         filePath = file;
         this.url = url;
     }

@@ -84,7 +84,7 @@ public class LocaleDB {
             Cursor cursor;
             cursor = db.rawQuery("SELECT * FROM Utilisateur", null);
             cursor.moveToFirst();
-            if( cursor.getCount() != 0){
+            if( cursor.getCount() > 0){
                 int user_id = cursor.getInt(0);
                 String prenom = cursor.getString(1);
                 String nom = cursor.getString(2);
@@ -112,7 +112,7 @@ public class LocaleDB {
             Cursor cursor;
             cursor = db.rawQuery("SELECT privilege FROM Utilisateur WHERE user_id = ?" , new String[]{"" + UserId});
             cursor.moveToFirst();
-            if(cursor.getCount() != 0){
+            if(cursor.getCount() > 0){
                 privilege = cursor.getInt(0);
             }
         }
@@ -136,7 +136,7 @@ public class LocaleDB {
             Cursor cursor;
             cursor = db.rawQuery("SELECT lastSurvey FROM Utilisateur WHERE user_id = ?", new String[]{"" + UserId});
             cursor.moveToFirst();
-            if (cursor.getCount() != 0) {
+            if (cursor.getCount() > 0) {
                 sIdx = cursor.getInt(0);
             }
         }
@@ -157,7 +157,7 @@ public class LocaleDB {
             Cursor cursor;
             cursor = db.rawQuery("SELECT lastMsg FROM Utilisateur WHERE user_id = ?", new String[]{"" + UserId});
             cursor.moveToFirst();
-            if (cursor.getCount() != 0) {
+            if (cursor.getCount() > 0) {
                 try {
                     mIdx = cursor.getInt(0);
                 }catch(CursorIndexOutOfBoundsException cioobe) {//entry does not exist
@@ -201,7 +201,7 @@ public class LocaleDB {
         if(db != null){
             Cursor cursor = db.rawQuery("SELECT source, timestamp, message FROM Messages WHERE conversationID = ? ORDER BY id_msg DESC LIMIT 1", new String[] {""+conversationID});
             cursor.moveToFirst();
-            if(cursor.getCount() != 0){
+            if(cursor.getCount() > 0){
                 cHead = new ConversationHead(
                         ""+conversationID,
                         cursor.getString(0),
@@ -217,91 +217,97 @@ public class LocaleDB {
         if(db != null){
             Cursor cursor = db.rawQuery("Select user_id from Utilisateur", null);
             cursor.moveToFirst();
-            if(cursor.getCount() != 0){
+            if(cursor.getCount() > 0){
                 user = cursor.getInt(0);
             }
         }
         return user;
     }
 
-    public void initCommenditaires(int maxPages, int maxBanners) {
+    public void initCommanditaires(int maxPages, int maxBanners) {
         if(db != null) {
             ContentValues values = new ContentValues();
             values.put("maxPages", maxPages);
             values.put("Pages", "0");
             values.put("maxBanners", maxBanners);
             values.put("Banners", "0");
-            Cursor cursor = db.rawQuery("SELECT * fROM Commenditaires", null);
+            Cursor cursor = db.rawQuery("SELECT * FROM Commanditaires", null);
             cursor.moveToFirst();
-            if(cursor.getCount() != 0)
-                db.update("Commenditaires", values, null, null);
+            if(cursor.getCount() > 0)
+                db.update("Commanditaires", values, null, null);
             else
-                db.insert("Commenditaires", null, values);
+                db.insert("Commanditaires", null, values);
         }
     }
 
-    public int getMaxPageCommenditaire(){
+    public int getMaxPageCommanditaire(){
         int mxpg = 0;
         if(db != null) {
-            Cursor cursor = db.rawQuery("SELECT maxPages FROM Commenditaires", null);
+            Cursor cursor = db.rawQuery("SELECT maxPages FROM Commanditaires", null);
             cursor.moveToFirst();
-            if(cursor.getCount() != 0){
+            if(cursor.getCount() > 0){
                 mxpg = cursor.getInt(0);
             }
         }
         return mxpg;
     }
 
-    public int getCurrentPageCommenditaire(){
+    public int getCurrentPageCommanditaire(){
         int pg = 0;
         if(db != null) {
-            Cursor cursor = db.rawQuery("SELECT Pages FROM Commenditaires", null);
+            Cursor cursor = db.rawQuery("SELECT Pages FROM Commanditaires", null);
             cursor.moveToFirst();
-            if(cursor.getCount() != 0){
+            if(cursor.getCount() > 0){
                 pg = cursor.getInt(0);
             }
         }
         return pg;
     }
 
-    public void setNextPageCommenditair(int val){
+    public void setNextPageCommanditaire(int val){
         ContentValues values = new ContentValues();
         if(db != null){
             values.put("Pages", ""+val);
-            db.update("Commenditaires", values, null, null);
+            System.out.print("CCQF LocaleDB setNextPageCommanditaire values : "+ values + "\n\n");
+            System.out.flush();
+            db.update("Commanditaires", values, null, null);
 
         }
     }
 
-    public int getMaxBannerCommenditaire(){
+    public int getMaxBannerCommanditaire(){
         int mxpg = 0;
         if(db != null) {
-            Cursor cursor = db.rawQuery("SELECT maxBanners FROM Commenditaires", null);
+            Cursor cursor = db.rawQuery("SELECT maxBanners FROM Commanditaires", null);
             cursor.moveToFirst();
-            if(cursor.getCount() != 0){
+            if(cursor.getCount() > 0){
                 mxpg = cursor.getInt(0);
             }
         }
         return mxpg;
     }
 
-    public int getCurrentBannerCommenditaire(){
+    public int getCurrentBannerCommanditaire(){
         int pg = 0;
         if(db != null) {
-            Cursor cursor = db.rawQuery("SELECT Banners FROM Commenditaires", null);
+            Cursor cursor = db.rawQuery("SELECT Banners FROM Commanditaires", null);
             cursor.moveToFirst();
-            if(cursor.getCount() != 0){
+            System.out.print("CCQF LocaleDB getCurrentBannerCommanditaire cursor n : "+ cursor.getColumnCount() + "\n\n");
+            System.out.flush();
+            if(cursor.getCount() > 0){
                 pg = cursor.getInt(0);
             }
         }
         return pg;
     }
 
-    public void setNextBannerCommenditair(int val){
+    public void setNextBannerCommanditaire(int val){
         ContentValues values = new ContentValues();
         if(db != null){
             values.put("Banners", ""+val);
-            db.update("Commenditaires", values, null, null);
+            System.out.print("CCQF LocaleDB setNextBannerCommanditaire values : "+ values + "\n\n");
+            System.out.flush();
+            db.update("Commanditaires", values, null, null);
 
         }
     }

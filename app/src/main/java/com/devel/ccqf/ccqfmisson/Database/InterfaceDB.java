@@ -266,18 +266,47 @@ public class InterfaceDB {
         return userCount;
     }
 
-    public void initCommenditaires(int maxPages, int maxBanners){
+    public void initCommanditaires(int maxPages, int maxBanners){
         if(lDb != null)
-            lDb.initCommenditaires(maxPages, maxBanners);
+            lDb.initCommanditaires(maxPages, maxBanners);
     }
 
     public int getCurrentPageIndex(){
         int idx = -1;
         int mxIdx = 0 ;
         if(lDb != null){
-            mxIdx = lDb.getMaxPageCommenditaire();
-            idx = lDb.getCurrentPageCommenditaire();
-            lDb.setNextPageCommenditair((++idx) % mxIdx);
+            mxIdx = lDb.getMaxPageCommanditaire();
+            if(mxIdx >= 0) {
+                System.out.print("CCQF interfaceDB getCurrentPageIndex reading maxIdx : " + mxIdx + "\n\n");
+                System.out.print("CCQF interfaceDB getCurrentPageIndex reading idx : " + idx + "\n\n");
+                System.out.flush();
+                idx = lDb.getCurrentPageCommanditaire();
+                if (++idx >= mxIdx)
+                    idx = 0;
+                System.out.print("CCQF interfaceDB getCurrentPageIndex setting idx : " + idx + "\n\n");
+                System.out.flush();
+                lDb.setNextPageCommanditaire(idx);
+            }
+        }
+        return idx;
+    }
+
+    public int getCurrentBannerIndex(){
+        int idx = -1;
+        int mxIdx = 0 ;
+        if(lDb != null){
+            mxIdx = lDb.getMaxBannerCommanditaire();
+            if(mxIdx >= 0) {
+                idx = lDb.getCurrentBannerCommanditaire();
+                System.out.print("CCQF interfaceDB getCurrentBannerIndex reading maxIdx : " + mxIdx + "\n\n");
+                System.out.print("CCQF interfaceDB getCurrentBannerIndex reading idx : " + idx + "\n\n");
+                System.out.flush();
+                if (++idx >= mxIdx)
+                    idx = 0;
+                System.out.print("CCQF interfaceDB getCurrentBannerIndex setting idx : " + idx + "\n\n");
+                System.out.flush();
+                lDb.setNextBannerCommanditaire(idx);
+            }
         }
         return idx;
     }

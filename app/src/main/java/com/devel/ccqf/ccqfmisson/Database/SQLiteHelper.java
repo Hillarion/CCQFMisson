@@ -37,7 +37,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
               "lastSurvey INTEGER)";
         db.execSQL(sql);
 
-        sql = "CREATE TABLE IF NOT EXISTS Commenditaires ("+
+        sql = "CREATE TABLE IF NOT EXISTS Commanditaires ("+
                 "maxPages INTEGER,"+
                 "Pages INTEGER,"+
                 "maxBanners INTEGER,"+
@@ -49,7 +49,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS Messages");
         db.execSQL("DROP TABLE IF EXISTS Utilisateur");
-        db.execSQL("DROP TABLE IF EXISTS Commenditaires");
+        db.execSQL("DROP TABLE IF EXISTS Commanditaires");
         onCreate(db);
     }
 
