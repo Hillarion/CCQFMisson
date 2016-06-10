@@ -3,28 +3,34 @@ package com.devel.ccqf.ccqfmisson;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.StrictMode;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ActionMenuView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.devel.ccqf.ccqfmisson.Database.InterfaceDB;
 import com.devel.ccqf.ccqfmisson.Database.LocaleDB;
 import com.devel.ccqf.ccqfmisson.LoginObjects.Login;
+import com.devel.ccqf.ccqfmisson.Pub.Commanditaire;
 import com.devel.ccqf.ccqfmisson.Pub.DialogRep;
+import com.devel.ccqf.ccqfmisson.Utilitairies.FileDownLoader;
 import com.devel.ccqf.ccqfmisson.Utilitairies.FontsOverride;
 import com.devel.ccqf.ccqfmisson.Utilitairies.Verify;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class MainActivity extends CCQFBaseActivity {
     private Button btnDoc;
@@ -32,31 +38,32 @@ public class MainActivity extends CCQFBaseActivity {
     private Button btnAgenda;
     private Button btnFeed;
     private InterfaceDB iDb;
+    private ImageButton ibBanner;
+    final static String dirUrl = "http://thierrystpierre.ddns.net:81/CCQFMission/Commanditaires";
+    private static String baseApplicationFilesPath;
+    private ArrayList<Commanditaire> menuPage =  null;
+    private ArrayList<Commanditaire> menuBanniere =  null;
+    private Commanditaire currentBanner = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         iDb = new InterfaceDB(MainActivity.this);
+        baseApplicationFilesPath = "" + Environment.getExternalStorageDirectory() + "/" +
+                getPackageName() + "/Commanditaires";
+
+        String [] params = {dirUrl, baseApplicationFilesPath, "menu.csv"};
+        int user = -1;
+        InterfaceDB iDb = new InterfaceDB(MainActivity.this);
+        new getCommanditairesAsyncTask().execute(params);
 
         FontsOverride.setDefaultFont(MainActivity.this, "MONOSPACE", "fonts/Myriad Web Bold.otf");//<- changer la font ici
-        DialogRep dr = new DialogRep();
+        DialogRep dr = new DialogRep(this);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-int user = -1;
-        dr.dialogPub(MainActivity.this);
-        InterfaceDB iDb = new InterfaceDB(MainActivity.this);
-        Toast.makeText(MainActivity.this, ""+ iDb.isUserEmpty(), Toast.LENGTH_SHORT).show();
-        if(iDb.isUserEmpty() == 0){
-            dialogLogin();
-        }
-        else
-            user = iDb.getCurrentUserID();
-
-        System.out.print("CCQF MainActivity OnCreate id=" + user + " \n\n");
-        System.out.flush();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +73,18 @@ int user = -1;
             }
         });
 
+        ibBanner = (ImageButton)findViewById(R.id.imageButton);
+        ibBanner.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if(currentBanner != null) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(currentBanner.getUrl()));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    startActivity(intent);
+                }
+            }
+        });
         btnAgenda = (Button)findViewById(R.id.myAgendaActivityBtn);
         btnAgenda.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,10 +120,26 @@ int user = -1;
                 startActivity(i);
             }
         });
+        if(iDb.isUserEmpty() == 0){
+            dialogLogin();
+        }
+        else {
+            SystemClock.sleep(3000);
+            user = iDb.getCurrentUserID();
+            if(menuPage != null)
+                dr.setPub(menuPage.get(iDb.getCurrentPageIndex()));
+            dr.dialogPub(MainActivity.this);
+        }
 
-
-//        InterfaceDB iDb = new InterfaceDB(MainActivity.this);
-//        int userID = iDb.getCurrentUserID();
+        if(menuBanniere != null){
+            int idx = iDb.getCurrentBannerIndex();
+            System.out.print("CCQF MainActivity menuBanniere = " + menuBanniere + " (" +menuBanniere.size() +")\n\n");
+            System.out.flush();
+            if(idx >= 0) {
+                currentBanner = menuBanniere.get(idx);
+                ibBanner.setImageDrawable(Drawable.createFromPath(currentBanner.getFilePath()));
+            }
+        }
     }
 
     public void dialogLogin(){
@@ -172,15 +207,10 @@ int user = -1;
         @Override
         protected Login doInBackground(String... login) {
 
-            if(iDb != null){
-                int id = iDb.registerUser(login[0],  login[1], login[2]);
-                System.out.print("CCQF SendLoginAsyncTask user Id = " + id + "\n\n");
-                System.out.flush();
+            if(iDb != null)
+                iDb.registerUser(login[0],  login[1], login[2]);
 
-            }return null;
-        }
-        protected void onPostExecute(Void...unused){
-
+            return null;
         }
 
         @Override
@@ -196,10 +226,58 @@ int user = -1;
         }
     }
 
-    private class getCommenditairesAsyncTask extends AsyncTask<Void, Void, Void>{
+    private class getCommanditairesAsyncTask extends AsyncTask<String, Void, Void>{
+        private boolean uploadFile = false;
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected Void doInBackground(String... params) {
+            long date = 0;
+            boolean updatedFromServer = false;
+            FileDownLoader fd = new FileDownLoader(params[2], params[1], params[0]);
+            if (iDb.isNetAccessible()) {
+                try {
+                    if (!fd.isUptodate()) {
+                        fd.getFileFromServer();
+                        updatedFromServer = true;
+                    }
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            menuPage = new ArrayList<Commanditaire>();
+            menuBanniere = new ArrayList<Commanditaire>();
+
+            File file = fd.getFileHandle();
+            if (file.exists()) {
+                try {
+                    Scanner fSc = new Scanner(fd.getFileHandle());
+                    fSc.useDelimiter("\n");
+                    do {
+                        String line = fSc.next();
+                        String[] linetbl = line.split(";");
+
+                        FileDownLoader fgl = new FileDownLoader(linetbl[2], params[1] + "/" + linetbl[0], params[0] + "/" + linetbl[0]);
+                        if (!fgl.isUptodate())
+                            fgl.getFileFromServer();
+                        if (linetbl[0].equalsIgnoreCase("Pages"))
+                            menuPage.add(new Commanditaire(params[1] + "/" + linetbl[0] + "/" + linetbl[2], linetbl[1]));
+                        else if (linetbl[0].equalsIgnoreCase("Banners"))
+                            menuBanniere.add(new Commanditaire(params[1] + "/" + linetbl[0] + "/" + linetbl[2], linetbl[1]));
+                    } while (fSc.hasNext());
+                    fSc.close();
+//                    if(updatedFromServer)
+                        iDb.initCommanditaires(menuPage.size(), menuBanniere.size());
+                } catch (FileNotFoundException fnfe) {
+                    fnfe.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
             return null;
         }
     }

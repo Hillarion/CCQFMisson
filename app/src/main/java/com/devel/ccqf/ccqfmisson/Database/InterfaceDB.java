@@ -56,7 +56,7 @@ public class InterfaceDB {
         }
     }
 
-    private boolean isOnline() {
+    public boolean isOnline() {
         try {
             ConnectivityManager cm = (ConnectivityManager) parentContext.getSystemService(Context.CONNECTIVITY_SERVICE);
             return cm.getActiveNetworkInfo().isConnectedOrConnecting();
@@ -65,7 +65,11 @@ public class InterfaceDB {
         }
     }
 
-    private boolean testConnexionToServer() {
+    public boolean isNetAccessible(){
+        return !workLocaly;
+    }
+
+    public boolean testConnexionToServer() {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -260,6 +264,51 @@ public class InterfaceDB {
             userCount = lDb.isUserEmpty();
         }
         return userCount;
+    }
+
+    public void initCommanditaires(int maxPages, int maxBanners){
+        if(lDb != null)
+            lDb.initCommanditaires(maxPages, maxBanners);
+    }
+
+    public int getCurrentPageIndex(){
+        int idx = -1;
+        int mxIdx = 0 ;
+        if(lDb != null){
+            mxIdx = lDb.getMaxPageCommanditaire();
+            if(mxIdx >= 0) {
+                System.out.print("CCQF interfaceDB getCurrentPageIndex reading maxIdx : " + mxIdx + "\n\n");
+                System.out.print("CCQF interfaceDB getCurrentPageIndex reading idx : " + idx + "\n\n");
+                System.out.flush();
+                idx = lDb.getCurrentPageCommanditaire();
+                if (++idx >= mxIdx)
+                    idx = 0;
+                System.out.print("CCQF interfaceDB getCurrentPageIndex setting idx : " + idx + "\n\n");
+                System.out.flush();
+                lDb.setNextPageCommanditaire(idx);
+            }
+        }
+        return idx;
+    }
+
+    public int getCurrentBannerIndex(){
+        int idx = -1;
+        int mxIdx = 0 ;
+        if(lDb != null){
+            mxIdx = lDb.getMaxBannerCommanditaire();
+            if(mxIdx >= 0) {
+                idx = lDb.getCurrentBannerCommanditaire();
+                System.out.print("CCQF interfaceDB getCurrentBannerIndex reading maxIdx : " + mxIdx + "\n\n");
+                System.out.print("CCQF interfaceDB getCurrentBannerIndex reading idx : " + idx + "\n\n");
+                System.out.flush();
+                if (++idx >= mxIdx)
+                    idx = 0;
+                System.out.print("CCQF interfaceDB getCurrentBannerIndex setting idx : " + idx + "\n\n");
+                System.out.flush();
+                lDb.setNextBannerCommanditaire(idx);
+            }
+        }
+        return idx;
     }
 
 }
