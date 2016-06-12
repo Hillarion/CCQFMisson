@@ -9,12 +9,16 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.view.View;
+import android.view.animation.TranslateAnimation;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.devel.ccqf.ccqfmisson.Adapters.CustomContactListAdapter;
+import com.devel.ccqf.ccqfmisson.Adapters.CustomSurveyAdapter;
 import com.devel.ccqf.ccqfmisson.Adapters.TheadListAdapter;
 import com.devel.ccqf.ccqfmisson.Database.InterfaceDB;
 import com.devel.ccqf.ccqfmisson.ReseauSocial.ConversationHead;
@@ -28,11 +32,13 @@ import java.util.List;
  * Created by thierry on 26/05/16.
  */
 public class FeedListActivity extends CCQFBaseActivity {
-    public final static String USER_KEY = "com.devel.ccqf.ccqfmisson.FeedListActivity.USER_KEY";
+    public final static String USER_KEY_USERS = "com.devel.ccqf.ccqfmisson.FeedListActivity.USER_KEY_USERS";
+    public final static String USER_KEY_CONV = "com.devel.ccqf.ccqfmisson.FeedListActivity.USER_KEY_CONV";
     private ListView lstFeedList;
     private ListView lstUserList;
     private ArrayList<ConversationHead> cHeadList;
-    private InterfaceDB iDb;
+    private InterfaceDB iDb = null;
+    private TheadListAdapter tlAdapter = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,26 +47,28 @@ public class FeedListActivity extends CCQFBaseActivity {
         iDb = new InterfaceDB(this);
 
         setContentView(R.layout.feed_list_listview_layout);
-        ArrayList<ConversationHead> cHeadList = null;
         lstFeedList = (ListView)findViewById(R.id.lstFeedList);
-
+        System.out.print("CCQF FeedListActivity onCreate lstFeedList visible ? " + lstFeedList.getVisibility() + "\n\n");
+        System.out.flush();
+        lstFeedList.setVisibility(View.VISIBLE);
+        System.out.print("CCQF FeedListActivity onCreate lstFeedList visible ? " + lstFeedList.getVisibility() + "\n\n");
+        System.out.flush();
         new GetMessageAsyncTask().execute();
         InterfaceDB iDb = new InterfaceDB(this);
-        if(iDb != null) {
-            List<Integer>  convList = iDb.getMessageThreadList();
-            if(convList != null){
-                cHeadList = new ArrayList<ConversationHead>();
-                Iterator<Integer> iter = convList.iterator();
-                while(iter.hasNext()){
-                    ConversationHead tmpHead = iDb.getMessageHead(iter.next().intValue());
-                    if(tmpHead != null)
-                        cHeadList.add(tmpHead);
-                }
+
+        lstFeedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ConversationHead ch = cHeadList.get(position);
+                System.out.print("CCQF FeedListActivity lstFeedList.setOnItemClickListener convID="+ch.getConvID()+"\n\n");
+                System.out.flush();
+                Intent i = new Intent(FeedListActivity.this, Feed.class);
+                Bundle donnees = new Bundle();
+                donnees.putString(USER_KEY_CONV, ch.getConvID());
+                i.putExtras(donnees);
+                startActivity(i);
             }
-        }
-/*        TheadListAdapter tlAdapter = new TheadListAdapter(this, cHeadList);
-        lstFeedList.setAdapter(tlAdapter);
-        lstFeedList.setVisibility(View.VISIBLE);*/
+        });
 
         FloatingActionButton fabNewFeed = (FloatingActionButton) findViewById(R.id.fabNewFeed);
         fabNewFeed.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +117,7 @@ public class FeedListActivity extends CCQFBaseActivity {
                 if(selectedIndex>0) {
                     Intent i = new Intent(FeedListActivity.this, Feed.class);
                     Bundle donnees = new Bundle();
-                    donnees.putString(USER_KEY, userList);
+                    donnees.putString(USER_KEY_USERS, userList);
                     i.putExtras(donnees);
                     startActivity(i);
                 }
@@ -148,7 +156,7 @@ public class FeedListActivity extends CCQFBaseActivity {
         @Override
         protected void onPostExecute(ArrayList<ConversationHead> cList) {
             cHeadList = cList;
-            TheadListAdapter tlAdapter = new TheadListAdapter(FeedListActivity.this, cList);
+            tlAdapter = new TheadListAdapter(FeedListActivity.this, cList);
             lstFeedList.setAdapter(tlAdapter);
         }
     }
@@ -163,6 +171,7 @@ public class FeedListActivity extends CCQFBaseActivity {
             }
             return uList;
         }
+
         @Override
         protected void onPostExecute(ArrayList<Users> uList) {
             lstUserList.setAdapter(new CustomContactListAdapter(FeedListActivity.this, uList));
@@ -180,5 +189,4 @@ public class FeedListActivity extends CCQFBaseActivity {
             // progress. For example updating ProgessDialog
         }
     }
-
 }

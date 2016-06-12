@@ -198,6 +198,21 @@ public class InterfaceDB {
         return msgList;
     }
 
+    public MessagePacket getMessage(int MsgId){
+        MessagePacket msg = null;
+        if(lDb != null)
+            msg = lDb.getMessage(MsgId);
+        return msg;
+    }
+
+    public List<MessagePacket> getMessages(int convID){
+        List<MessagePacket> msgList = null;
+        System.out.print("CCQF InterfaceDB getMessages convID = " + convID + "\n\n");
+        System.out.flush();
+        if(lDb != null)
+            msgList = lDb.getMessages(convID);
+        return msgList;
+    }
     /*
     * Méthode qui envoi un message au system de réseau social.
     *       Reçoit un MessagePacket
@@ -218,6 +233,17 @@ public class InterfaceDB {
         }
         return msgId;
     }
+
+/*
+    public int sendMessage(int convID, String msgText){
+        int msgId = -1;
+        if(rDb != null) {
+            MessagePacket msg = new MessagePacket(-1, currentUser, -1, msgText, new Date(), "");
+            msgId = rDb.sendMessage(msg);
+        }
+        return msgId;
+    }
+*/
 
     public ArrayList<SurveyObjectResults> readSurveyResults(int surveyId){
         ArrayList<SurveyObjectResults> rsltList = null;

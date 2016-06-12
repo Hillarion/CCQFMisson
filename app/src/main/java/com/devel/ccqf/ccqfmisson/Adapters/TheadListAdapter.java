@@ -25,18 +25,12 @@ public class TheadListAdapter extends BaseAdapter {
     public TheadListAdapter(Context context, List<ConversationHead> liste){
         this.context = context;
         threadList = liste;
-        mInflater = LayoutInflater.from(context);
-        System.out.print("CCQF FeedListActivity TheadListAdapter liste = " + liste + "\n\n");
-        System.out.flush();
+        mInflater = LayoutInflater.from(this.context);
     }
 
     @Override
     public int getCount() {
-        System.out.print("CCQF FeedListActivity TheadListAdapter.getCount() liste = " + threadList + "\n\n");
-        System.out.flush();
         if(threadList != null) {
-            System.out.print("CCQF FeedListActivity TheadListAdapter.getCount() liste.size = " + threadList.size() + "\n\n");
-            System.out.flush();
             return threadList.size();
         }
         else
@@ -59,8 +53,6 @@ public class TheadListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ConversationHead currentDoc = threadList.get(position);
-        System.out.print("CCQF FeedListActivity TheadListAdapter getView ( = " + currentDoc + ")\n\n");
-        System.out.flush();
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         convertView = mInflater.inflate(R.layout.feed_list_adapter_layout, null);

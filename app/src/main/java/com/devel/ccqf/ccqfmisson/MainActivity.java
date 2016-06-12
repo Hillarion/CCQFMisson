@@ -2,6 +2,7 @@ package com.devel.ccqf.ccqfmisson;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -13,7 +14,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.devel.ccqf.ccqfmisson.Database.InterfaceDB;
@@ -38,7 +39,7 @@ public class MainActivity extends CCQFBaseActivity {
     private Button btnAgenda;
     private Button btnFeed;
     private InterfaceDB iDb;
-    private ImageButton ibBanner;
+    private ImageView ibBanner;
     final static String dirUrl = "http://thierrystpierre.ddns.net:81/CCQFMission/Commanditaires";
     private static String baseApplicationFilesPath;
     private ArrayList<Commanditaire> menuPage =  null;
@@ -73,7 +74,7 @@ public class MainActivity extends CCQFBaseActivity {
             }
         });
 
-        ibBanner = (ImageButton)findViewById(R.id.imageButton);
+        ibBanner = (ImageView)findViewById(R.id.imageButton);
         ibBanner.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -137,8 +138,16 @@ public class MainActivity extends CCQFBaseActivity {
             System.out.flush();
             if(idx >= 0) {
                 currentBanner = menuBanniere.get(idx);
-                ibBanner.setImageDrawable(Drawable.createFromPath(currentBanner.getFilePath()));
+                Drawable drawable = Drawable.createFromPath(currentBanner.getFilePath());
+/*                int width = ibBanner.getWidth();
+                int height = ibBanner.getHeight();
+                int w2percent = (int)((width * 2.5)/100);
+                int h2percent = (int)((height * 2.5)/100);
+                drawable.setBounds(w2percent, h2percent, width-w2percent, height-w2percent);*/
+                ibBanner.setImageDrawable(drawable);
             }
+            System.out.print("CCQF MainActivity ibBanner dim = (" + ibBanner.getMeasuredWidth() + ", " +ibBanner.getMeasuredHeight() +")\n\n");
+            System.out.flush();
         }
     }
 

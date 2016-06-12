@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.devel.ccqf.ccqfmisson.R;
@@ -17,14 +18,14 @@ import com.devel.ccqf.ccqfmisson.R;
  */
 public class DialogRep extends Dialog /*implements DialogInterface.OnClickListener*/ {
     private Commanditaire com = null;
-    private LinearLayout pubLayout;
+    private ImageView pubLayout;
 
     public DialogRep(Context c){
         super(c);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_pub);
         setCancelable(false);
-        pubLayout = (LinearLayout)findViewById(R.id.pubLayout);
+        pubLayout = (ImageView)findViewById(R.id.pubLayout);
 
         final Button btnDismiss = (Button)findViewById(R.id.btnDialogPubDismiss);
         btnDismiss.setOnClickListener(new View.OnClickListener() {
@@ -57,7 +58,7 @@ public class DialogRep extends Dialog /*implements DialogInterface.OnClickListen
     public void setPub(Commanditaire pub){
         com = pub;
 
-        pubLayout.setBackground(Drawable.createFromPath(pub.getFilePath()));
+        pubLayout.setImageDrawable(Drawable.createFromPath(pub.getFilePath()));
     }
 
 }

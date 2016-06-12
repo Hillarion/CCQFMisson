@@ -10,7 +10,10 @@ import com.devel.ccqf.ccqfmisson.ReseauSocial.ConversationHead;
 import com.devel.ccqf.ccqfmisson.ReseauSocial.MessagePacket;
 import com.devel.ccqf.ccqfmisson.Users;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,8 +22,10 @@ import java.util.List;
 public class LocaleDB {
 
     static SQLiteDatabase db = null;
+    SimpleDateFormat dateFormat;
 
     public LocaleDB(Context cntx){
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         if(db == null)
             db = (new SQLiteHelper(cntx)).getReadableDatabase();
     }
@@ -96,14 +101,71 @@ public class LocaleDB {
         return userLogin;
     }
 
-    public List<MessagePacket> readOutMessage(int startMsgId, int nMessage){
-        List<MessagePacket> msgList = null;
-        return msgList;
+
+    public MessagePacket getMessage(int MsgId){
+        MessagePacket msg = null;
+        if(db!= null){
+            Cursor cursor;
+            cursor = db.rawQuery("SELECT * from Messages WHERE id_msg = ?", new String[]{"" + MsgId});
+            cursor.moveToFirst();
+            if(cursor.getCount() > 0) {
+                Date convertedDate = new Date();
+                try {
+                    convertedDate = dateFormat.parse(cursor.getString(5));
+                }catch (ParseException pe) {
+                    pe.printStackTrace();
+                }
+
+                msg = new MessagePacket(cursor.getInt(0), // msgID
+                                        cursor.getInt(2), // source
+                                        cursor.getInt(1), // convID
+                                        cursor.getString(3),  // dest
+                                        cursor.getString(4), // message
+                                        convertedDate, // timestamp
+                                        cursor.getString(6)  // attachement
+                                        );
+            }
+        }
+        return msg;
     }
 
-    public List<MessagePacket> readInMessage(int startMsgId, int nMessage){
-        List<MessagePacket> msgList = null;
-        return msgList;
+    public List<MessagePacket> getMessages(int convID){
+        List<MessagePacket> lstMsg = null;
+        if(db != null){
+            Cursor cursor;
+            cursor = db.rawQuery("SELECT * from Messages WHERE conversationID = ?", new String[]{"" + convID});
+            cursor.moveToFirst();
+            System.out.print("CCQF LocaleDB getMessages count = " + cursor.getCount() + "\n\n");
+            System.out.flush();
+            if(cursor.getCount() > 0) {
+                lstMsg = new ArrayList<>();
+                int loopCount = 0;
+                while (loopCount < cursor.getCount()) {
+
+                    Date convertedDate = new Date();
+                    try {
+                        convertedDate = dateFormat.parse(cursor.getString(5));
+                    } catch (ParseException pe) {
+                        pe.printStackTrace();
+                    }
+                    MessagePacket msg = new MessagePacket(cursor.getInt(0), // msgID
+                                            cursor.getInt(2), // source
+                                            cursor.getInt(1), // convID
+                                            cursor.getString(3),  // dest
+                                            cursor.getString(4), // message
+                                            convertedDate, // timestamp
+                                            cursor.getString(6)  // attachement
+                                            );
+                    System.out.print("CCQF LocaleDB getMessages msg ("+loopCount+") : " + msg + "\n\n");
+                    System.out.flush();
+                    lstMsg.add(msg);
+                    cursor.moveToNext();
+                    loopCount++;
+                }
+            }
+
+        }
+        return lstMsg;
     }
 
     public int getPrivilege(int UserId){

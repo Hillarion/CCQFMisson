@@ -27,6 +27,11 @@ public class CustomFeedAdapter extends BaseAdapter {
         this.messagesItems = navDrawerItems;
     }
 
+    public void add(MessagePacket msg){
+        messagesItems.add(msg);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return messagesItems.size();
@@ -39,7 +44,7 @@ public class CustomFeedAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return position/*messagesItems.get(position).getConvID()*/;
     }
 
     @SuppressLint("InflateParams")
@@ -50,8 +55,12 @@ public class CustomFeedAdapter extends BaseAdapter {
          * The following list not implemented reusable list items as list items
          * are showing incorrect data Add the solution if you have one
          * */
+        System.out.print("CCQF CustomFeedAdapter getView() messagesItems = " +messagesItems + "\n\n");
+        System.out.flush();
 
         MessagePacket m = messagesItems.get(position);
+        System.out.print("CCQF CustomFeedAdapter getView() m = " + m + "\n\n");
+        System.out.flush();
 
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -69,6 +78,11 @@ public class CustomFeedAdapter extends BaseAdapter {
 
         TextView lblFrom = (TextView) convertView.findViewById(R.id.lblMsgFrom);
         TextView txtMsg = (TextView) convertView.findViewById(R.id.txtMsg);
+
+        System.out.print("CCQF CustomFeedAdapter getView() m.getMessage() =  " + m.getMessage() + "\n\n");
+        System.out.flush();
+        System.out.print("CCQF CustomFeedAdapter getView() m.getSource() = " + m.getSource() + "\n\n");
+        System.out.flush();
 
         txtMsg.setText(m.getMessage());
         lblFrom.setText(m.getSource());
