@@ -7,15 +7,17 @@
 
     <TextView
         android:id="@+id/txtChatRoomTitle"
+        android:background="@color/colorChatUser"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="80dp" />
     <ListView
         android:id="@+id/list_view_messages"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@null"
+        android:background="@drawable/feed_view_border"
         android:divider="@null"
+        android:layout_gravity="top"
         android:transcriptMode="alwaysScroll"
         android:stackFromBottom="true">
     </ListView>

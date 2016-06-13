@@ -11,8 +11,10 @@ import android.widget.TextView;
 
 import com.devel.ccqf.ccqfmisson.R;
 import com.devel.ccqf.ccqfmisson.ReseauSocial.MessagePacket;
+import com.devel.ccqf.ccqfmisson.Users;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -21,6 +23,7 @@ import java.util.List;
 public class CustomFeedAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<MessagePacket> messagesItems;
+    private ArrayList<Users> userNameList;
 
     public CustomFeedAdapter(Context context, ArrayList<MessagePacket> navDrawerItems) {
         this.context = context;
@@ -29,7 +32,10 @@ public class CustomFeedAdapter extends BaseAdapter {
 
     public void add(MessagePacket msg){
         messagesItems.add(msg);
-        notifyDataSetChanged();
+    }
+
+    public void setUserNameList(ArrayList<Users> liste){
+        userNameList = liste;
     }
 
     @Override
@@ -55,12 +61,8 @@ public class CustomFeedAdapter extends BaseAdapter {
          * The following list not implemented reusable list items as list items
          * are showing incorrect data Add the solution if you have one
          * */
-        System.out.print("CCQF CustomFeedAdapter getView() messagesItems = " +messagesItems + "\n\n");
-        System.out.flush();
 
         MessagePacket m = messagesItems.get(position);
-        System.out.print("CCQF CustomFeedAdapter getView() m = " + m + "\n\n");
-        System.out.flush();
 
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -79,14 +81,16 @@ public class CustomFeedAdapter extends BaseAdapter {
         TextView lblFrom = (TextView) convertView.findViewById(R.id.lblMsgFrom);
         TextView txtMsg = (TextView) convertView.findViewById(R.id.txtMsg);
 
-        System.out.print("CCQF CustomFeedAdapter getView() m.getMessage() =  " + m.getMessage() + "\n\n");
-        System.out.flush();
-        System.out.print("CCQF CustomFeedAdapter getView() m.getSource() = " + m.getSource() + "\n\n");
-        System.out.flush();
-
         txtMsg.setText(m.getMessage());
-        lblFrom.setText(m.getSource());
+        Iterator<Users> uIter = userNameList.iterator();
+        while(uIter.hasNext()){
+            Users lUser = uIter.next();
+            if(lUser.getUserID() == m.getSource())
+                lblFrom.setText("" + lUser.getUserName());
+        }
 
         return convertView;
     }
+
+
 }

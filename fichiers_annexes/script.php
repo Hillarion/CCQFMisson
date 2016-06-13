@@ -151,11 +151,12 @@ function sendMessage(){
     $timeStamp=$_POST["timeStamp"];
     $attachement=$_POST["attachement"];
     $convId = $_POST["conversationID"];
+    $groupList = "";
 
     if(($message != "") && ($msgSource != "") && ($timeStamp != "")){
         if(!is_numeric($msgSource))
             returnFail("bad source values src = '$msgSource'");
-        else if(  ($tag = preg_match('/^\d+(?:,\d+)*$/', $destinataires, $matches)) != 1){
+        else if((  ($tag = preg_match('/^\d+(?:,\d+)*$/', $destinataires, $matches)) != 1) && ($convId <= 0)){
             returnFail("bad field values dest = $destinataires ($matches[1])");
             }
         else if(!validateDate($timeStamp))
@@ -169,7 +170,7 @@ function sendMessage(){
                 $req = "SELECT conversation_id FROM ConversationThread WHERE groupe_ids='$groupList'";
                 $result = doQuery($req);
                 $row = mysqli_num_rows($result);
-                if($row>0){// s'il existe déjà un econversation, utiliser son ID
+                if($row>0){// s'il existe déjà une conversation, utiliser son ID
                     $ligne = mysqli_fetch_object($result);
                     $convId = $ligne->conversation_id;
                 }
@@ -179,7 +180,16 @@ function sendMessage(){
                     $convId = mysqli_insert_id($conn);
                 }
             }
-            $destList = explode(',', trim($destinataires, " \n\r"));
+            else{
+                $reqDest = "SELECT groupe_ids from ConversationThread WHERE conversation_id=$convId";
+                $resultDest = doQuery($reqDest);
+                $row = mysqli_num_rows($result);
+                if($row > 0){
+                    $ligne = mysqli_fetch_object($result);
+                    $groupList = $ligne->groupe_ids;
+                }
+            }
+            $destList = explode(',', trim($groupList, " \n\r")); // on renvois le message à tous, incluant la source.
             $req = "INSERT INTO MessagePacket values(0, $msgSource, $convId,".
                    "'$message', '$timeStamp', '$attachement')";
             $result = doQuery($req);

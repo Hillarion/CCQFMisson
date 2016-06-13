@@ -1,11 +1,15 @@
-drop database CCQFMission;
-create database CCQFMission;
+//drop database CCQFMission;
+//create database CCQFMission;
 
 use CCQFMission;
 drop table MessageQueue;
 drop table MessagePacket;
 drop table ConversationThread;
 drop table Utilisateur;
+drop table SurveyForm;
+drop table SurveyResponse;
+drop table SurveyQuestion;
+drop table event;
 
 create table Utilisateur (
     user_id int NOT NULL AUTO_INCREMENT,
@@ -81,7 +85,7 @@ create table event (
 );
 
 insert into Utilisateur values(0, 'Racicot', 'Vanessa', 'ccqf', 'admin');
-insert into Utilisateur values(0, '', 'User', 'company1', '');
-insert into Utilisateur values(0, '', 'User2', 'company2', '');
+//insert into Utilisateur values(0, 'St-Pierre', 'Thierry', 'AEC', '');
+//insert into Utilisateur values(0, 'Bleau', 'Jonathan', 'G', '');
 
 

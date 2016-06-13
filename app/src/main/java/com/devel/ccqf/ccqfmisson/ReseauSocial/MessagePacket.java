@@ -95,6 +95,6 @@ public class MessagePacket {
     }
 
     public String toString (){
-        return "[" +source+ "]" + timestamp + " : " + message;
+        return "[" +source+ "] " + timestamp + " : \"" + message + "\" -> to : (" + destinataires + "), convID = " + convID;
     }
 }

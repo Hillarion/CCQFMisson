@@ -42,21 +42,15 @@ public class LocaleDB {
         values.put("timestamp", sdf.format(msg.getTimestamp()));
         values.put("attachement", msg.getAttachement());
 
-        System.out.print("CCQF LocalDb writeMessage values = " + values + "\n\n");
-        System.out.flush();
         db.insert("Messages", null, values);
     }
 
     public void setUser(int userId, String nom, String prenom, String compagnie){
-        System.out.print("CCQF LocalDB setUser (entry)");
-        System.out.flush();
         if(db != null){
             Cursor cursor = null;
             cursor = db.rawQuery("SELECT * FROM Utilisateur WHERE user_id = ?" , new String[]{"" + userId});
             cursor.moveToFirst();
             if(cursor.getCount() == 0){// Usager n'existe pas
-                System.out.print("CCQF LocalDB setUser (writing)");
-                System.out.flush();
                 ContentValues values = new ContentValues();
                 values.put("user_id", "" + userId);
                 values.put("prenom", prenom);
@@ -66,8 +60,6 @@ public class LocaleDB {
                 values.put("lastSurvey", "-1");
                 values.put("privilege", "-1");
                 long val = db.insert("Utilisateur", null, values);
-                System.out.print("CCQF LocalDB setUser (finally) val = " + val + "\n\n");
-                System.out.flush();
             }
         }
     }
@@ -135,8 +127,6 @@ public class LocaleDB {
             Cursor cursor;
             cursor = db.rawQuery("SELECT * from Messages WHERE conversationID = ?", new String[]{"" + convID});
             cursor.moveToFirst();
-            System.out.print("CCQF LocaleDB getMessages count = " + cursor.getCount() + "\n\n");
-            System.out.flush();
             if(cursor.getCount() > 0) {
                 lstMsg = new ArrayList<>();
                 int loopCount = 0;
@@ -156,8 +146,6 @@ public class LocaleDB {
                                             convertedDate, // timestamp
                                             cursor.getString(6)  // attachement
                                             );
-                    System.out.print("CCQF LocaleDB getMessages msg ("+loopCount+") : " + msg + "\n\n");
-                    System.out.flush();
                     lstMsg.add(msg);
                     cursor.moveToNext();
                     loopCount++;
@@ -330,8 +318,6 @@ public class LocaleDB {
         ContentValues values = new ContentValues();
         if(db != null){
             values.put("Pages", ""+val);
-            System.out.print("CCQF LocaleDB setNextPageCommanditaire values : "+ values + "\n\n");
-            System.out.flush();
             db.update("Commanditaires", values, null, null);
 
         }
@@ -354,8 +340,6 @@ public class LocaleDB {
         if(db != null) {
             Cursor cursor = db.rawQuery("SELECT Banners FROM Commanditaires", null);
             cursor.moveToFirst();
-            System.out.print("CCQF LocaleDB getCurrentBannerCommanditaire cursor n : "+ cursor.getColumnCount() + "\n\n");
-            System.out.flush();
             if(cursor.getCount() > 0){
                 pg = cursor.getInt(0);
             }
@@ -367,8 +351,6 @@ public class LocaleDB {
         ContentValues values = new ContentValues();
         if(db != null){
             values.put("Banners", ""+val);
-            System.out.print("CCQF LocaleDB setNextBannerCommanditaire values : "+ values + "\n\n");
-            System.out.flush();
             db.update("Commanditaires", values, null, null);
 
         }

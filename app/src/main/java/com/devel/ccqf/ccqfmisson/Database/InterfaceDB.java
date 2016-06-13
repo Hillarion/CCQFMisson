@@ -207,8 +207,6 @@ public class InterfaceDB {
 
     public List<MessagePacket> getMessages(int convID){
         List<MessagePacket> msgList = null;
-        System.out.print("CCQF InterfaceDB getMessages convID = " + convID + "\n\n");
-        System.out.flush();
         if(lDb != null)
             msgList = lDb.getMessages(convID);
         return msgList;
@@ -225,10 +223,19 @@ public class InterfaceDB {
         return msgId;
     }
 
-    public int sendMessage(String dest, String msgText){
+/*    public int sendMessage(String dest, String msgText){
         int msgId = -1;
         if(rDb != null) {
             MessagePacket msg = new MessagePacket(-1, currentUser, -1, dest, msgText, new Date(), "");
+            msgId = rDb.sendMessage(msg);
+        }
+        return msgId;
+    }*/
+
+    public int sendMessage(int convID, String dest, String msgText){
+        int msgId = -1;
+        if(rDb != null) {
+            MessagePacket msg = new MessagePacket(-1, currentUser, convID, dest, msgText, new Date(), "");
             msgId = rDb.sendMessage(msg);
         }
         return msgId;
@@ -303,14 +310,9 @@ public class InterfaceDB {
         if(lDb != null){
             mxIdx = lDb.getMaxPageCommanditaire();
             if(mxIdx >= 0) {
-                System.out.print("CCQF interfaceDB getCurrentPageIndex reading maxIdx : " + mxIdx + "\n\n");
-                System.out.print("CCQF interfaceDB getCurrentPageIndex reading idx : " + idx + "\n\n");
-                System.out.flush();
                 idx = lDb.getCurrentPageCommanditaire();
                 if (++idx >= mxIdx)
                     idx = 0;
-                System.out.print("CCQF interfaceDB getCurrentPageIndex setting idx : " + idx + "\n\n");
-                System.out.flush();
                 lDb.setNextPageCommanditaire(idx);
             }
         }
@@ -324,13 +326,8 @@ public class InterfaceDB {
             mxIdx = lDb.getMaxBannerCommanditaire();
             if(mxIdx >= 0) {
                 idx = lDb.getCurrentBannerCommanditaire();
-                System.out.print("CCQF interfaceDB getCurrentBannerIndex reading maxIdx : " + mxIdx + "\n\n");
-                System.out.print("CCQF interfaceDB getCurrentBannerIndex reading idx : " + idx + "\n\n");
-                System.out.flush();
                 if (++idx >= mxIdx)
                     idx = 0;
-                System.out.print("CCQF interfaceDB getCurrentBannerIndex setting idx : " + idx + "\n\n");
-                System.out.flush();
                 lDb.setNextBannerCommanditaire(idx);
             }
         }

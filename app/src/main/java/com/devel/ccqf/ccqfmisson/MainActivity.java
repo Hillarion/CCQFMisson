@@ -51,8 +51,8 @@ public class MainActivity extends CCQFBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         iDb = new InterfaceDB(MainActivity.this);
-        baseApplicationFilesPath = "" + Environment.getExternalStorageDirectory() + "/" +
-                getPackageName() + "/Commanditaires";
+        baseApplicationFilesPath = "" + Environment.getDataDirectory().getPath() + "/data/" +
+                getPackageName() + "/Files/Commanditaires";
 
         String [] params = {dirUrl, baseApplicationFilesPath, "menu.csv"};
         int user = -1;
@@ -134,20 +134,11 @@ public class MainActivity extends CCQFBaseActivity {
 
         if(menuBanniere != null){
             int idx = iDb.getCurrentBannerIndex();
-            System.out.print("CCQF MainActivity menuBanniere = " + menuBanniere + " (" +menuBanniere.size() +")\n\n");
-            System.out.flush();
-            if(idx >= 0) {
+            if((idx >= 0) && (idx<menuBanniere.size())) {
                 currentBanner = menuBanniere.get(idx);
                 Drawable drawable = Drawable.createFromPath(currentBanner.getFilePath());
-/*                int width = ibBanner.getWidth();
-                int height = ibBanner.getHeight();
-                int w2percent = (int)((width * 2.5)/100);
-                int h2percent = (int)((height * 2.5)/100);
-                drawable.setBounds(w2percent, h2percent, width-w2percent, height-w2percent);*/
                 ibBanner.setImageDrawable(drawable);
             }
-            System.out.print("CCQF MainActivity ibBanner dim = (" + ibBanner.getMeasuredWidth() + ", " +ibBanner.getMeasuredHeight() +")\n\n");
-            System.out.flush();
         }
     }
 

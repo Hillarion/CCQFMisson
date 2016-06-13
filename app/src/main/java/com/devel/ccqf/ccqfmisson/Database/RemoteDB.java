@@ -108,8 +108,6 @@ public class RemoteDB {
         pairs.add(new BasicNameValuePair("nom", nom));
         pairs.add(new BasicNameValuePair("prenom", prenom));
         pairs.add(new BasicNameValuePair("compagnie", compagnie));
-        System.out.print(" CCQF RemoteDb query= " + pairs + "\n\n");
-        System.out.flush();
         String ligneResult = sendRequest(pairs);
         if(ligneResult != null) {
             parser = new JSONParser(ligneResult);
@@ -246,13 +244,13 @@ public class RemoteDB {
                             try {
                                 JSONObject jsonObject = jArray.getJSONObject(idx);
                                 int uId = jsonObject.getInt("user_id");
-                                if(uId != currentUser){
+//                                if(uId != currentUser){
                                     String nom = jsonObject.getString("nom");
                                     String prenom = jsonObject.getString("prenom");
                                     String compagnie = jsonObject.getString("compagnie");
                                     Users user=new Users(uId, nom, prenom, compagnie, "");
                                     uList.add(user);
-                                }
+//                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -271,7 +269,7 @@ public class RemoteDB {
     * Pour tout message envoyé une copie est insctite dans la BD locale, si celle-ci existe.
     */
     public int sendMessage(MessagePacket msg){
-        int msgId = -1;
+        int convID = -1;
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
         pairs.add(new BasicNameValuePair("action", "sendMessage"));
         pairs.add(new BasicNameValuePair("messageContent", msg.getMessage()));
@@ -283,8 +281,6 @@ public class RemoteDB {
 		String time = sdf.format(tStmp);
         pairs.add(new BasicNameValuePair("timeStamp", time));
         pairs.add(new BasicNameValuePair("attachement", msg.getAttachement()));
-        System.out.print("CCQF remoteDB sendMessage pairs = " + pairs + "\n\n");
-        System.out.flush();
 
         String ligneResult = sendRequest(pairs);
 
@@ -293,21 +289,15 @@ public class RemoteDB {
             String status = parser.getStatus();
             if (!status.isEmpty()) {
                 if (status.equalsIgnoreCase("Success")) {
-                    msgId = parser.getIndex();
+/*                    msgId = parser.getIndex();
                     msg.setId_msg(msgId);
-                    if(msg.getConvID() <= 0) {
-                        int convID = parser.getInt("conversationID");
-                        if (convID > 0)
-                            msg.setConvID(convID);
-                    }
-                    msg.setSelf(true);
-                    if(lDb != null){
-                        lDb.writeMessage(msg);
-                    }
+                    if(msg.getConvID() <= 0) {*/
+                        convID = parser.getInt("conversationID");
+//                    }
                 }
             }
         }
-        return msgId;
+        return convID;
     }
 
     /*
@@ -321,13 +311,9 @@ public class RemoteDB {
         pairs.add(new BasicNameValuePair("action", "readMessages"));
         pairs.add(new BasicNameValuePair("userID", "" + userId));
         pairs.add(new BasicNameValuePair("msgID", "" + lastMessageID));
-        System.out.print("CCQF remoteDB readMessages pairs = " + pairs + "\n\n");
-        System.out.flush();
         String ligneResult = sendRequest(pairs);
 
         if(ligneResult != null) {
-            System.out.print("CCQF remoteDB readMessages response = " + ligneResult + "\n\n");
-            System.out.flush();
             parser = new JSONParser(ligneResult);
             String status = parser.getStatus();
             if (!status.isEmpty()) {

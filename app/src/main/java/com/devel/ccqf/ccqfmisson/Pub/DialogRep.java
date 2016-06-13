@@ -37,8 +37,6 @@ public class DialogRep extends Dialog /*implements DialogInterface.OnClickListen
         pubLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.print("CCQF DialofRep OnWindowClick() com = "+ com + "\n\n");
-                System.out.flush();
                 dismiss();
                 if(com != null){
                     Intent intent = new Intent(Intent.ACTION_VIEW);

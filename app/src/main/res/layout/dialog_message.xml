@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/txtLoginName"
+        android:layout_gravity="center_horizontal"
+        android:hint="Alerte"
+        android:textAlignment="center"
+        android:textColor="#ff000000"
+        android:paddingTop="18dp"
+        android:textSize="21dp"
+        android:text="Vous devez être en ligne pour utiliser cette section"
+        />
+
+    <Button
+        android:id="@+id/btnNoNetOk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="OK"
+        android:textSize="10pt"
+        android:background="@color/colorCCQFGreen1"
+        />
+</LinearLayout>
