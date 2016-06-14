@@ -39,6 +39,8 @@ public class SurveyObject {
         this.choixReponse = reponse;
        // choixReponse = new ArrayList<String>();
     }
+
+
     //Constructeur temporaire a fin de faire des test
     public SurveyObject(String question, int id){
         super();

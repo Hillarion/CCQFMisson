@@ -16,11 +16,14 @@ import android.widget.Toast;
 import com.devel.ccqf.ccqfmisson.Adapters.CustomSurveyAnswerAdapter;
 import com.devel.ccqf.ccqfmisson.Database.InterfaceDB;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyGroup;
+import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyMultiple;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObject;
 
 import java.text.DateFormat;
 import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class SurveyCreate extends CCQFBaseActivity {
@@ -28,7 +31,7 @@ public class SurveyCreate extends CCQFBaseActivity {
     private EditText txtNewQuestion;
     private Button btnOK;
     private ListView listViewNewAnswers;
-    SurveyObject newSurvey;
+    SurveyMultiple newSurvey;
     ArrayList <String> arrayListNewAnswers;
     InterfaceDB iDb;
     @Override
@@ -62,13 +65,29 @@ public class SurveyCreate extends CCQFBaseActivity {
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               newSurvey = new SurveyObject(txtNewQuestion.getText().toString(), arrayListNewAnswers);
-                ArrayList<SurveyObject> aSo = new ArrayList<SurveyObject>();
-                aSo.add(newSurvey);
-                Date date = null;
-                SurveyGroup group = new SurveyGroup(date, aSo);
-                iDb = new InterfaceDB(SurveyCreate.this);
-                iDb.sendSurvey(group);
+                if((arrayListNewAnswers.isEmpty()) || (txtNewQuestion.equals(""))){
+                    Toast.makeText(SurveyCreate.this, "Bien remplir tout les champs",
+                            Toast.LENGTH_SHORT).show();
+                }else{
+                    newSurvey = new SurveyMultiple(arrayListNewAnswers.size(), txtNewQuestion.getText().toString(),
+                            arrayListNewAnswers);
+                    ArrayList<SurveyObject> aSo = new ArrayList<SurveyObject>();
+                    aSo.add(newSurvey);
+                    DateFormat df = new SimpleDateFormat("MM/dd/yyyy ");
+                    Date date = Calendar.getInstance().getTime();
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(date);
+                    cal.add(Calendar.DATE, 3);
+                    date = cal.getTime();
+                    SurveyGroup group = new SurveyGroup(date, aSo);
+                    iDb = new InterfaceDB(SurveyCreate.this);
+                    iDb.sendSurvey(group);
+                    Toast.makeText(SurveyCreate.this, "Envoyé ", Toast.LENGTH_SHORT).show();
+                    System.out.print("FROM SURVERCREATE " + newSurvey);
+                    System.out.flush();
+                    clean();
+                }
+
             }
         });
     }
@@ -87,7 +106,7 @@ public class SurveyCreate extends CCQFBaseActivity {
                 String answer = txtNewAnswer.getText().toString();
                 arrayListNewAnswers.add(answer);
                 txtNewAnswer.setText("");
-                Toast.makeText(SurveyCreate.this, answer+" ajouté", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(SurveyCreate.this, answer+" ajouté", Toast.LENGTH_SHORT).show();
                 d.dismiss();
 
                 if(arrayListNewAnswers.size() > 0){
@@ -206,6 +225,13 @@ public class SurveyCreate extends CCQFBaseActivity {
             // progress. For example updating ProgessDialog
         }
 
+    }
+
+    public void clean(){
+        txtNewQuestion.setText("");
+        arrayListNewAnswers = new ArrayList<>();
+        CustomSurveyAnswerAdapter a = new CustomSurveyAnswerAdapter(SurveyCreate.this, arrayListNewAnswers);
+        listViewNewAnswers.setAdapter(a);
     }
 }
 

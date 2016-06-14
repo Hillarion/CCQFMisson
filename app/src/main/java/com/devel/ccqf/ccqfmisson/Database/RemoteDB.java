@@ -393,13 +393,14 @@ public class RemoteDB {
                         for(int r=1; r<reps.size(); r++)
                             listeReponses += ","+reps.get(r);
                         pairs.add(new BasicNameValuePair("listeReponses", listeReponses));
-                        sendRequestNoResponse(pairs);
+                        String s = sendRequest(pairs);
+                        System.out.print("FROM REMOTE DB "+ s);
+                        System.out.flush();
                     }
                 }
             }
         }
     }
-
     /*
     * Méthode qui lis un sondage
     *       Reçoit l'identifiant su sondage à lire
