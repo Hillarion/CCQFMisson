@@ -180,8 +180,8 @@ public class RemoteDB {
                                 String telephone = jsonObject.getString("telephone");
                                 String email = jsonObject.getString("email");
                                 String adresse = jsonObject.getString("adresse");
-                                String batiment = jsonObject.getString("batiment");
-                                Boolean b = Boolean.valueOf(batiment);
+                                Boolean b = (jsonObject.getInt("batiment") == 0)?false:true;
+//                                Boolean b = Boolean.valueOf(batiment);
 
                                 Event e = new Event(destinataire, hDebut, hFin, compagnie, nom, poste,
                                         telephone, email, adresse,  b);

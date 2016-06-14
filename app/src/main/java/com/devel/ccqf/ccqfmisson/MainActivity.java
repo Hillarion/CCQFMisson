@@ -89,6 +89,7 @@ public class MainActivity extends CCQFBaseActivity {
                 }
             }
         });
+
         btnAgenda = (Button)findViewById(R.id.myAgendaActivityBtn);
         btnAgenda.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +129,7 @@ public class MainActivity extends CCQFBaseActivity {
             dialogLogin();
         }
         else {
-            SystemClock.sleep(3000);
+//            SystemClock.sleep(3000);
             user = iDb.getCurrentUserID();
             if(menuPage != null)
                 dr.setPub(menuPage.get(iDb.getCurrentPageIndex()));

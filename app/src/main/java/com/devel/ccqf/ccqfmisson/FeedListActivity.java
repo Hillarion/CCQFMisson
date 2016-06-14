@@ -75,7 +75,6 @@ public class FeedListActivity extends CCQFBaseActivity {
         } else {
             dialogAlerteReseau();
         }
-
     }
 
     public void dialogSelectUsers() {
@@ -83,18 +82,18 @@ public class FeedListActivity extends CCQFBaseActivity {
         final Dialog d = new Dialog(FeedListActivity.this);
         d.setContentView(R.layout.dialog_destinataires);
         lstUserList = (ListView) d.findViewById(R.id.lstUserList);
+        ArrayList<Users> localUserList = new ArrayList<>();
         d.setTitle("Send to:");
+        int currentUser = iDb.getCurrentUserID();
         Button btnOK = (Button) d.findViewById(R.id.btnUserListOk);
-        lstUserList.setAdapter(new CustomContactListAdapter(FeedListActivity.this, globalUserList));
+        Iterator<Users> uIter = globalUserList.iterator();
+        while(uIter.hasNext()){
+            Users user = uIter.next();
+            if(user.getUserID() != currentUser)
+                localUserList.add(user);
+        }
+        lstUserList.setAdapter(new CustomContactListAdapter(FeedListActivity.this, localUserList));
 
-//        new GetUserListAsyncTask().execute();
-
-/*        btnRefreshUserList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new GetUserListAsyncTask().execute();
-            }
-        });*/
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View c) {
@@ -115,6 +114,7 @@ public class FeedListActivity extends CCQFBaseActivity {
                 if (selectedIndex > 0) {
                     Intent i = new Intent(FeedListActivity.this, Feed.class);
                     Bundle donnees = new Bundle();
+                    donnees.putParcelableArrayList(USER_KEY_USERLIST, globalUserList);
                     donnees.putString(USER_KEY_USERS, userList);
                     i.putExtras(donnees);
                     startActivity(i);

@@ -15,11 +15,11 @@ public class FileDownLoader {
     private String nomFichier;
     private String filePath;
     private String baseURL;
-    private static final int  MEGABYTE = 1024 * 1024;
+    private static final int MEGABYTE = 1024 * 1024;
     private File fichier;
 
 
-    public FileDownLoader (String nom, String path, String url){
+    public FileDownLoader(String nom, String path, String url) {
         nomFichier = nom;
         filePath = path;
         baseURL = url;
@@ -48,7 +48,7 @@ public class FileDownLoader {
         return upToDate;
     }
 
-    public void getFileFromServer() throws IOException{
+    public void getFileFromServer() throws IOException {
         URL url = new URL(baseURL + "/" + nomFichier);
         File docBaseDir = new File(filePath);
         File fichier = new File(filePath, nomFichier);
@@ -71,6 +71,15 @@ public class FileDownLoader {
         fileOutputStream.close();
     }
 
+    public boolean isLocalyPresent() {
+        boolean present = false;
+        File docBaseDir = new File(filePath);
+        if (docBaseDir.exists()) {
+            if (fichier.exists())
+                present = true;
+        }
+        return present;
+    }
 
     public File getFileHandle(){
         return fichier;

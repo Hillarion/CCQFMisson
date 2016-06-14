@@ -16,6 +16,8 @@ import com.devel.ccqf.ccqfmisson.ReseauSocial.MessagePacket;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Feed extends CCQFBaseActivity {
 
@@ -119,11 +121,23 @@ public class Feed extends CCQFBaseActivity {
                 }
             }
         });
-    }
 
-    private void getMsg(){
-        new getMessageAsyncTask().execute();
 
+        TimerTask task = new TimerTask() {
+
+            @Override
+            public void run() {
+                System.out.print("CCQF Feed TimerTask fetching messages\n\n");
+                System.out.flush();
+                new getMessagesAsyncTask().execute();
+            }
+        };
+        //create a new Timer
+        Timer timer = new Timer();
+        //specify the time interval in seconds after which task should run periodically
+        int seconds = 30; // in your case as per question one minute
+        //schedule your timer to execute perodically
+        timer.schedule(task, seconds * 1000);
     }
 
     private class SendMessageAsyncTask extends AsyncTask<String, Void, Integer> {
@@ -156,7 +170,7 @@ public class Feed extends CCQFBaseActivity {
         }
     }
 
-    private class getMessageAsyncTask extends AsyncTask<Void, Void, ArrayList<MessagePacket>> {
+    private class getMessagesAsyncTask extends AsyncTask<Void, Void, ArrayList<MessagePacket>> {
 
         @Override
         protected ArrayList<MessagePacket> doInBackground(Void... params) {
