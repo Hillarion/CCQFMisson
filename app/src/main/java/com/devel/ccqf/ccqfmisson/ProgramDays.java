@@ -62,7 +62,7 @@ public class ProgramDays extends CCQFBaseActivity {
         String date = df.format(d);
 
         for(int i = 0 ; i < 3 ; i++ ){
-            n.add(new Event("Jour "+(i+1), date));
+            n.add(new Event("", "Jour "+(i+1)));
         }
         return n;
     }

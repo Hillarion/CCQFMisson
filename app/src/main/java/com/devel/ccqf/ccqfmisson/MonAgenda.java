@@ -23,17 +23,27 @@ import java.util.List;
 public class MonAgenda extends CCQFBaseActivity { //B2B
     private ListView listViewEvents;
     private ArrayList<Event> events;
+    private InterfaceDB iDb;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mon_agenda);
+
+        InterfaceDB iDb = new InterfaceDB(MonAgenda.this);
         LocaleDB lDb = new LocaleDB(MonAgenda.this);
+
         String user = lDb.getCurrentUserLogin();
         listViewEvents = (ListView) findViewById(R.id.listViewEvents);
-        new getEventListAsyncTask().execute(user);
-//        setListViewEvents(user);
-
-
+        if( iDb.isOnline()){
+            new getEventListAsyncTask().execute(user);
+        }
+        else{
+            ArrayList<Event> alE = new ArrayList<>();
+            Event e = new Event("Impossible de vérifier l'horaire sans connexion", "", "", "");
+            alE.add(e);
+            CustomB2BAdapter adapter = new CustomB2BAdapter(MonAgenda.this, alE);
+            listViewEvents.setAdapter(adapter);
+        }
     }
 
     public ArrayList<Event> filterEventListFromDb(ArrayList<Event> alEventRaw){
@@ -49,22 +59,19 @@ public class MonAgenda extends CCQFBaseActivity { //B2B
             String telephone = eTemp.getTelephone();
             String email = eTemp.getEmail();
             String adresse = eTemp.getAdresse();
-            boolean ext = eTemp.isAutreBatiment();
+            boolean bExt = eTemp.isAutreBatiment();
+
+            String ext = "";
+            if(bExt){
+                ext = "*";
+            }
+            else
+                ext = "";
 
             String heure = ""+hDebut+" "+hFin;
             String title = nom+", "+poste+", "+compagnie;
             String detail = telephone+", "+email;
-            String location = ""+adresse+""+ext;
-
-            /*if(ext){
-                location = adresse+" ";
-            }
-            else if(!ext){
-                location = adresse;
-            }*/
-
-
-
+            String location = ""+adresse+" "+ext;
 
             alEvent.add(new Event(title, heure, detail, location));
         }
@@ -76,13 +83,15 @@ public class MonAgenda extends CCQFBaseActivity { //B2B
         @Override
         protected ArrayList<Event> doInBackground(String... params) {
             ArrayList<Event>alEventRaw =null;
-            InterfaceDB iDb = new InterfaceDB(MonAgenda.this);
+            ArrayList<Event>alEvent = null;
             if(iDb != null)
-                alEventRaw = iDb.getEventList(params[0]);
-                ArrayList<Event> alEvent = filterEventListFromDb(alEventRaw);
-
-            System.out.print("CCQF MonAgenda getEventListAsyncTask doInBackground ("+params[0] + ") alEventRaw = " + alEventRaw + "\n\n");
-            System.out.flush();
+                    alEventRaw = iDb.getEventList(params[0]);
+            if(alEventRaw != null) {
+                    alEvent = filterEventListFromDb(alEventRaw);
+                }else {
+                    alEvent = new ArrayList<>();
+                    alEvent.add(new Event("Rien à l'horaire", "", "", ""));
+                }
             return alEvent;
         }
         @Override

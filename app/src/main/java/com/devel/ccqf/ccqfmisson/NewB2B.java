@@ -185,6 +185,7 @@ public class NewB2B extends CCQFBaseActivity {
         txtDebut.setText("");
         txtFin.setText("");
         txtCompanie.setText("");
+        txtNom.setText("");
         txtPoste.setText("");
         txtTelephone.setText("");
         txtEmail.setText("");

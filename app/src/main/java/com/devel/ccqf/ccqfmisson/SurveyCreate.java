@@ -18,7 +18,10 @@ import com.devel.ccqf.ccqfmisson.Database.InterfaceDB;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyGroup;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObject;
 
+import java.text.DateFormat;
+import java.text.Format;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class SurveyCreate extends CCQFBaseActivity {
     private Button btnNewAnswer;
@@ -27,6 +30,7 @@ public class SurveyCreate extends CCQFBaseActivity {
     private ListView listViewNewAnswers;
     SurveyObject newSurvey;
     ArrayList <String> arrayListNewAnswers;
+    InterfaceDB iDb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +62,13 @@ public class SurveyCreate extends CCQFBaseActivity {
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+               newSurvey = new SurveyObject(txtNewQuestion.getText().toString(), arrayListNewAnswers);
+                ArrayList<SurveyObject> aSo = new ArrayList<SurveyObject>();
+                aSo.add(newSurvey);
+                Date date = null;
+                SurveyGroup group = new SurveyGroup(date, aSo);
+                iDb = new InterfaceDB(SurveyCreate.this);
+                iDb.sendSurvey(group);
             }
         });
     }
@@ -149,7 +159,7 @@ public class SurveyCreate extends CCQFBaseActivity {
 
     public void newSurveyObject(){
         String question = txtNewQuestion.getText().toString();
-        newSurvey = new SurveyObject(1,question, arrayListNewAnswers);
+        //newSurvey = new SurveyObject(1,question, arrayListNewAnswers);
     }
 
     public int getPositionInArray(String string){

@@ -23,6 +23,11 @@ public class SurveyGroup {
     private int id;
     private List<SurveyObject> surveyList;
 
+    public SurveyGroup(Date dateLimite, List<SurveyObject> surveyList) {
+        this.dateLimite = dateLimite;
+        this.surveyList = surveyList;
+    }
+
     public Date getDateLimite() {
         return dateLimite;
     }

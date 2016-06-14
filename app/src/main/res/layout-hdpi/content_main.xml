@@ -61,4 +61,48 @@
         android:padding="0dp"
         android:layout_margin="0dp"
         android:src="@drawable/dummy_banner" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Documents"
+        android:id="@+id/textView"
+        android:layout_below="@+id/docActivityBtn"
+        android:layout_alignStart="@+id/docActivityBtn"
+        android:layout_alignEnd="@+id/docActivityBtn"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Messagerie"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/feedActivityBtn"
+        android:layout_alignStart="@+id/feedActivityBtn"
+        android:layout_alignEnd="@+id/feedActivityBtn"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Agenda"
+        android:id="@+id/textView3"
+        android:layout_below="@+id/myAgendaActivityBtn"
+        android:layout_alignEnd="@+id/myAgendaActivityBtn"
+        android:layout_alignStart="@+id/myAgendaActivityBtn"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Program"
+        android:id="@+id/textView4"
+        android:layout_below="@+id/programActivityBtn"
+        android:layout_alignStart="@+id/programActivityBtn"
+        android:layout_alignEnd="@+id/programActivityBtn"
+        android:textAlignment="center"/>
 </RelativeLayout>

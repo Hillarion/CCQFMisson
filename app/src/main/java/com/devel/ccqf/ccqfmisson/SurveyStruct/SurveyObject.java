@@ -23,6 +23,7 @@ public class SurveyObject {
     protected String questionTexte;
     protected ArrayList<String> choixReponse;
 
+
     public SurveyObject(){
         super();
     }
@@ -32,11 +33,10 @@ public class SurveyObject {
         questionTexte = question;
         choixReponse = new ArrayList<String>();
     }
-    public SurveyObject(int id, String question, ArrayList<String> reponse){
+    public SurveyObject(String question, ArrayList<String> reponse){
         super();
-        questionId = id;
-        questionTexte = question;
-        choixReponse = reponse;
+        this.questionTexte = question;
+        this.choixReponse = reponse;
        // choixReponse = new ArrayList<String>();
     }
     //Constructeur temporaire a fin de faire des test

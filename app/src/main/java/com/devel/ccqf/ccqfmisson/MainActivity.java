@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,11 +49,18 @@ public class MainActivity extends CCQFBaseActivity {
     private ArrayList<Commanditaire> menuPage =  null;
     private ArrayList<Commanditaire> menuBanniere =  null;
     private Commanditaire currentBanner = null;
+    private LocaleDB lDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        lDb = new LocaleDB(MainActivity.this);
+        int privilege = lDb.getPrivilege(lDb.getCurrentUserID());
+        if(privilege == -1){
+
+        }
         iDb = new InterfaceDB(MainActivity.this);
         baseApplicationFilesPath = "" + Environment.getDataDirectory().getPath() + "/data/" +
                 getPackageName() + "/Files/Commanditaires";

@@ -92,7 +92,7 @@ public class Survey extends CCQFBaseActivity {
 /*                new SendAnswerAsyncTask().execute(new SurveyAnswer(workingSurvey.getId(),
                                                 listSurveyGroup.get(surveyQuestionIndex).getType(),
                                                 selectedAnswers));*/
-                Toast.makeText(Survey.this, "Sent (not)", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(Survey.this, "Sent (not)", Toast.LENGTH_SHORT).show();
                 //Reload list
                 if(surveyQuestionIndex < listSurveyGroup.size()-1){
                     surveyQuestionIndex++;
@@ -143,7 +143,7 @@ public class Survey extends CCQFBaseActivity {
     }
 
     //Liste Temporaire
-    public List<SurveyObject> dummySurveyGroup(){
+    /*public List<SurveyObject> dummySurveyGroup(){
         ArrayList<SurveyObject> dummy = new ArrayList<>();
         ArrayList<String> a =new ArrayList<>();
         a.add("Vert");
@@ -163,7 +163,7 @@ public class Survey extends CCQFBaseActivity {
         c.add("4");
         dummy.add(new SurveyObject(3, "1 a 4 ?",c));
         return dummy;
-    }
+    }*/
 
     public View getViewByPosition(int pos, ListView listView) {
         final int firstListItemPosition = listView.getFirstVisiblePosition();
@@ -206,7 +206,7 @@ public class Survey extends CCQFBaseActivity {
                 listSurveyGroup = sGrp.getQuestions();
             }
             else
-                listSurveyGroup = dummySurveyGroup();
+               // listSurveyGroup = dummySurveyGroup();
             surveyQuestionIndex=0;
             setListAnswerAdapter(listSurveyGroup.get(surveyQuestionIndex).getChoixReponse());
             txtQuestion.setText(listSurveyGroup.get(surveyQuestionIndex).getQuestionTexte());
