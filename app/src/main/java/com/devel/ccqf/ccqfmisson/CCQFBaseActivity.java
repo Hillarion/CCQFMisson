@@ -27,7 +27,7 @@ public class CCQFBaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        enableMenu = false;
+        enableMenu = true;
         actionBar = getSupportActionBar();
 
         actionBar.setDisplayUseLogoEnabled(true);
