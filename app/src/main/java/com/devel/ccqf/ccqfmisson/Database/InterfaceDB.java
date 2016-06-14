@@ -205,8 +205,8 @@ public class InterfaceDB {
         return msg;
     }
 
-    public List<MessagePacket> getMessages(int convID){
-        List<MessagePacket> msgList = null;
+    public ArrayList<MessagePacket> getMessages(int convID){
+        ArrayList<MessagePacket> msgList = null;
         if(lDb != null)
             msgList = lDb.getMessages(convID);
         return msgList;

@@ -38,6 +38,10 @@ public class CustomFeedAdapter extends BaseAdapter {
         userNameList = liste;
     }
 
+    public void setUserMessageList(ArrayList<MessagePacket> liste){
+        messagesItems = liste;
+    }
+
     @Override
     public int getCount() {
         return messagesItems.size();

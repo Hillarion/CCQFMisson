@@ -16,6 +16,14 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <receiver
+            android:name=".Utilitairies.FeedAlarmReceiver"
+            android:process=":remote" >
+        </receiver>
+
+        <service
+            android:name=".Utilitairies.FeedService"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

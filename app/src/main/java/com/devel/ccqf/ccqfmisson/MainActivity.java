@@ -1,8 +1,10 @@
 package com.devel.ccqf.ccqfmisson;
 
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -22,6 +24,7 @@ import com.devel.ccqf.ccqfmisson.Database.LocaleDB;
 import com.devel.ccqf.ccqfmisson.LoginObjects.Login;
 import com.devel.ccqf.ccqfmisson.Pub.Commanditaire;
 import com.devel.ccqf.ccqfmisson.Pub.DialogRep;
+import com.devel.ccqf.ccqfmisson.Utilitairies.FeedAlarmReceiver;
 import com.devel.ccqf.ccqfmisson.Utilitairies.FileDownLoader;
 import com.devel.ccqf.ccqfmisson.Utilitairies.FontsOverride;
 import com.devel.ccqf.ccqfmisson.Utilitairies.Verify;
@@ -132,6 +135,15 @@ public class MainActivity extends CCQFBaseActivity {
             dr.dialogPub(MainActivity.this);
         }
 
+        if ((iDb != null) && (user > 0)){
+            Intent intent = new Intent(getApplicationContext(), FeedAlarmReceiver.class);
+            final PendingIntent pIntent= PendingIntent.getBroadcast(this, FeedAlarmReceiver.REQUEST_CODE,
+                    intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            long firstMillis = System.currentTimeMillis(); // alarm is set right away
+            AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+            alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis,
+                    30 * 1000, pIntent); // tout les 15 secondes
+        }
         if(menuBanniere != null){
             int idx = iDb.getCurrentBannerIndex();
             if((idx >= 0) && (idx<menuBanniere.size())) {

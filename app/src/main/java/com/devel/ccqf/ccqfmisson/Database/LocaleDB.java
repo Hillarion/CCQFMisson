@@ -121,8 +121,8 @@ public class LocaleDB {
         return msg;
     }
 
-    public List<MessagePacket> getMessages(int convID){
-        List<MessagePacket> lstMsg = null;
+    public ArrayList<MessagePacket> getMessages(int convID){
+        ArrayList<MessagePacket> lstMsg = null;
         if(db != null){
             Cursor cursor;
             cursor = db.rawQuery("SELECT * from Messages WHERE conversationID = ?", new String[]{"" + convID});

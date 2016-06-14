@@ -1,18 +1,11 @@
 package com.devel.ccqf.ccqfmisson;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.ActionMenuView;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -114,7 +107,7 @@ public class Feed extends CCQFBaseActivity {
                 }
             }
         }
-        txtChatRoomTitle.setText("conversation avec :\n"+textViewList);
+        txtChatRoomTitle.setText("conversation avec :\n" + textViewList);
 
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,6 +119,11 @@ public class Feed extends CCQFBaseActivity {
                 }
             }
         });
+    }
+
+    private void getMsg(){
+        new getMessageAsyncTask().execute();
+
     }
 
     private class SendMessageAsyncTask extends AsyncTask<String, Void, Integer> {
@@ -157,4 +155,18 @@ public class Feed extends CCQFBaseActivity {
             // progress. For example updating ProgessDialog
         }
     }
+
+    private class getMessageAsyncTask extends AsyncTask<Void, Void, ArrayList<MessagePacket>> {
+
+        @Override
+        protected ArrayList<MessagePacket> doInBackground(Void... params) {
+            return  iDb.getMessages(convID);
+        }
+        @Override
+        protected void onPostExecute(ArrayList<MessagePacket> msgList) {
+            feedAdapter.setUserMessageList(msgList);
+        }
+
+    }
+
 }
