@@ -154,6 +154,7 @@ public class FeedListActivity extends CCQFBaseActivity {
         protected void onPostExecute(ArrayList<ConversationHead> cList) {
             cHeadList = cList;
             tlAdapter = new TheadListAdapter(FeedListActivity.this, cList);
+            tlAdapter.setUserList(globalUserList);
             lstFeedList.setAdapter(tlAdapter);
         }
     }

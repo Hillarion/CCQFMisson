@@ -4,11 +4,12 @@
     <color name="colorPrimaryDark">#FF000000</color>
     <color name="colorAccent">#c13f21</color>
     <color name="colorCCQFOrange">#c13f21</color>
+    <color name="colorCCQFGreen0">#28c43c</color>
     <color name="colorCCQFGreen1">#35873f</color>
     <color name="colorCCQFGreen2">#415d2d</color>
 
     <color name="colorChatCCQF">#eab4a8</color>
-    <color name="colorChatUser">#bcf7c3</color>
+    <color name="colorChatUser">#28c43c</color>
     <color name="colorWhite">#FFFFFFFF</color>
     <color name="background_material_light">#ffffff</color>
     <color name="colorBackground">#ffffff</color>

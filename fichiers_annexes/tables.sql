@@ -38,11 +38,10 @@ create table MessagePacket(
 );
 
 create table MessageQueue(
-    id_msg int NOT NULL ,
+    id_msg int NOT NULL,
     destinataire int NOT NULL,
-    lu boolean NOT NULL,
     FOREIGN KEY(id_msg) REFERENCES MessagePacket (id_msg),
-    FOREIGN KEY(destinataire) REFERENCES Utilisateur (id_user)
+    FOREIGN KEY(destinataire) REFERENCES Utilisateur (user_id)
 );
 
 create table SurveyQuestion(
@@ -85,6 +84,8 @@ create table event (
 );
 
 insert into Utilisateur values(0, 'Racicot', 'Vanessa', 'ccqf', 'admin');
+
+
 //insert into Utilisateur values(0, 'St-Pierre', 'Thierry', 'AEC', '');
 //insert into Utilisateur values(0, 'Bleau', 'Jonathan', 'G', '');
 

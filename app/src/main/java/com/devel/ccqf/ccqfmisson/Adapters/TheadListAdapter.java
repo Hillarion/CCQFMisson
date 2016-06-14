@@ -10,7 +10,10 @@ import android.widget.TextView;
 
 import com.devel.ccqf.ccqfmisson.R;
 import com.devel.ccqf.ccqfmisson.ReseauSocial.ConversationHead;
+import com.devel.ccqf.ccqfmisson.Users;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -21,13 +24,19 @@ public class TheadListAdapter extends BaseAdapter {
     private Context context;
     private List<ConversationHead> threadList;
     private LayoutInflater mInflater;
+    private ArrayList<Users> userList;
 
     public TheadListAdapter(Context context, List<ConversationHead> liste){
         this.context = context;
         threadList = liste;
         mInflater = LayoutInflater.from(this.context);
+        userList = null;
+
     }
 
+    public void setUserList(ArrayList<Users> list){
+        userList = list;
+    }
     @Override
     public int getCount() {
         if(threadList != null) {
@@ -61,7 +70,18 @@ public class TheadListAdapter extends BaseAdapter {
         TextView txtLastMsgHdr = (TextView)convertView.findViewById(R.id.txtLastMsgHdr);
         TextView txtLastMsgTime = (TextView)convertView.findViewById(R.id.txtLastMsgTime);
         txtConversationID.setText(currentDoc.getConvID());
-        txtNameList.setText(currentDoc.getFrom());
+        if(userList != null) {
+            Iterator<Users> uIter = userList.iterator();
+            while(uIter.hasNext()){
+                Users user = uIter.next();
+                if(currentDoc.getFrom().equals(user.getUID())) {
+                    txtNameList.setText(user.getUserName());
+                    break;
+                }
+            }
+        }
+        else
+            txtNameList.setText(currentDoc.getFrom());
         txtLastMsgHdr.setText(currentDoc.getLastMsg());
         txtLastMsgTime.setText(currentDoc.getWhen());
 

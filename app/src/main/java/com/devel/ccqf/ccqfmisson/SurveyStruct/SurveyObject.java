@@ -60,6 +60,21 @@ public class SurveyObject {
         return type;
     }
 
+    public int getIntType() {
+        int intType =0;
+        switch(type){
+            case SURVEY_TYPE_TRUEFALSE:
+                intType=0;
+            case SURVEY_TYPE_MULTIPLECHOICE:
+                intType=1;
+            case SURVEY_TYPE_TEXT:
+                intType=2;
+            default:
+                intType=0;
+        }
+        return intType;
+    }
+
     public void setType(surveyType type) {
         this.type = type;
     }

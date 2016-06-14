@@ -158,7 +158,8 @@ public class InterfaceDB {
     public int[] readSurveyList() {
         int[] tbl = null;
         int lastSurveyID = lDb.getLastSurveyIndex(currentUser);
-
+        System.out.print("CCQF interfaceDB radSurveyList lastSurveyID = "+ lastSurveyID +"\n\n");
+        System.out.flush();
         if (rDb != null)
             tbl = rDb.readSurveyList(lastSurveyID);
         return tbl;
@@ -322,10 +323,14 @@ public class InterfaceDB {
     public int getCurrentBannerIndex(){
         int idx = -1;
         int mxIdx = 0 ;
+        System.out.print("CCQF InterfaceDB getCurrentBannerIndex() \n\n");
+        System.out.flush();
         if(lDb != null){
             mxIdx = lDb.getMaxBannerCommanditaire();
             if(mxIdx >= 0) {
                 idx = lDb.getCurrentBannerCommanditaire();
+                System.out.print("CCQF InterfaceDB getCurrentBannerIndex() mxIdx="+mxIdx+", idx="+idx+"\n\n");
+                System.out.flush();
                 if (++idx >= mxIdx)
                     idx = 0;
                 lDb.setNextBannerCommanditaire(idx);

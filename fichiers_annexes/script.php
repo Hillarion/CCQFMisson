@@ -266,16 +266,22 @@ function readMessages(){
 }
 
 /* 
-*  Cette méthode ne fait que créer l'entrée SurveyForm à laqulle se greffera,
+*  Cette méthode ne fait que créer l'entrée SurveyForm à laquelle se greffera,
 *   subséquemment, les questions.
 */
 function createSurveyForm(){
     $dateLimite=$_POST["dateLimite"];
-    if(validateDate($dateLimite)) {
-	$req = "INSERT INTO SurveyForm value(0, '', '$dateLimite')";
-	createStatus(doQuery($req2));
+    if($dateLimite != ""){
+        if(validateDate($dateLimite)) {
+	        $req = "INSERT INTO SurveyForm value(0, '', '$dateLimite')";
+	        createStatus(doQuery($req));
+        }
+        else returnFail("Bad date format");
     }
-    else returnFail("Bad date format");
+    else {
+        $req = "INSERT INTO SurveyForm value(0, '', '')";
+        createStatus(doQuery($req));
+    }
 }
 
 function sendSurveyQuestion(){
@@ -286,7 +292,7 @@ function sendSurveyQuestion(){
 
     if(($idSurvey == "") || !is_numeric($idSurvey))
         returnFail("Bad Survey ID");
-    else if($qestion == "")
+    else if($question == "")
         returnFail("question must not be empty");
     else if ($reponsesList == "")
         returnFail("response list must not be empty");

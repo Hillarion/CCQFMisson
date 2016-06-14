@@ -127,17 +127,13 @@ public class Feed extends CCQFBaseActivity {
 
             @Override
             public void run() {
-                System.out.print("CCQF Feed TimerTask fetching messages\n\n");
-                System.out.flush();
                 new getMessagesAsyncTask().execute();
+                // Implement the task you want to perform periodically
             }
         };
-        //create a new Timer
         Timer timer = new Timer();
-        //specify the time interval in seconds after which task should run periodically
-        int seconds = 30; // in your case as per question one minute
         //schedule your timer to execute perodically
-        timer.schedule(task, seconds * 1000);
+        timer.scheduleAtFixedRate(task, 1000, 5 * 1000);
     }
 
     private class SendMessageAsyncTask extends AsyncTask<String, Void, Integer> {
@@ -178,7 +174,16 @@ public class Feed extends CCQFBaseActivity {
         }
         @Override
         protected void onPostExecute(ArrayList<MessagePacket> msgList) {
+            Iterator<MessagePacket> mIter = msgList.iterator();
+            while(mIter.hasNext())
+            {
+                MessagePacket msg = mIter.next();
+                if(msg.getSource() == currentUser)
+                    msg.setSelf(true);
+            }
             feedAdapter.setUserMessageList(msgList);
+            feedAdapter.notifyDataSetChanged();
+            listViewMessages.setAdapter(feedAdapter);
         }
 
     }

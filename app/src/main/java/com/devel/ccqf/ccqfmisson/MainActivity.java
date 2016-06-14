@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -36,6 +37,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends CCQFBaseActivity {
     private Button btnDoc;
@@ -50,17 +53,13 @@ public class MainActivity extends CCQFBaseActivity {
     private ArrayList<Commanditaire> menuBanniere =  null;
     private Commanditaire currentBanner = null;
     private LocaleDB lDb;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        lDb = new LocaleDB(MainActivity.this);
-        int privilege = lDb.getPrivilege(lDb.getCurrentUserID());
-        if(privilege == -1){
-
-        }
         iDb = new InterfaceDB(MainActivity.this);
         baseApplicationFilesPath = "" + Environment.getDataDirectory().getPath() + "/data/" +
                 getPackageName() + "/Files/Commanditaires";
@@ -76,7 +75,7 @@ public class MainActivity extends CCQFBaseActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,12 +136,21 @@ public class MainActivity extends CCQFBaseActivity {
             dialogLogin();
         }
         else {
-//            SystemClock.sleep(3000);
+            SystemClock.sleep(1500);
             user = iDb.getCurrentUserID();
-            if(menuPage != null)
-                dr.setPub(menuPage.get(iDb.getCurrentPageIndex()));
+            if(menuPage != null) {
+                int cmdtIdx = iDb.getCurrentPageIndex();
+                if (cmdtIdx < menuPage.size()) {
+                    Commanditaire cmdt = menuPage.get(cmdtIdx);
+                    dr.setPub(cmdt);
+                }
+            }
             dr.dialogPub(MainActivity.this);
         }
+
+        InterfaceDB.privilegeType privilege = iDb.getPrivilege(iDb.getCurrentUserID());
+        if(privilege == InterfaceDB.privilegeType.ADMIN)
+            enableMenu = true;
 
         if ((iDb != null) && (user > 0)){
             Intent intent = new Intent(getApplicationContext(), FeedAlarmReceiver.class);
@@ -151,16 +159,34 @@ public class MainActivity extends CCQFBaseActivity {
             long firstMillis = System.currentTimeMillis(); // alarm is set right away
             AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
             alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis,
-                    30 * 1000, pIntent); // tout les 15 secondes
+                    15 * 1000, pIntent); // tout les 15 secondes
         }
         if(menuBanniere != null){
             int idx = iDb.getCurrentBannerIndex();
+            System.out.print("CCQF MainActiviti onCreate Banner Area idx = "+idx +" menuBanniere="+menuBanniere.size()+"\n\n");
+            System.out.flush();
             if((idx >= 0) && (idx<menuBanniere.size())) {
                 currentBanner = menuBanniere.get(idx);
                 Drawable drawable = Drawable.createFromPath(currentBanner.getFilePath());
                 ibBanner.setImageDrawable(drawable);
             }
         }
+
+
+        TimerTask task = new TimerTask() {
+
+            @Override
+            public void run() {
+                new getSurveyAsyncTask().execute();
+                System.out.print("CCQF MainActivity TimerTask querying survey");
+                System.out.flush();
+                // Implement the task you want to perform periodically
+            }
+        };
+        Timer timer = new Timer();
+        //schedule your timer to execute perodically
+        timer.scheduleAtFixedRate(task, 1000, 30 /* 60 */* 1000);
+
     }
 
     public void dialogLogin(){
@@ -214,11 +240,6 @@ public class MainActivity extends CCQFBaseActivity {
                 } else{
                     Toast.makeText(MainActivity.this, "Prenom Invalide", Toast.LENGTH_SHORT).show();
                 }
-                
-                
-                
-             /*   Login login = new Login(prenom, nom, email, surnom);
-                d.dismiss();*/
             }
         });
     }
@@ -303,4 +324,22 @@ public class MainActivity extends CCQFBaseActivity {
         }
     }
 
+    private class getSurveyAsyncTask extends AsyncTask<Void, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(Void... params) {
+            int [] lst = iDb.readSurveyList();
+            System.out.print("CCQF MainActivity getSurveyAsyncTask doInBackground lst = "+ lst + "\n\n");
+            System.out.flush();
+            return  new Integer((lst == null)?0:1);
+        }
+        @Override
+        protected void onPostExecute(Integer  val) {
+            if(val != 0)
+                fab.setVisibility(View.VISIBLE);
+            else
+                fab.setVisibility(View.INVISIBLE);
+        }
+
+    }
 }

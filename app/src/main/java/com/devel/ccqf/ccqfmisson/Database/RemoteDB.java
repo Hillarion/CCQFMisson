@@ -387,14 +387,14 @@ public class RemoteDB {
                         pairs.add(new BasicNameValuePair("action", "sendSurveyQuestion"));
                         pairs.add(new BasicNameValuePair("id_survey", ""+srvId));
                         pairs.add(new BasicNameValuePair("question", ""+sObj.getQuestionTexte()));
-                        pairs.add(new BasicNameValuePair("type", ""+sObj.getType()));
+                        pairs.add(new BasicNameValuePair("type", ""+sObj.getIntType()));
                         ArrayList<String> reps  = sObj.getChoixReponse();
                         String listeReponses = reps.get(0);
                         for(int r=1; r<reps.size(); r++)
                             listeReponses += ","+reps.get(r);
                         pairs.add(new BasicNameValuePair("listeReponses", listeReponses));
                         String s = sendRequest(pairs);
-                        System.out.print("FROM REMOTE DB "+ s);
+                        System.out.print("FROM REMOTE DB " + s);
                         System.out.flush();
                     }
                 }
@@ -505,6 +505,10 @@ public class RemoteDB {
                             }
                         }
                     }
+                }
+                else{
+                    System.out.print("CCQF RemoteDb readSurveyList() fail LineResult="+ligneResult+"\n\n");
+                    System.out.flush();
                 }
             }
         }
