@@ -1,5 +1,6 @@
 package com.devel.ccqf.ccqfmisson;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -40,42 +41,29 @@ public class Program extends CCQFBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mon_agenda);
-        InputStream inputStream = getResources().openRawResource(R.raw.program);
+
+        events = new ArrayList<>();
         listViewEvents = (ListView) findViewById(R.id.listViewEvents);
-        //setListViewEvents(temp);
-        baseApplicationFilesPath = "" + Environment.getDataDirectory().getPath() + "/data/" +
-                getPackageName() + "/Files/Programme";
-        Toast.makeText(Program.this, ""+baseApplicationFilesPath, Toast.LENGTH_LONG).show();
-        new GetProgramAsyncTask().execute(dirUrl,baseApplicationFilesPath, "program.csv");
+        Intent i = getIntent();
+        Bundle b = i.getExtras();
+        events = b.getParcelableArrayList("EVENTLIST");
 
-        Toast.makeText(Program.this, ""+events, Toast.LENGTH_SHORT).show();
-
-        listViewEvents.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //  Intent i = new Intent(Program.this )
-                //Toast.makeText(Program.this, temp.toString(), Toast.LENGTH_SHORT).show();
-
-
-            }
-        });
-    }
-    public void setListViewEvents(ArrayList<Event> alProgram) {
-        CustomProgramAdapter adapter = new CustomProgramAdapter(this, dummyListDays());
-       // CustomSurveyAnswerAdapter adapter = new CustomSurveyAnswerAdapter(Program.this, alProgram);
+        adapter = new CustomB2BAdapter(Program.this,events);
         listViewEvents.setAdapter(adapter);
-    }
-    public ArrayList<Event> dummyListDays(){
-        ArrayList<Event> n = new ArrayList<>();
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy ");
-        Date d = Calendar.getInstance().getTime();
-        String date = df.format(d);
 
-        for(int i = 0 ; i < 20 ; i++ ){
-            n.add(new Event("Title", i+"h00", (i+1)+"h00"));
-        }
-        return n;
+
+
+
+
+
+
+
+     /*   baseApplicationFilesPath = "" + Environment.getDataDirectory().getPath() + "/data/" +
+                getPackageName() + "/Files/Programme";
+        new GetProgramAsyncTask().execute(dirUrl,baseApplicationFilesPath, "program.csv");*/
     }
+
+
     private class GetProgramAsyncTask extends AsyncTask<String, Void, ArrayList<Event>>{
 
         @Override
@@ -111,7 +99,10 @@ public class Program extends CCQFBaseActivity {
                     do{
                         String line = scanner.next();
                         String[] linetbl = line.split(";");
-                        e = new Event(linetbl[0], linetbl[1], linetbl[2], linetbl[3]);
+                        System.out.print(""+line);
+                        System.out.flush();
+                        e = new Event(linetbl[1], linetbl[0],  linetbl[2], linetbl[3]);
+
                         events.add(e);
                       //  Toast.makeText(Program.this, "Event : "+e, Toast.LENGTH_SHORT).show();
                     }while(scanner.hasNext());
@@ -127,7 +118,7 @@ public class Program extends CCQFBaseActivity {
         protected void onPostExecute(ArrayList<Event> liste){
             super.onPostExecute(liste);
             adapter = new CustomB2BAdapter(Program.this,liste);
-            //listViewEvents.setAdapter(adapter);
+            listViewEvents.setAdapter(adapter);
 
         }
     }

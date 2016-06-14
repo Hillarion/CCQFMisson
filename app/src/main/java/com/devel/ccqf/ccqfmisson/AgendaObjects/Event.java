@@ -1,11 +1,14 @@
 package com.devel.ccqf.ccqfmisson.AgendaObjects;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
 /**
  * Created by jo on 5/16/16.
  */
-public class Event {
+public class Event implements Parcelable {
     protected String destinataire;
     protected String DTStart;
     protected String DTEnd;
@@ -48,6 +51,31 @@ public class Event {
         this.adresse = adresse;
         this.autreBatiment = autreBatiment;
     }
+
+    protected Event(Parcel in) {
+        destinataire = in.readString();
+        DTStart = in.readString();
+        DTEnd = in.readString();
+        compagnie = in.readString();
+        nom = in.readString();
+        poste = in.readString();
+        telephone = in.readString();
+        email = in.readString();
+        adresse = in.readString();
+        autreBatiment = in.readByte() != 0;
+    }
+
+    public static final Creator<Event> CREATOR = new Creator<Event>() {
+        @Override
+        public Event createFromParcel(Parcel in) {
+            return new Event(in);
+        }
+
+        @Override
+        public Event[] newArray(int size) {
+            return new Event[size];
+        }
+    };
 
     @Override
     public String toString() {
@@ -144,4 +172,26 @@ public class Event {
     public void setAutreBatiment(boolean autreBatiment) {
         this.autreBatiment = autreBatiment;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(destinataire);
+        dest.writeString(DTStart);
+        dest.writeString(DTEnd);
+        dest.writeString(compagnie);
+        dest.writeString(nom);
+        dest.writeString(poste);
+        dest.writeString(telephone);
+        dest.writeString(email);
+        dest.writeString(adresse);
+        dest.writeByte((byte) (autreBatiment ? 1 : 0));
+
+    }
+
+
 }
