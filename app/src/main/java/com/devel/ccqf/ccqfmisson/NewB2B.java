@@ -44,7 +44,8 @@ public class NewB2B extends CCQFBaseActivity {
     private String batiment;
     private String email;
     private boolean ext = false;
-    String temp;
+    private InterfaceDB iDb;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,13 +55,14 @@ public class NewB2B extends CCQFBaseActivity {
         initialize();
         fillBatimentSpinner();
         //get Login adresse
-     /*   ArrayList<String> alTempLoginList = new ArrayList<>();
-        alTempLoginList.add("jonathan_bleau@derp.com");
-        alTempLoginList.add("jacinthe_desrochers@derp.com");
-        alTempLoginList.add("simon_petit@derp.com");*/
-        fillDestinataireSpinner(loginAdressList());
-
-
+        iDb = new InterfaceDB(NewB2B.this);
+        if(iDb.isOnline()){
+            fillDestinataireSpinner(loginAdressList());
+        }else {
+            ArrayList<String> alString = new ArrayList<>();
+            alString.add("Hors Connection");
+            fillDestinataireSpinner(alString);
+        }
 
         btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +84,7 @@ public class NewB2B extends CCQFBaseActivity {
                 }
                 //Validation
                 Verify ve = new Verify();
+
                 if (!compagnie.equals("")) {
                     if(!heureDebut.equals("")){
                         if(!heureFin.equals("")){
@@ -95,8 +98,6 @@ public class NewB2B extends CCQFBaseActivity {
                                                         email, batiment, ext);
                                                 new SendB2BAsyncTask().execute(e);
                                                 clean();
-                                                Toast.makeText(NewB2B.this, "Evenement Envoyé", Toast.LENGTH_SHORT).show();
-
                                             }
                                             else{
                                                 Toast.makeText
@@ -173,11 +174,13 @@ public class NewB2B extends CCQFBaseActivity {
     public ArrayList<String> loginAdressList(){
         ArrayList<String> alLoginAdress;
         alLoginAdress = new ArrayList<>();
-        InterfaceDB iDb = new InterfaceDB(NewB2B.this);
-        ArrayList<Users> alUser = iDb.getUserList();
-        for(int i = 0; i<alUser.size(); i++){
-            alLoginAdress.add(alUser.get(i).getUserName());
-        }
+        //InterfaceDB iDb = new InterfaceDB(NewB2B.this);
+            ArrayList<Users> alUser = iDb.getUserList();
+            for(int i = 0; i<alUser.size(); i++){
+                alLoginAdress.add(alUser.get(i).getUserName());
+                System.out.print("FROM NEWB2B : CONNECTION LOOP");
+                System.out.flush();
+            }
         return alLoginAdress;
     }
 

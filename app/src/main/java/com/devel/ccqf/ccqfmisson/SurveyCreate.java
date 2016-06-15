@@ -65,29 +65,33 @@ public class SurveyCreate extends CCQFBaseActivity {
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if((arrayListNewAnswers.isEmpty()) || (txtNewQuestion.equals(""))){
-                    Toast.makeText(SurveyCreate.this, "Bien remplir tout les champs",
-                            Toast.LENGTH_SHORT).show();
+                iDb = new InterfaceDB(SurveyCreate.this);
+                if(iDb.isOnline()){
+                    if((arrayListNewAnswers.isEmpty()) || (txtNewQuestion.equals(""))){
+                        Toast.makeText(SurveyCreate.this, "Bien remplir tout les champs",
+                                Toast.LENGTH_SHORT).show();
+                    }else{
+                        newSurvey = new SurveyMultiple(arrayListNewAnswers.size(), txtNewQuestion.getText().toString(),
+                                arrayListNewAnswers);
+                        ArrayList<SurveyObject> aSo = new ArrayList<SurveyObject>();
+                        aSo.add(newSurvey);
+                        DateFormat df = new SimpleDateFormat("MM/dd/yyyy ");
+                        Date date = Calendar.getInstance().getTime();
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(date);
+                        cal.add(Calendar.DATE, 3);
+                        date = cal.getTime();
+                        SurveyGroup group = new SurveyGroup(date, aSo);
+                        iDb = new InterfaceDB(SurveyCreate.this);
+                        iDb.sendSurvey(group);
+                        Toast.makeText(SurveyCreate.this, "Envoyé ", Toast.LENGTH_SHORT).show();
+                        System.out.print("FROM SURVERCREATE " + newSurvey);
+                        System.out.flush();
+                        clean();
+                    } 
                 }else{
-                    newSurvey = new SurveyMultiple(arrayListNewAnswers.size(), txtNewQuestion.getText().toString(),
-                            arrayListNewAnswers);
-                    ArrayList<SurveyObject> aSo = new ArrayList<SurveyObject>();
-                    aSo.add(newSurvey);
-                    DateFormat df = new SimpleDateFormat("MM/dd/yyyy ");
-                    Date date = Calendar.getInstance().getTime();
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(date);
-                    cal.add(Calendar.DATE, 3);
-                    date = cal.getTime();
-                    SurveyGroup group = new SurveyGroup(date, aSo);
-                    iDb = new InterfaceDB(SurveyCreate.this);
-                    iDb.sendSurvey(group);
-                    Toast.makeText(SurveyCreate.this, "Envoyé ", Toast.LENGTH_SHORT).show();
-                    System.out.print("FROM SURVERCREATE " + newSurvey);
-                    System.out.flush();
-                    clean();
+                    Toast.makeText(SurveyCreate.this, "Hors Connexion !", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
     }
