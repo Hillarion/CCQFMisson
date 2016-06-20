@@ -16,7 +16,7 @@ import com.devel.ccqf.ccqfmisson.R;
 /**
  * Created by jo on 5/31/16.
  */
-public class DialogRep extends Dialog /*implements DialogInterface.OnClickListener*/ {
+public class DialogRep extends Dialog {
     private Commanditaire com = null;
     private ImageView pubLayout;
 

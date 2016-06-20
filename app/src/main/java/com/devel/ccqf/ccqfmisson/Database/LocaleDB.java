@@ -61,6 +61,7 @@ public class LocaleDB {
                 values.put("privilege", "-1");
                 long val = db.insert("Utilisateur", null, values);
             }
+            cursor.close();
         }
     }
 
@@ -71,6 +72,7 @@ public class LocaleDB {
             cursor = db.rawQuery("SELECT * FROM Utilisateur", null);
             cursor.moveToFirst();
             cursorCount = cursor.getCount();
+            cursor.close();
         }
         return cursorCount;
     }
@@ -88,7 +90,7 @@ public class LocaleDB {
                 String companie = cursor.getString(3);
                 userLogin = prenom+"_"+nom+"@"+companie;
             }
-
+            cursor.close();
         }
         return userLogin;
     }
@@ -117,6 +119,7 @@ public class LocaleDB {
                                         cursor.getString(6)  // attachement
                                         );
             }
+            cursor.close();
         }
         return msg;
     }
@@ -151,7 +154,7 @@ public class LocaleDB {
                     loopCount++;
                 }
             }
-
+            cursor.close();
         }
         return lstMsg;
     }
@@ -165,6 +168,7 @@ public class LocaleDB {
             if(cursor.getCount() > 0){
                 privilege = cursor.getInt(0);
             }
+            cursor.close();
         }
         return privilege;
     }
@@ -189,6 +193,7 @@ public class LocaleDB {
             if (cursor.getCount() > 0) {
                 sIdx = cursor.getInt(0);
             }
+            cursor.close();
         }
         return sIdx;
     }
@@ -214,6 +219,7 @@ public class LocaleDB {
                    mIdx = -1;
                 }
             }
+            cursor.close();
         }
         return mIdx;
     }
@@ -242,6 +248,7 @@ public class LocaleDB {
                     }
                 }
             }
+            cursor.close();
         }
         return (List)convList;
     }
@@ -258,6 +265,7 @@ public class LocaleDB {
                         cursor.getString(2),
                         cursor.getString(1));
             }
+            cursor.close();
         }
         return cHead;
     }
@@ -270,6 +278,7 @@ public class LocaleDB {
             if(cursor.getCount() > 0){
                 user = cursor.getInt(0);
             }
+            cursor.close();
         }
         return user;
     }
@@ -283,10 +292,14 @@ public class LocaleDB {
             values.put("Banners", "0");
             Cursor cursor = db.rawQuery("SELECT * FROM Commanditaires", null);
             cursor.moveToFirst();
-            if(cursor.getCount() > 0)
+            if(cursor.getCount() > 0) {
+                cursor.close();
                 db.update("Commanditaires", values, null, null);
-            else
+            }
+            else {
+                cursor.close();
                 db.insert("Commanditaires", null, values);
+            }
         }
     }
 
@@ -298,6 +311,7 @@ public class LocaleDB {
             if(cursor.getCount() > 0){
                 mxpg = cursor.getInt(0);
             }
+            cursor.close();
         }
         return mxpg;
     }
@@ -310,16 +324,16 @@ public class LocaleDB {
             if(cursor.getCount() > 0){
                 pg = cursor.getInt(0);
             }
+            cursor.close();
         }
         return pg;
     }
 
     public void setNextPageCommanditaire(int val){
         ContentValues values = new ContentValues();
-        if(db != null){
-            values.put("Pages", ""+val);
-            db.update("Commanditaires", values, null, null);
-
+        if(db != null) {
+            values.put("Pages", "" + val);
+            int res = db.update("Commanditaires", values, null, null);
         }
     }
 
@@ -331,6 +345,7 @@ public class LocaleDB {
             if(cursor.getCount() > 0){
                 mxpg = cursor.getInt(0);
             }
+            cursor.close();
         }
         return mxpg;
     }
@@ -343,6 +358,7 @@ public class LocaleDB {
             if(cursor.getCount() > 0){
                 pg = cursor.getInt(0);
             }
+            cursor.close();
         }
         return pg;
     }
@@ -350,9 +366,12 @@ public class LocaleDB {
     public void setNextBannerCommanditaire(int val){
         ContentValues values = new ContentValues();
         if(db != null){
-            values.put("Banners", ""+val);
-            db.update("Commanditaires", values, null, null);
-
+            System.out.print("CCQF LocaleDB setNextBannerCommanditaire() new banner idx=" + val + "\n\n");
+            System.out.flush();
+            values.put("Banners", "" + val);
+            int res = db.update("Commanditaires", values, null, null);
+            System.out.print("CCQF LocaleDB setNextBannerCommanditaire() row affected=" + res + "\n\n");
+            System.out.flush();
         }
     }
 }

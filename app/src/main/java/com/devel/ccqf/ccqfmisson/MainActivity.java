@@ -161,7 +161,7 @@ public class MainActivity extends CCQFBaseActivity {
             alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis,
                     15 * 1000, pIntent); // tout les 15 secondes
         }
-        if(menuBanniere != null){
+/*        if(menuBanniere != null){
             int idx = iDb.getCurrentBannerIndex();
             System.out.print("CCQF MainActiviti onCreate Banner Area idx = "+idx +" menuBanniere="+menuBanniere.size()+"\n\n");
             System.out.flush();
@@ -170,8 +170,7 @@ public class MainActivity extends CCQFBaseActivity {
                 Drawable drawable = Drawable.createFromPath(currentBanner.getFilePath());
                 ibBanner.setImageDrawable(drawable);
             }
-        }
-
+        }*/
 
         TimerTask task = new TimerTask() {
 
@@ -189,7 +188,22 @@ public class MainActivity extends CCQFBaseActivity {
 
     }
 
-    public void dialogLogin(){
+    protected void onResume() {
+        super.onResume();
+        if(menuBanniere != null){
+            int idx = iDb.getCurrentBannerIndex();
+            System.out.print("CCQF MainActiviti onCreate Banner Area idx = "+idx +" menuBanniere="+menuBanniere.size()+"\n\n");
+            System.out.flush();
+            if((idx >= 0) && (idx<menuBanniere.size())) {
+                currentBanner = menuBanniere.get(idx);
+                Drawable drawable = Drawable.createFromPath(currentBanner.getFilePath());
+                ibBanner.setImageDrawable(drawable);
+            }
+        }
+
+    }
+
+        public void dialogLogin(){
 
         final Dialog d = new Dialog(MainActivity.this);
         d.setContentView(R.layout.dialog_login);
@@ -303,8 +317,10 @@ public class MainActivity extends CCQFBaseActivity {
                         String[] linetbl = line.split(";");
 
                         FileDownLoader fgl = new FileDownLoader(linetbl[2], params[1] + "/" + linetbl[0], params[0] + "/" + linetbl[0]);
-                        if (!fgl.isUptodate())
-                            fgl.getFileFromServer();
+                        if(iDb.isOnline()) {
+                            if (!fgl.isUptodate())
+                                fgl.getFileFromServer();
+                        }
                         if (linetbl[0].equalsIgnoreCase("Pages"))
                             menuPage.add(new Commanditaire(params[1] + "/" + linetbl[0] + "/" + linetbl[2], linetbl[1]));
                         else if (linetbl[0].equalsIgnoreCase("Banners"))

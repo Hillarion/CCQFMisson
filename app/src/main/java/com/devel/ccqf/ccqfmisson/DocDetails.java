@@ -1,5 +1,6 @@
 package com.devel.ccqf.ccqfmisson;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -86,11 +88,30 @@ public class DocDetails extends CCQFBaseActivity {
         @Override
         protected void onPostExecute(File fichier) {
             super.onPostExecute(fichier);
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(fichier), "application/pdf");
-            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(intent);
+            if(fichier.exists()) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.fromFile(fichier), "application/pdf");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
+            }
+            else {
+                dialogAlerteReseau();
+            }
         }
+    }
+
+    private void dialogAlerteReseau() {
+        final Dialog d = new Dialog(DocDetails.this);
+        d.setContentView(R.layout.dialog_message);
+        d.setTitle("Alerte!");
+        Button btnOK = (Button) d.findViewById(R.id.btnNoNetOk);
+        btnOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                d.dismiss();
+            }
+        });
+        d.show();
     }
 
 

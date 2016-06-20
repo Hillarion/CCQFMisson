@@ -506,10 +506,10 @@ public class RemoteDB {
                         }
                     }
                 }
-                else{
-                    System.out.print("CCQF RemoteDb readSurveyList() fail LineResult="+ligneResult+"\n\n");
-                    System.out.flush();
-                }
+            }
+            else{
+                System.out.print("CCQF RemoteDb readSurveyList() fail LineResult="+ligneResult+"\n\n");
+                System.out.flush();
             }
         }
         return surveylist;
