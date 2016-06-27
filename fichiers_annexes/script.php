@@ -183,9 +183,9 @@ function sendMessage(){
             else{
                 $reqDest = "SELECT groupe_ids from ConversationThread WHERE conversation_id=$convId";
                 $resultDest = doQuery($reqDest);
-                $row = mysqli_num_rows($result);
+                $row = mysqli_num_rows($resultDest);
                 if($row > 0){
-                    $ligne = mysqli_fetch_object($result);
+                    $ligne = mysqli_fetch_object($resultDest);
                     $groupList = $ligne->groupe_ids;
                 }
             }

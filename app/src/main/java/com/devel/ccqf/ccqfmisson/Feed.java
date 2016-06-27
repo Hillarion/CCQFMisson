@@ -118,6 +118,7 @@ public class Feed extends CCQFBaseActivity {
 
                 if (!msgText.isEmpty()) {
                     new SendMessageAsyncTask().execute(new String[]{userList, msgText, ""+strConv});
+                    inputMsg.setText("");
                 }
             }
         });

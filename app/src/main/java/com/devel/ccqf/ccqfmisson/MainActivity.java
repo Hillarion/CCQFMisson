@@ -177,14 +177,12 @@ public class MainActivity extends CCQFBaseActivity {
             @Override
             public void run() {
                 new getSurveyAsyncTask().execute();
-                System.out.print("CCQF MainActivity TimerTask querying survey");
-                System.out.flush();
                 // Implement the task you want to perform periodically
             }
         };
         Timer timer = new Timer();
         //schedule your timer to execute perodically
-        timer.scheduleAtFixedRate(task, 1000, 30 /* 60 */* 1000);
+        timer.scheduleAtFixedRate(task, 1000, 30 * 60 * 1000); // toute les 30 minutes
 
     }
 
@@ -192,8 +190,6 @@ public class MainActivity extends CCQFBaseActivity {
         super.onResume();
         if(menuBanniere != null){
             int idx = iDb.getCurrentBannerIndex();
-            System.out.print("CCQF MainActiviti onCreate Banner Area idx = "+idx +" menuBanniere="+menuBanniere.size()+"\n\n");
-            System.out.flush();
             if((idx >= 0) && (idx<menuBanniere.size())) {
                 currentBanner = menuBanniere.get(idx);
                 Drawable drawable = Drawable.createFromPath(currentBanner.getFilePath());
@@ -345,8 +341,6 @@ public class MainActivity extends CCQFBaseActivity {
         @Override
         protected Integer doInBackground(Void... params) {
             int [] lst = iDb.readSurveyList();
-            System.out.print("CCQF MainActivity getSurveyAsyncTask doInBackground lst = "+ lst + "\n\n");
-            System.out.flush();
             return  new Integer((lst == null)?0:1);
         }
         @Override
