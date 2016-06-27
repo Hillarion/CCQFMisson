@@ -378,6 +378,8 @@ public class RemoteDB {
             if (!status.isEmpty()) {
                 if (status.equalsIgnoreCase("Success")) {
                     int srvId = parser.getIndex();
+                    System.out.print("CCQF RemoteDB sendSurvey (Group) srvID = " + srvId + "\n\n");
+                    System.out.flush();
 
                     List<SurveyObject> qList = sGrp.getQuestions();
                     Iterator<SurveyObject> iter = qList.iterator();
@@ -393,6 +395,8 @@ public class RemoteDB {
                         for(int r=1; r<reps.size(); r++)
                             listeReponses += ","+reps.get(r);
                         pairs.add(new BasicNameValuePair("listeReponses", listeReponses));
+                        System.out.print("CCQF RemoteDB sendSurvey (Question) pairs = " + pairs + "\n\n");
+                        System.out.flush();
                         String s = sendRequest(pairs);
                         System.out.print("FROM REMOTE DB " + s);
                         System.out.flush();
@@ -494,7 +498,7 @@ public class RemoteDB {
             String status = parser.getStatus();
             if (!status.isEmpty()) {
                 if (status.equalsIgnoreCase("Success")) {
-                    JSONArray jArray = parser.getList("msgQueue");
+                    JSONArray jArray = parser.getList("surveyList");
                     if (jArray != null) {
                         surveylist = new int[jArray.length()];
                         for (int idx = 0; idx < jArray.length(); idx++) {
@@ -507,10 +511,10 @@ public class RemoteDB {
                     }
                 }
             }
-            else{
+/*            else{
                 System.out.print("CCQF RemoteDb readSurveyList() fail LineResult="+ligneResult+"\n\n");
                 System.out.flush();
-            }
+            }*/
         }
         return surveylist;
     }

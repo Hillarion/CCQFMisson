@@ -300,18 +300,17 @@ function sendSurveyQuestion(){
         returnFail("Bad QuestionType");
     else{
         $req = "INSERT INTO SurveyQuestion values(0, '$question', $type, '$reponsesList')";
-	createStatus(doQuery($req));
-        $msgId = mysqli_insert_id($conn);
-	$req = "SELECT question_list FROM SurveyForm where id_survey = $idSurvey";
+    	$msgId = createStatus(doQuery($req));
+	    $req = "SELECT question_list FROM SurveyForm where id_survey = $idSurvey";
         $result = doQuery($req);
-	$ligne = mysqli_fetch_object(doQuery($req));
+	    $ligne = mysqli_fetch_object(doQuery($req));
         $qList = $ligne->question_list;
-	if($qList == "")
+	    if($qList == "")
             $qList = "$msgId";
         else
             $qList += ",$msgId";
-	$req = "UPDATE question_list=$qList FROM SurveyForm where id_survey = $idSurvey";
-        $result = doQuery($req);		
+	    $req = "UPDATE SurveyForm set question_list=$qList where id_survey = $idSurvey";
+        $result = doQuery($req);
     }
 }
 
