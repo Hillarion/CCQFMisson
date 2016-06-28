@@ -234,12 +234,12 @@ public class InterfaceDB {
     }*/
 
     public int sendMessage(int convID, String dest, String msgText){
-        int msgId = -1;
+        int cId = -1;
         if(rDb != null) {
             MessagePacket msg = new MessagePacket(-1, currentUser, convID, dest, msgText, new Date(), "");
-            msgId = rDb.sendMessage(msg);
+            cId = rDb.sendMessage(msg);
         }
-        return msgId;
+        return cId;
     }
 
 /*

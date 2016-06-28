@@ -14,6 +14,7 @@ import com.devel.ccqf.ccqfmisson.Database.InterfaceDB;
 import com.devel.ccqf.ccqfmisson.ReseauSocial.MessagePacket;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
@@ -144,14 +145,15 @@ public class Feed extends CCQFBaseActivity {
             if(iDb != null){
                 // convID est commun à tout les messages entrant et sortant pour l'instance courante de Feed.
                 convID = iDb.sendMessage(convID, msgInfo[0], msgInfo[1]);
-                MessagePacket msg = iDb.getMessage(msgId);
+                MessagePacket msg = new MessagePacket(-1, currentUser, convID,msgInfo[0], msgInfo[1], new Date(), "");
+                msg.setSelf(true);
                 feedAdapter.add(msg);
             }
             return convID;
         }
         @Override
         protected void onPostExecute(Integer unused) {
-
+            feedAdapter.notifyDataSetChanged();
         }
 
         @Override

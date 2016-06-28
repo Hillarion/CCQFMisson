@@ -159,7 +159,7 @@ public class MainActivity extends CCQFBaseActivity {
             long firstMillis = System.currentTimeMillis(); // alarm is set right away
             AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
             alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis,
-                    15 * 1000, pIntent); // tout les 15 secondes
+                    7 * 1000, pIntent); // tout les 15 secondes
         }
 /*        if(menuBanniere != null){
             int idx = iDb.getCurrentBannerIndex();
