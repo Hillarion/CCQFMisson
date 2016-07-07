@@ -161,16 +161,6 @@ public class MainActivity extends CCQFBaseActivity {
             alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis,
                     7 * 1000, pIntent); // tout les 15 secondes
         }
-/*        if(menuBanniere != null){
-            int idx = iDb.getCurrentBannerIndex();
-            System.out.print("CCQF MainActiviti onCreate Banner Area idx = "+idx +" menuBanniere="+menuBanniere.size()+"\n\n");
-            System.out.flush();
-            if((idx >= 0) && (idx<menuBanniere.size())) {
-                currentBanner = menuBanniere.get(idx);
-                Drawable drawable = Drawable.createFromPath(currentBanner.getFilePath());
-                ibBanner.setImageDrawable(drawable);
-            }
-        }*/
 
         TimerTask task = new TimerTask() {
 
@@ -199,8 +189,7 @@ public class MainActivity extends CCQFBaseActivity {
 
     }
 
-        public void dialogLogin(){
-
+    public void dialogLogin() {
         final Dialog d = new Dialog(MainActivity.this);
         d.setContentView(R.layout.dialog_login);
         d.setTitle("Enregistrez-Vous");
@@ -214,45 +203,37 @@ public class MainActivity extends CCQFBaseActivity {
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String prenom = txtPrenom.getText().toString();
-                String nom = txtNom.getText().toString();
-                String compagnie = txtSurnom.getText().toString();
-                Verify verify = new Verify();
+            String prenom = txtPrenom.getText().toString();
+            String nom = txtNom.getText().toString();
+            String compagnie = txtSurnom.getText().toString();
+            Verify verify = new Verify();
 
-                if(verify.isValidName(prenom)){
+            if(verify.isValidName(prenom)) {
+                if(verify.isValidName(nom)) {
+                    if(!compagnie.isEmpty()) {
+                        new SendLoginAsyncTask().execute(nom, prenom, compagnie);
+                        Toast.makeText
+                                 (MainActivity.this, ""+nom +"_"+prenom+"@"+compagnie,
+                                         Toast.LENGTH_SHORT).show();
 
-                     if(verify.isValidName(nom)) {
-                         
-                         if(!compagnie.isEmpty()){
-//   pour référence
-//                       int  userID =  iDb.registerUser(String nom, String prenom, String compagnie) ;
-                             new SendLoginAsyncTask().execute(nom, prenom, compagnie);
-                             Toast.makeText
-                                     (MainActivity.this, ""+nom +"_"+prenom+"@"+compagnie,
-                                             Toast.LENGTH_SHORT).show();
+                        InterfaceDB iDb = new InterfaceDB(MainActivity.this);
+                        iDb.registerUser(nom, prenom, compagnie);
 
-                             InterfaceDB iDb = new InterfaceDB(MainActivity.this);
-                             LocaleDB lDb = new LocaleDB(MainActivity.this);
-                             iDb.registerUser(nom, prenom, compagnie);
-//                             lDb.setUser(1, nom, prenom, compagnie);
-
-                             d.dismiss();
-                         } else{
-                             Toast.makeText(MainActivity.this, "Companie vide", Toast.LENGTH_SHORT).
-                                     show();
-                         }
-
-                     } else{
-                         Toast.makeText(MainActivity.this, "Nom Invalide", Toast.LENGTH_SHORT).
-                                 show();
-                     }
-
-                } else{
-                    Toast.makeText(MainActivity.this, "Prenom Invalide", Toast.LENGTH_SHORT).show();
+                        d.dismiss();
+                    } else {
+                       Toast.makeText(MainActivity.this, "Companie vide", Toast.LENGTH_SHORT).
+                               show();
+                    }
+                } else {
+                     Toast.makeText(MainActivity.this, "Nom Invalide", Toast.LENGTH_SHORT).
+                             show();
                 }
+            } else {
+                Toast.makeText(MainActivity.this, "Prenom Invalide", Toast.LENGTH_SHORT).show();
             }
-        });
-    }
+        }
+    });
+}
 
     private class SendLoginAsyncTask extends AsyncTask<String, Void, Login>{
 

@@ -98,7 +98,6 @@ public class Feed extends CCQFBaseActivity {
         String textViewList = "";
         String [] splitedtUserList = userList.split(",");
         for(int uIdx=0; uIdx < splitedtUserList.length; uIdx++){
-//            int value = Integer.parseInt(splitedtUserList[uIdx]);
             String uid = splitedtUserList[uIdx];
             Iterator<Users>  uIter = globalUserList.iterator();
             while(uIter.hasNext()) {

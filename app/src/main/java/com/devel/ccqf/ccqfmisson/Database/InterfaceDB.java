@@ -224,15 +224,6 @@ public class InterfaceDB {
         return msgId;
     }
 
-/*    public int sendMessage(String dest, String msgText){
-        int msgId = -1;
-        if(rDb != null) {
-            MessagePacket msg = new MessagePacket(-1, currentUser, -1, dest, msgText, new Date(), "");
-            msgId = rDb.sendMessage(msg);
-        }
-        return msgId;
-    }*/
-
     public int sendMessage(int convID, String dest, String msgText){
         int cId = -1;
         if(rDb != null) {
@@ -241,17 +232,6 @@ public class InterfaceDB {
         }
         return cId;
     }
-
-/*
-    public int sendMessage(int convID, String msgText){
-        int msgId = -1;
-        if(rDb != null) {
-            MessagePacket msg = new MessagePacket(-1, currentUser, -1, msgText, new Date(), "");
-            msgId = rDb.sendMessage(msg);
-        }
-        return msgId;
-    }
-*/
 
     public ArrayList<SurveyObjectResults> readSurveyResults(int surveyId){
         ArrayList<SurveyObjectResults> rsltList = null;

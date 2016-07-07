@@ -289,11 +289,7 @@ public class RemoteDB {
             String status = parser.getStatus();
             if (!status.isEmpty()) {
                 if (status.equalsIgnoreCase("Success")) {
-/*                    msgId = parser.getIndex();
-                    msg.setId_msg(msgId);
-                    if(msg.getConvID() <= 0) {*/
-                        convID = parser.getInt("conversationID");
-//                    }
+                    convID = parser.getInt("conversationID");
                 }
             }
         }
@@ -511,10 +507,6 @@ public class RemoteDB {
                     }
                 }
             }
-/*            else{
-                System.out.print("CCQF RemoteDb readSurveyList() fail LineResult="+ligneResult+"\n\n");
-                System.out.flush();
-            }*/
         }
         return surveylist;
     }
@@ -565,7 +557,6 @@ public class RemoteDB {
                                     JSONObject joPesp = respArray.getJSONObject(jdx);
                                     hit = joPesp.getInt("hit");
                                     ttlHit += hit;
-                                    //Pair pair = new Pair(joPesp.getString("label"), hit);
                                     SurveyPair pair = new SurveyPair(joPesp.getString("label"), ""+hit);
                                     answersAndHit.add(pair);
                                 }
