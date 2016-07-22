@@ -37,11 +37,11 @@ public class SurveyResultDetails extends CCQFBaseActivity {
 
         StringBuilder s = new StringBuilder();
         for(int idx = 0; idx < p.size(); idx++) {
-            s.append(("\n" + p.get(idx).getAnswer() + " " + p.get(idx).getHits()));
+            s.append(("\n" + p.get(idx).getAnswer() + " :      " + p.get(idx).getHits()));
             txtDetails.setText(s);
         }
     }
-
+/*
     private SurveyObjectResults dummyObject(){
         SurveyPair p1 = new SurveyPair("A", "3");
         SurveyPair p2 = new SurveyPair("B", "4");
@@ -63,6 +63,6 @@ public class SurveyResultDetails extends CCQFBaseActivity {
         }
         String string = s.toString();
         return string;
-    }
+    }*/
 
 }

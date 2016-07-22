@@ -36,6 +36,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -54,6 +55,8 @@ public class MainActivity extends CCQFBaseActivity {
     private Commanditaire currentBanner = null;
     private LocaleDB lDb;
     private FloatingActionButton fab;
+    private Integer [] surveyLst = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +83,10 @@ public class MainActivity extends CCQFBaseActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, Survey.class);
+                Bundle bundle = new Bundle();
+                ArrayList<Integer> tmpList = new ArrayList<Integer>(Arrays.asList(surveyLst));
+                bundle.putIntegerArrayList("surveyListe", tmpList);
+                i.putExtras(bundle);
                 startActivity(i);
             }
         });
@@ -321,8 +328,8 @@ public class MainActivity extends CCQFBaseActivity {
 
         @Override
         protected Integer doInBackground(Void... params) {
-            int [] lst = iDb.readSurveyList();
-            return  new Integer((lst == null)?0:1);
+            surveyLst = iDb.readSurveyList(false);
+            return  new Integer((surveyLst == null)?0:1);
         }
         @Override
         protected void onPostExecute(Integer  val) {

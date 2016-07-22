@@ -2,7 +2,6 @@ package com.devel.ccqf.ccqfmisson;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -44,13 +43,6 @@ public class SurveyResults extends CCQFBaseActivity {
             }
         });
 
-    }
-    public ArrayList<SurveyObjectResults> dummyList(){
-        ArrayList<SurveyObjectResults> list = new ArrayList<>();
-        for(int i = 0;i < 5;i++){
-            list.add(new SurveyObjectResults("jhgjhg", i));
-        }
-        return  list;
     }
 
 

@@ -1,5 +1,6 @@
 package com.devel.ccqf.ccqfmisson;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,8 @@ import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyGroup;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class Survey extends CCQFBaseActivity {
@@ -34,14 +37,20 @@ public class Survey extends CCQFBaseActivity {
     private SparseIntArray selectedPosition;
     private SurveyGroup workingSurvey;
     private static List<SurveyObject> listSurveyGroup = null;
+    private InterfaceDB iDb = null;
+    private ArrayList<Integer> surveyListe = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey);
+        iDb = new InterfaceDB(this);
+        Intent i = getIntent();
+        Bundle bundle = i.getExtras();
+        surveyListe = bundle.getIntegerArrayList("surveyListe");
+        Collections.sort(surveyListe);
 
         listAnswers = new ArrayList<>();
-      //  listList = new ArrayList<>();
         selectedAnswers = new ArrayList<>();
         checkedItems = new ArrayList<>();
         selectedPosition = new SparseIntArray();
@@ -49,34 +58,32 @@ public class Survey extends CCQFBaseActivity {
         listViewAnswers = (ListView)findViewById(R.id.listAnswer);
         txtQuestion = (TextView)findViewById(R.id.txtQuestionSurvey);
 
+        Iterator<Integer> iter = surveyListe.iterator();
+        Integer itg = null;
+        while(iter.hasNext()){
+            int idx = iDb.getLastSurveyIndex();
+            itg = iter.next();
+            if(itg > idx)
+                break;
+        }
+
         //Affichage de la premiere question et ses choix de réponses
-        new GetSurveyAsyncTask().execute(3);
+        new GetSurveyAsyncTask().execute(itg);
 
         listViewAnswers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                /*String selectedId = ((TextView) view.findViewById(R.id.txtIDSurvey))
-                        .getText().toString();*/
                 String selectedId = ""+(position+1);
                 CheckedTextView check = ((CheckedTextView) view.findViewById(R.id.txtAnswerSurvey));
-               //String checkedId = String.valueOf(position);
 
                 if(selectedAnswers.contains(selectedId)){ //UN-CHECK
                     selectedAnswers.remove(selectedId);
-                   // selectedPosition.delete(surveyQuestionIndex);
-                   // checkedItems.remove(String.valueOf(position));
                     check.toggle();
-                   // Toast.makeText(Survey.this, "Un-check", Toast.LENGTH_SHORT).show();
-
                 }
                 else if (selectedAnswers.size() < 1){ //CHECK
                     selectedAnswers.add(selectedId);
-                   // selectedPosition.put(surveyQuestionIndex, position);
-                   // checkedItems.add(checkedId);
                     check.toggle();
-                    /*Toast.makeText(Survey.this, "Check "+selectedId,
-                            Toast.LENGTH_SHORT).show();*/
                 }
 
             }
@@ -89,30 +96,31 @@ public class Survey extends CCQFBaseActivity {
             public void onClick(View v) {
 
                 //Send Answer
-/*                new SendAnswerAsyncTask().execute(new SurveyAnswer(workingSurvey.getId(),
-                                                listSurveyGroup.get(surveyQuestionIndex).getType(),
-                                                selectedAnswers));*/
-                //Toast.makeText(Survey.this, "Sent (not)", Toast.LENGTH_SHORT).show();
-                //Reload list
-                if(surveyQuestionIndex < listSurveyGroup.size()-1){
-                    surveyQuestionIndex++;
-                    listViewAnswers.setAdapter(null);
-                    setListAnswerAdapter(listSurveyGroup.get(surveyQuestionIndex).getChoixReponse());
-                    txtQuestion.setText(listSurveyGroup.get(surveyQuestionIndex).getQuestionTexte());
-                    selectedAnswers = new ArrayList<String>();
+                SurveyAnswer [] sAnswer = new SurveyAnswer[1];
+                int srvID = workingSurvey.getId();
+                SurveyObject.surveyType type = listSurveyGroup.get(surveyQuestionIndex).getType();
+                if(selectedAnswers.size() > 0) {
+                    String tmpText = selectedAnswers.get(0);
+                    int respIdxVal = 0;
+                    if (tmpText.matches("[0-9]*"))
+                        respIdxVal = Integer.parseInt(tmpText);
+
+                    sAnswer[0] = new SurveyAnswer(srvID, type, respIdxVal - 1);
+                    new SendAnswerAsyncTask().execute(sAnswer);
+
+                    //Reload list
+                    if (surveyQuestionIndex < listSurveyGroup.size() - 1) {
+                        surveyQuestionIndex++;
+                        listViewAnswers.setAdapter(null);
+                        setListAnswerAdapter(listSurveyGroup.get(surveyQuestionIndex).getChoixReponse());
+                        txtQuestion.setText(listSurveyGroup.get(surveyQuestionIndex).getQuestionTexte());
+                        selectedAnswers = new ArrayList<String>();
+                    } else {
+                        txtQuestion.setText("All caught up !");
+                        listViewAnswers.setVisibility(View.GONE);
+                        iDb.setLastSurveyIndex(srvID);
+                    }
                 }
-                else {
-                    txtQuestion.setText("All caught up !");
-                    listViewAnswers.setVisibility(View.GONE);
-                }
-               /* if (surveyQuestionIndex < listList.size()-1) {
-                    surveyQuestionIndex++;
-                    listViewAnswers.setAdapter(null);
-                    setListAnswerAdapter(listList.get(surveyQuestionIndex));
-                 }
-                else{
-                   // Toast.makeText(Survey.this, surveyQuestionIndex+" nope", Toast.LENGTH_SHORT).show();
-                }*/
             }
         });
 
@@ -142,28 +150,7 @@ public class Survey extends CCQFBaseActivity {
         listViewAnswers.setAdapter(new CustomSurveyAdapter(this, answers));
     }
 
-    //Liste Temporaire
-    /*public List<SurveyObject> dummySurveyGroup(){
-        ArrayList<SurveyObject> dummy = new ArrayList<>();
-        ArrayList<String> a =new ArrayList<>();
-        a.add("Vert");
-        a.add("Bleu");
-        a.add("Gris");
-        dummy.add(new SurveyObject(1, "Couleur préféré ?",a));
 
-        ArrayList<String> b =new ArrayList<>();
-        b.add("Oui");
-        b.add("Non");
-        dummy.add(new SurveyObject(2, "Oui ou Non ?",b));
-
-        ArrayList<String> c =new ArrayList<>();
-        c.add("1");
-        c.add("2");
-        c.add("3");
-        c.add("4");
-        dummy.add(new SurveyObject(3, "1 a 4 ?",c));
-        return dummy;
-    }*/
 
     public View getViewByPosition(int pos, ListView listView) {
         final int firstListItemPosition = listView.getFirstVisiblePosition();
@@ -190,11 +177,10 @@ public class Survey extends CCQFBaseActivity {
 
     private class GetSurveyAsyncTask extends AsyncTask<Integer, Void, SurveyGroup> {
         @Override
-        protected SurveyGroup doInBackground(Integer... adr) {
+        protected SurveyGroup doInBackground(Integer... surveyIDTable) {
             SurveyGroup srvGrp = null;
-            InterfaceDB iDb = new InterfaceDB(Survey.this);
             if(iDb != null)
-                srvGrp = iDb.readSurvey(adr[0].intValue());
+                srvGrp = iDb.readSurvey(surveyIDTable[0].intValue());
             return srvGrp;
         }
 
@@ -208,8 +194,10 @@ public class Survey extends CCQFBaseActivity {
             else
                // listSurveyGroup = dummySurveyGroup();
             surveyQuestionIndex=0;
-            setListAnswerAdapter(listSurveyGroup.get(surveyQuestionIndex).getChoixReponse());
-            txtQuestion.setText(listSurveyGroup.get(surveyQuestionIndex).getQuestionTexte());
+            if(listSurveyGroup != null) {
+                setListAnswerAdapter(listSurveyGroup.get(surveyQuestionIndex).getChoixReponse());
+                txtQuestion.setText(listSurveyGroup.get(surveyQuestionIndex).getQuestionTexte());
+            }
         }
 
         @Override

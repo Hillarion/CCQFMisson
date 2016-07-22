@@ -482,8 +482,8 @@ public class RemoteDB {
     *       Reçoit l'identifiant du dernier sondage déjà lu.
     *       Retourne un tableau contenant la liste des identifiant non-lu
     */
-    public int [] readSurveyList(int lastSurveyID){
-        int[] surveylist = null;
+    public Integer [] readSurveyList(int lastSurveyID){
+        Integer[] surveylist = null;
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
         pairs.add(new BasicNameValuePair("action", "readSurveyList"));
         pairs.add(new BasicNameValuePair("surveyID", "" + lastSurveyID));
@@ -496,7 +496,7 @@ public class RemoteDB {
                 if (status.equalsIgnoreCase("Success")) {
                     JSONArray jArray = parser.getList("surveyList");
                     if (jArray != null) {
-                        surveylist = new int[jArray.length()];
+                        surveylist = new Integer[jArray.length()];
                         for (int idx = 0; idx < jArray.length(); idx++) {
                             try {
                                 surveylist[idx] = jArray.getInt(idx);

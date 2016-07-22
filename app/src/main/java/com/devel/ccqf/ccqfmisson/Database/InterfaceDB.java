@@ -155,14 +155,16 @@ public class InterfaceDB {
     *       Utilise l'identifiant du dernier sondage déjà lu tels que gardé dans la base de données locale
     *       Retourne un tableau contenant la liste des identifiant non-lu
     */
-    public int[] readSurveyList() {
-        int[] tbl = null;
+    public Integer[] readSurveyList(Boolean allSurvey) {
+        Integer[] tbl = null;
         int lastSurveyID = lDb.getLastSurveyIndex(currentUser);
-        System.out.print("CCQF interfaceDB readSurveyList lastSurveyID = "+ lastSurveyID +"\n\n");
-        System.out.flush();
         if (rDb != null)
             tbl = rDb.readSurveyList(lastSurveyID);
         return tbl;
+    }
+
+    public int getLastSurveyIndex(){
+        return lDb.getLastSurveyIndex(currentUser);
     }
 
     /*
@@ -175,9 +177,19 @@ public class InterfaceDB {
 
         if (rDb != null) {
             sGrp = rDb.readSurvey(surveyID);
-            lDb.setLastSurveyIndex(currentUser, sGrp.getId());
         }
         return sGrp;
+    }
+
+    public ArrayList<SurveyGroup> getSurveyList(){
+        ArrayList<SurveyGroup> list = null;
+/*        if(rDb != null)
+            list = rDb.getSurveyList();*/
+        return list;
+    }
+
+    public void setLastSurveyIndex(int sIdx) {
+        lDb.setLastSurveyIndex(currentUser, sIdx);
     }
 
     public void sendSurvey(SurveyGroup sGrp) {
