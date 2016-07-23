@@ -478,9 +478,60 @@ public class RemoteDB {
     }
 
     /*
+    * Méthode qui lis la listes de sondages. Cette liste ne contient que des coquilles
+    * c'est à qu'elle ne contient que les ID et les dates de péremption pour chaque sondage
+    *       Reçoit : rien.
+    *       Retourne un ArrayList contenant la liste des identifiants.
+    */
+    public ArrayList<SurveyGroup> getSurveyList() {
+        ArrayList<SurveyGroup> list = null;
+        System.out.print("CCQF SurveyList RemoteDB.getSurveyList() \n\n");
+        System.out.flush();
+        ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
+        pairs.add(new BasicNameValuePair("action", "getListSurvey"));
+        String ligneResult = sendRequest(pairs);
+        System.out.print("CCQF SurveyList interfaceDB.getSurveyList() ligneResult = "+ligneResult+"\n\n");
+        System.out.flush();
+        if (ligneResult != null) {
+            parser = new JSONParser(ligneResult);
+            String status = parser.getStatus();
+            if (!status.isEmpty()) {
+                if (status.equalsIgnoreCase("Success")) {
+                    JSONArray jArray = parser.getList("surveyList");
+                    if (jArray != null) {
+                        list = new ArrayList<SurveyGroup>();
+                        for (int idx = 0; idx < jArray.length(); idx++) {
+                            try {
+                                JSONObject jObj = jArray.getJSONObject(idx);
+                                if (jObj != null) {
+                                    System.out.print("CCQF SurveyList interfaceDB.getSurveyList() jObj["+idx+"] = " + jObj + "\n\n");
+                                    System.out.flush();
+                                    int id = jObj.getInt("id");
+                                    String time = jObj.getString("date");
+                                    Date convertedDate = new Date();
+                                    try {
+                                        convertedDate = dateFormat.parse(time);
+                                    } catch (ParseException pe) {
+                                        pe.printStackTrace();
+                                    }
+                                    SurveyGroup sGrp = new SurveyGroup(id, convertedDate);
+                                    list.add(sGrp);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return list;
+    }
+
+    /*
     * Méthode qui lis la listes des sondages non lu.
     *       Reçoit l'identifiant du dernier sondage déjà lu.
-    *       Retourne un tableau contenant la liste des identifiant non-lu
+    *       Retourne un tableau contenant la liste des identifiants non-lu
     */
     public Integer [] readSurveyList(int lastSurveyID){
         Integer[] surveylist = null;

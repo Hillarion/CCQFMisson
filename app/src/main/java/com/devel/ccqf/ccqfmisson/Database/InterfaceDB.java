@@ -183,8 +183,10 @@ public class InterfaceDB {
 
     public ArrayList<SurveyGroup> getSurveyList(){
         ArrayList<SurveyGroup> list = null;
-/*        if(rDb != null)
-            list = rDb.getSurveyList();*/
+        System.out.print("CCQF SurveyList interfaceDB.getSurveyList() rDb = "+rDb+"\n\n");
+        System.out.flush();
+        if(rDb != null)
+            list = rDb.getSurveyList();
         return list;
     }
 

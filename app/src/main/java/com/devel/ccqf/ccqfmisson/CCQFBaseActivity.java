@@ -58,7 +58,7 @@ public class CCQFBaseActivity extends AppCompatActivity {
                     startActivity(i);
                     break;
                 case R.id.action_result://Consulter résulat du survey
-                    Intent i2 = new Intent(this, SurveyResults.class);
+                    Intent i2 = new Intent(this, SurveyList.class);
                     startActivity(i2);
                     break;
                 case R.id.action_newB2b://Nouveau B2B (formulaire quie crée un object Event)

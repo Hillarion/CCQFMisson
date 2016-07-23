@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.devel.ccqf.ccqfmisson.Adapters.CustomSurveyListAdapter;
 import com.devel.ccqf.ccqfmisson.Database.InterfaceDB;
 import com.devel.ccqf.ccqfmisson.SurveyStruct.SurveyGroup;
 
@@ -25,8 +26,11 @@ public class SurveyList  extends CCQFBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey_results);
         iDb = new InterfaceDB(SurveyList.this);
+        System.out.print("CCQF SurveyList onCreate iDb = " + iDb + "\n\n");
+        System.out.flush();
 
         surveyListView = (ListView) findViewById(R.id.listViewSurveyResults);
+        new GetSurveyListAsyncTask().execute();
         surveyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -42,15 +46,19 @@ public class SurveyList  extends CCQFBaseActivity {
         @Override
         protected ArrayList<SurveyGroup> doInBackground(Void... unused){
             ArrayList<SurveyGroup> sList = null;
+            System.out.print("CCQF SurveyList GSLAT doInBackground iDb = "+iDb+"\n\n");
+            System.out.flush();
             if(iDb != null)
                 sList = iDb.getSurveyList();
             return sList;
         }
 
         protected void onPostExecute(ArrayList<SurveyGroup> sList){
+            System.out.print("CCQF SurveyList GSLAT onPostExecute sList = "+sList+"\n\n");
+            System.out.flush();
             surveyList = sList;
 
-            surveyListView.setAdapter();
+            surveyListView.setAdapter(new CustomSurveyListAdapter(SurveyList.this,surveyList));
         }
     }
 }

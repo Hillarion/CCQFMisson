@@ -49,6 +49,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".Survey"
             android:screenOrientation="portrait" />
+        <activity android:name=".SurveyList"
+            android:screenOrientation="portrait" />
         <activity android:name=".SurveyCreate"
             android:screenOrientation="portrait" />
         <activity android:name=".SurveyResults"

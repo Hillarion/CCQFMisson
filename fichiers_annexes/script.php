@@ -402,6 +402,25 @@ function readSurveyList(){
         returnFail("no result");
 }
 
+function getListSurvey(){
+    $req = "SELECT * from SurveyForm";
+    $result = doQuery($req);
+
+    $row=mysqli_num_rows($result);
+    if($row > 0){
+        echo "{\"Status\" : \"Success\", ";
+        echo "\"surveyList\" : [";
+        while($ligne=mysqli_fetch_object($result)){
+            echo "{ \"id\" : \"$ligne->id_survey\", ";
+            echo "{ \"date\" : \"$ligne->dateLimite\"}";
+            if(--$row>0) echo ",";
+        }
+        echo "]}";
+    }
+    else
+        returnFail("no result");
+}
+
 function readSurveyResults(){
     $surveyID=$_POST["surveyID"];
 
@@ -574,6 +593,9 @@ switch ($action){
     break;
     case "readSurveyList" :
        readSurveyList();
+    break;
+    case "getListSurvey":
+        getListSurvey();
     break;
     case "readSurveyResults" :
         readSurveyResults();
