@@ -59,7 +59,9 @@ public class CustomSurveyListAdapter extends BaseAdapter{
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         convertView = mInflater.inflate(R.layout.survey_results_row_layout, null);
         TextView groupID = (TextView)convertView.findViewById(R.id.txtSurveyResultsQuestion);
+        groupID.setTextSize(20.0f);
         TextView grpDate = (TextView)convertView.findViewById(R.id.txtResultStatus);
+        grpDate.setTextSize(20.0f);
         groupID.setText("" + sg.getId());
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 

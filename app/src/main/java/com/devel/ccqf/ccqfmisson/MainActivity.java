@@ -158,6 +158,13 @@ public class MainActivity extends CCQFBaseActivity {
         InterfaceDB.privilegeType privilege = iDb.getPrivilege(iDb.getCurrentUserID());
         if(privilege == InterfaceDB.privilegeType.ADMIN)
             enableMenu = true;
+        else{
+            if (mainMenu != null) {
+                mainMenu.findItem(R.id.action_settings).setVisible(false);
+                mainMenu.findItem(R.id.action_result).setVisible(false);
+                mainMenu.findItem(R.id.action_newB2b).setVisible(false);
+            }
+        }
 
         if ((iDb != null) && (user > 0)){
             Intent intent = new Intent(getApplicationContext(), FeedAlarmReceiver.class);

@@ -27,7 +27,7 @@ public class CCQFBaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        enableMenu = true;//false;
+        enableMenu = false;
         actionBar = getSupportActionBar();
 
         actionBar.setDisplayUseLogoEnabled(true);
@@ -40,7 +40,9 @@ public class CCQFBaseActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        if(enableMenu) {
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+        }
         mainMenu = menu;
         return true;
     }

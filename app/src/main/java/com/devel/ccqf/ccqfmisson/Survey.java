@@ -195,8 +195,10 @@ public class Survey extends CCQFBaseActivity {
                // listSurveyGroup = dummySurveyGroup();
             surveyQuestionIndex=0;
             if(listSurveyGroup != null) {
-                setListAnswerAdapter(listSurveyGroup.get(surveyQuestionIndex).getChoixReponse());
-                txtQuestion.setText(listSurveyGroup.get(surveyQuestionIndex).getQuestionTexte());
+                if(surveyQuestionIndex < listSurveyGroup.size()) {
+                    setListAnswerAdapter(listSurveyGroup.get(surveyQuestionIndex).getChoixReponse());
+                    txtQuestion.setText(listSurveyGroup.get(surveyQuestionIndex).getQuestionTexte());
+                }
             }
         }
 

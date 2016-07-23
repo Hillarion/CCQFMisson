@@ -374,8 +374,6 @@ public class RemoteDB {
             if (!status.isEmpty()) {
                 if (status.equalsIgnoreCase("Success")) {
                     int srvId = parser.getIndex();
-                    System.out.print("CCQF RemoteDB sendSurvey (Group) srvID = " + srvId + "\n\n");
-                    System.out.flush();
 
                     List<SurveyObject> qList = sGrp.getQuestions();
                     Iterator<SurveyObject> iter = qList.iterator();
@@ -391,11 +389,7 @@ public class RemoteDB {
                         for(int r=1; r<reps.size(); r++)
                             listeReponses += ","+reps.get(r);
                         pairs.add(new BasicNameValuePair("listeReponses", listeReponses));
-                        System.out.print("CCQF RemoteDB sendSurvey (Question) pairs = " + pairs + "\n\n");
-                        System.out.flush();
                         String s = sendRequest(pairs);
-                        System.out.print("FROM REMOTE DB " + s);
-                        System.out.flush();
                     }
                 }
             }
@@ -485,13 +479,9 @@ public class RemoteDB {
     */
     public ArrayList<SurveyGroup> getSurveyList() {
         ArrayList<SurveyGroup> list = null;
-        System.out.print("CCQF SurveyList RemoteDB.getSurveyList() \n\n");
-        System.out.flush();
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
         pairs.add(new BasicNameValuePair("action", "getListSurvey"));
         String ligneResult = sendRequest(pairs);
-        System.out.print("CCQF SurveyList interfaceDB.getSurveyList() ligneResult = "+ligneResult+"\n\n");
-        System.out.flush();
         if (ligneResult != null) {
             parser = new JSONParser(ligneResult);
             String status = parser.getStatus();
@@ -504,8 +494,6 @@ public class RemoteDB {
                             try {
                                 JSONObject jObj = jArray.getJSONObject(idx);
                                 if (jObj != null) {
-                                    System.out.print("CCQF SurveyList interfaceDB.getSurveyList() jObj["+idx+"] = " + jObj + "\n\n");
-                                    System.out.flush();
                                     int id = jObj.getInt("id");
                                     String time = jObj.getString("date");
                                     Date convertedDate = new Date();

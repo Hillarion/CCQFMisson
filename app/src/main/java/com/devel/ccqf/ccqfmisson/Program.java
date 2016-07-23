@@ -99,12 +99,9 @@ public class Program extends CCQFBaseActivity {
                     do{
                         String line = scanner.next();
                         String[] linetbl = line.split(";");
-                        System.out.print(""+line);
-                        System.out.flush();
                         e = new Event(linetbl[1], linetbl[0],  linetbl[2], linetbl[3]);
 
                         events.add(e);
-                      //  Toast.makeText(Program.this, "Event : "+e, Toast.LENGTH_SHORT).show();
                     }while(scanner.hasNext());
                     scanner.close();
 

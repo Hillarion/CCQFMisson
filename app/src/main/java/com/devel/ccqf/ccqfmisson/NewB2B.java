@@ -178,8 +178,6 @@ public class NewB2B extends CCQFBaseActivity {
             ArrayList<Users> alUser = iDb.getUserList();
             for(int i = 0; i<alUser.size(); i++){
                 alLoginAdress.add(alUser.get(i).getUserName());
-                System.out.print("FROM NEWB2B : CONNECTION LOOP");
-                System.out.flush();
             }
         return alLoginAdress;
     }

@@ -26,7 +26,11 @@ public class SurveyResults extends CCQFBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey_results);
 
-        new GetSurveyResultsAsyncTask().execute(1);
+        Intent i = getIntent();
+        Bundle bundle = i.getExtras();
+        int surveyID = bundle.getInt(SurveyList.KEY_SURVEY_ID);
+
+        new GetSurveyResultsAsyncTask().execute(surveyID);
         listResults = (ListView)findViewById(R.id.listViewSurveyResults);
 
         listResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -366,12 +366,8 @@ public class LocaleDB {
     public void setNextBannerCommanditaire(int val){
         ContentValues values = new ContentValues();
         if(db != null){
-            System.out.print("CCQF LocaleDB setNextBannerCommanditaire() new banner idx=" + val + "\n\n");
-            System.out.flush();
             values.put("Banners", "" + val);
             int res = db.update("Commanditaires", values, null, null);
-            System.out.print("CCQF LocaleDB setNextBannerCommanditaire() row affected=" + res + "\n\n");
-            System.out.flush();
         }
     }
 }

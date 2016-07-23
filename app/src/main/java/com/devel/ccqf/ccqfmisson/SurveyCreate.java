@@ -85,8 +85,6 @@ public class SurveyCreate extends CCQFBaseActivity {
                         iDb = new InterfaceDB(SurveyCreate.this);
                         iDb.sendSurvey(group);
                         Toast.makeText(SurveyCreate.this, "Envoyé ", Toast.LENGTH_SHORT).show();
-                        System.out.print("FROM SURVERCREATE " + newSurvey);
-                        System.out.flush();
                         clean();
                     } 
                 }else{

@@ -183,8 +183,6 @@ public class InterfaceDB {
 
     public ArrayList<SurveyGroup> getSurveyList(){
         ArrayList<SurveyGroup> list = null;
-        System.out.print("CCQF SurveyList interfaceDB.getSurveyList() rDb = "+rDb+"\n\n");
-        System.out.flush();
         if(rDb != null)
             list = rDb.getSurveyList();
         return list;
@@ -302,14 +300,10 @@ public class InterfaceDB {
     public int getCurrentPageIndex(){
         int idx = -1;
         int mxIdx = 0 ;
-        System.out.print("CCQF InterfaceDB getCurrentPageIndex() \n\n");
-        System.out.flush();
         if(lDb != null){
             mxIdx = lDb.getMaxPageCommanditaire();
             if(mxIdx >= 0) {
                 idx = lDb.getCurrentPageCommanditaire();
-                System.out.print("CCQF InterfaceDB getCurrentPageIndex() mxIdx="+mxIdx+", idx="+idx+"\n\n");
-                System.out.flush();
                 if (++idx >= mxIdx)
                     idx = 0;
                 lDb.setNextPageCommanditaire(idx);
@@ -321,14 +315,10 @@ public class InterfaceDB {
     public int getCurrentBannerIndex(){
         int idx = -1;
         int mxIdx = 0 ;
-        System.out.print("CCQF InterfaceDB getCurrentBannerIndex() \n\n");
-        System.out.flush();
         if(lDb != null){
             mxIdx = lDb.getMaxBannerCommanditaire();
             if(mxIdx >= 0) {
                 idx = lDb.getCurrentBannerCommanditaire();
-                System.out.print("CCQF InterfaceDB getCurrentBannerIndex() mxIdx="+mxIdx+", idx="+idx+"\n\n");
-                System.out.flush();
                 if (++idx >= mxIdx)
                     idx = 0;
                 lDb.setNextBannerCommanditaire(idx);
