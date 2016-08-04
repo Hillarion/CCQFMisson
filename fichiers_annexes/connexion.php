@@ -23,22 +23,21 @@ function doQuery($query){
 
 function createStatus($status){
     global $conn;
-    $etat = false;
+    $id = mysqli_insert_id($conn) ;
 
     echo "{\"Status\" : " ;
     if($status > 0)
     {
         echo "\"Success\"";
         echo ", \"Id\" : \"";
-        echo  mysqli_insert_id($conn) ;
+        echo  $id;
         echo "\"";
-        $etat = true;
     }
     else
         echo "\"Fail\"";
 
     echo "}";
-    return $etat;
+    return $id;
 }
 
 function returnFail($msg){

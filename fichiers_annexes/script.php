@@ -411,8 +411,8 @@ function getListSurvey(){
         echo "{\"Status\" : \"Success\", ";
         echo "\"surveyList\" : [";
         while($ligne=mysqli_fetch_object($result)){
-            echo "{ \"id\" : \"$ligne->id_survey\", ";
-            echo "{ \"date\" : \"$ligne->dateLimite\"}";
+            echo "{\"id\" : \"$ligne->id_survey\", ";
+            echo "\"date\" : \"$ligne->dateLimite\"}";
             if(--$row>0) echo ",";
         }
         echo "]}";
